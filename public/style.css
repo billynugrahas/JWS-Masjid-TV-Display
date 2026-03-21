@@ -405,6 +405,9 @@ body {
 /* ==================== INFO / HADITH SECTION ==================== */
 .info-section {
   padding: var(--spacing-lg) var(--spacing-xl);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
 }
 
 .info-container {
@@ -419,6 +422,8 @@ body {
   box-shadow: var(--shadow-md);
   max-width: 900px;
   margin: 0 auto;
+  width: 100%;
+  min-height: 80px;
 }
 
 .info-icon {
