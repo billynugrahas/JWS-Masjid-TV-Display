@@ -68,11 +68,14 @@ db.exec(`
 // Initialize default settings
 const defaultSettings = {
   mosque_name: 'Masjid Al-Muhajirin',
+  mosque_logo: '🕌',
+  mosque_tagline: 'Baitullah untuk Umat',
   mosque_address: '',
   mosque_phone: '',
   running_text: 'Selamat datang di Masjid Al-Muhajirin',
   background_image: '',
-  hadith_rotation_interval: 30
+  hadith_rotation_interval: 30,
+  show_live_indicator: 'true'
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');

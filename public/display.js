@@ -168,6 +168,24 @@ function updateDisplayElements() {
   document.getElementById('mosque-name').textContent = mosqueName;
   document.title = `Display - ${mosqueName}`;
 
+  // Update mosque logo
+  const mosqueLogo = document.getElementById('mosque-logo');
+  if (mosqueLogo) {
+    mosqueLogo.textContent = settings.mosque_logo || '🕌';
+  }
+
+  // Update mosque tagline
+  const mosqueTagline = document.getElementById('mosque-tagline');
+  if (mosqueTagline) {
+    mosqueTagline.textContent = settings.mosque_tagline || '';
+  }
+
+  // Update live indicator visibility
+  const liveIndicator = document.querySelector('.live-indicator');
+  if (liveIndicator) {
+    liveIndicator.style.display = settings.show_live_indicator === 'true' ? 'flex' : 'none';
+  }
+
   // Update background image
   const bgOverlay = document.getElementById('bg-overlay');
   if (bgOverlay) {

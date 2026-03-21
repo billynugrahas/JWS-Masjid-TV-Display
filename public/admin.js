@@ -629,10 +629,13 @@ async function deleteRunningText(id) {
 
 // ==================== SETTINGS ====================
 function populateSettings() {
+  document.getElementById('setting-mosque-logo').value = appData.settings.mosque_logo || '🕌';
   document.getElementById('setting-mosque-name').value = appData.settings.mosque_name || '';
+  document.getElementById('setting-mosque-tagline').value = appData.settings.mosque_tagline || '';
   document.getElementById('setting-mosque-address').value = appData.settings.mosque_address || '';
   document.getElementById('setting-mosque-phone').value = appData.settings.mosque_phone || '';
   document.getElementById('setting-hadith-interval').value = appData.settings.hadith_rotation_interval || 30;
+  document.getElementById('setting-show-live').checked = appData.settings.show_live_indicator === 'true';
 
   // Background image
   if (appData.settings.background_image) {
@@ -677,10 +680,13 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
 
   try {
     const settings = {
+      mosque_logo: document.getElementById('setting-mosque-logo').value,
       mosque_name: document.getElementById('setting-mosque-name').value,
+      mosque_tagline: document.getElementById('setting-mosque-tagline').value,
       mosque_address: document.getElementById('setting-mosque-address').value,
       mosque_phone: document.getElementById('setting-mosque-phone').value,
-      hadith_rotation_interval: document.getElementById('setting-hadith-interval').value
+      hadith_rotation_interval: document.getElementById('setting-hadith-interval').value,
+      show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false'
     };
 
     if (backgroundImageData !== appData.settings.background_image) {

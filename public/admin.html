@@ -207,8 +207,17 @@
             </div>
             <div class="card-body">
               <div class="form-group">
+                <label>Logo Masjid (Emoji)</label>
+                <input type="text" id="setting-mosque-logo" placeholder="🕌" maxlength="4">
+                <small style="color: var(--color-text-muted);">Gunakan emoji, contoh: 🕌 ⭐ 🌙 ☪️</small>
+              </div>
+              <div class="form-group">
                 <label>Nama Masjid</label>
                 <input type="text" id="setting-mosque-name" placeholder="Masjid Al-Muhajirin">
+              </div>
+              <div class="form-group">
+                <label>Tagline / Moto</label>
+                <input type="text" id="setting-mosque-tagline" placeholder="Baitullah untuk Umat">
               </div>
               <div class="form-group">
                 <label>Alamat</label>
@@ -223,7 +232,7 @@
 
           <div class="card">
             <div class="card-header">
-              <h2>Tampilan</h2>
+              <h2>Tampilan Display</h2>
             </div>
             <div class="card-body">
               <div class="form-group">
@@ -242,6 +251,12 @@
               <div class="form-group">
                 <label>Interval Rotasi Hadits (detik)</label>
                 <input type="number" id="setting-hadith-interval" value="30" min="10" max="120">
+              </div>
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-show-live">
+                  <span>Tampilkan indikator LIVE di header</span>
+                </label>
               </div>
             </div>
           </div>
