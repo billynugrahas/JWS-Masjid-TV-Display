@@ -276,6 +276,15 @@ function renderMarquee() {
   const marqueeEl = document.getElementById('marquee');
   if (!marqueeEl) return;
 
+  // Get marquee settings with defaults
+  const loop = settings.marquee_loop !== 'false'; // Default true (seamless loop)
+  const speed = parseInt(settings.marquee_speed) || 30; // Default 30 seconds
+  const gap = parseFloat(settings.marquee_gap) || 4; // Default 4rem
+
+  // Apply CSS variables for marquee configuration
+  marqueeEl.style.setProperty('--marquee-gap', `${gap}rem`);
+  marqueeEl.style.gap = `${gap}rem`;
+
   // If we have dynamic running texts, use them
   if (runningTexts.length > 0) {
     const items = runningTexts.map(rt => {
@@ -291,8 +300,21 @@ function renderMarquee() {
       `;
     }).join('');
 
-    // Single set of items with gap (no duplication)
-    marqueeEl.innerHTML = items;
+    if (loop) {
+      // Seamless loop: duplicate items (2 copies total)
+      // Animation translates -50% so when it reaches the end of first set,
+      // the second set is exactly where the first set started
+      marqueeEl.innerHTML = items + items;
+      marqueeEl.style.animationName = 'marquee-seamless';
+      marqueeEl.style.animationDuration = `${speed}s`;
+      marqueeEl.style.animationIterationCount = 'infinite';
+    } else {
+      // Non-seamless: single items, wait for exit then restart
+      marqueeEl.innerHTML = items;
+      marqueeEl.style.animationName = 'marquee';
+      marqueeEl.style.animationDuration = `${speed}s`;
+      marqueeEl.style.animationIterationCount = 'infinite';
+    }
   } else {
     // Fallback to default marquee
     const defaultText = settings.running_text || 'Selamat datang di Masjid';

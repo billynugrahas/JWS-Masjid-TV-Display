@@ -75,7 +75,10 @@ const defaultSettings = {
   running_text: 'Selamat datang di Masjid Al-Muhajirin',
   background_image: '',
   hadith_rotation_interval: 30,
-  show_live_indicator: 'true'
+  show_live_indicator: 'true',
+  marquee_loop: 'true',
+  marquee_speed: 30,
+  marquee_gap: 4
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');

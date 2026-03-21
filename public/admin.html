@@ -260,6 +260,31 @@
               </div>
             </div>
           </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Pengaturan Teks Berjalan</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-marquee-loop">
+                  <span>Loop seamless (tanpa jeda)</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Jika aktif: item pertama muncul langsung setelah item terakhir. Jika nonaktif: tunggu semua item keluar layar baru mulai lagi.</small>
+              </div>
+              <div class="form-group">
+                <label>Kecepatan (detik)</label>
+                <input type="number" id="setting-marquee-speed" value="30" min="10" max="120">
+                <small style="color: var(--color-text-muted);">Semakin kecil angka, semakin cepat (default: 30)</small>
+              </div>
+              <div class="form-group">
+                <label>Jarak antar item (rem)</label>
+                <input type="number" id="setting-marquee-gap" value="4" min="1" max="20" step="0.5">
+                <small style="color: var(--color-text-muted);">Jarak spasi antar teks berjalan (default: 4)</small>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

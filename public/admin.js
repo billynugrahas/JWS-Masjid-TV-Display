@@ -637,6 +637,11 @@ function populateSettings() {
   document.getElementById('setting-hadith-interval').value = appData.settings.hadith_rotation_interval || 30;
   document.getElementById('setting-show-live').checked = appData.settings.show_live_indicator === 'true';
 
+  // Marquee settings
+  document.getElementById('setting-marquee-loop').checked = appData.settings.marquee_loop !== 'false';
+  document.getElementById('setting-marquee-speed').value = appData.settings.marquee_speed || 30;
+  document.getElementById('setting-marquee-gap').value = appData.settings.marquee_gap || 4;
+
   // Background image
   if (appData.settings.background_image) {
     backgroundImageData = appData.settings.background_image;
@@ -686,7 +691,10 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       mosque_address: document.getElementById('setting-mosque-address').value,
       mosque_phone: document.getElementById('setting-mosque-phone').value,
       hadith_rotation_interval: document.getElementById('setting-hadith-interval').value,
-      show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false'
+      show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
+      marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
+      marquee_speed: document.getElementById('setting-marquee-speed').value,
+      marquee_gap: document.getElementById('setting-marquee-gap').value
     };
 
     if (backgroundImageData !== appData.settings.background_image) {

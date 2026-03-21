@@ -498,14 +498,20 @@ body {
 .marquee {
   display: inline-flex;
   align-items: center;
-  gap: 4rem;  /* Larger gap between items */
-  animation: marquee 30s linear infinite;
+  gap: var(--marquee-gap, 4rem);
+  animation: marquee var(--marquee-speed, 30s) linear infinite;
   padding-left: 100%;
 }
 
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
+}
+
+/* Seamless loop animation - translates only 50% since content is duplicated */
+@keyframes marquee-seamless {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .marquee-item {
