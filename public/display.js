@@ -265,6 +265,13 @@ function rotateHadith() {
 }
 
 // ==================== MARQUEE RENDERING ====================
+// Category label mapping (English to Indonesian)
+const categoryLabels = {
+  'info': 'INFO',
+  'donation': 'DONASI',
+  'announcement': 'PENGUMUMAN'
+};
+
 function renderMarquee() {
   const marqueeEl = document.getElementById('marquee');
   if (!marqueeEl) return;
@@ -272,8 +279,9 @@ function renderMarquee() {
   // If we have dynamic running texts, use them
   if (runningTexts.length > 0) {
     const items = runningTexts.map(rt => {
-      const categoryClass = `tag-${rt.category || 'info'}`;
-      const categoryLabel = (rt.category || 'info').toUpperCase();
+      const category = rt.category || 'info';
+      const categoryClass = `tag-${category}`;
+      const categoryLabel = categoryLabels[category] || 'INFO';
       return `
         <span class="marquee-item">
           <span class="marquee-tag ${categoryClass}">${categoryLabel}</span>

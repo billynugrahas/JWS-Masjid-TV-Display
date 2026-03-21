@@ -171,7 +171,8 @@ body {
 }
 
 /* ==================== HERO SECTION - CLOCK ==================== */
-.hero {
+.hero,
+.hero-section {
   flex: 1;
   display: flex;
   flex-direction: column;
