@@ -4,241 +4,413 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - Masjid Display</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
-    .header {
-      text-align: center;
-      padding: 20px 0;
-      border-bottom: 2px solid #1976d2;
-      margin-bottom: 20px;
-    }
-
-    .header h1 {
-      color: #1976d2;
-      font-size: 1.5rem;
-    }
-
-    .section {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .section h2 {
-      color: #1976d2;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
-      color: #555;
-    }
-
-    .form-group input[type="text"],
-    .form-group input[type="time"],
-    .form-group input[type="number"],
-    .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-
-    .form-group textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-
-    .prayer-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      align-items: end;
-      margin-bottom: 15px;
-      padding: 10px;
-      background: #f9f9f9;
-      border-radius: 4px;
-    }
-
-    .prayer-row .prayer-name {
-      font-weight: 600;
-      grid-column: 1 / -1;
-      margin-bottom: 5px;
-    }
-
-    .btn {
-      background: #1976d2;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.3s;
-    }
-
-    .btn:hover {
-      background: #1565c0;
-    }
-
-    .btn-secondary {
-      background: #757575;
-    }
-
-    .btn-secondary:hover {
-      background: #616161;
-    }
-
-    .success-msg {
-      background: #4caf50;
-      color: white;
-      padding: 10px;
-      border-radius: 4px;
-      margin-top: 10px;
-      text-align: center;
-      display: none;
-    }
-
-    .error-msg {
-      background: #f44336;
-      color: white;
-      padding: 10px;
-      border-radius: 4px;
-      margin-top: 10px;
-      text-align: center;
-      display: none;
-    }
-
-    .link-section {
-      text-align: center;
-      padding: 20px;
-      background: #e3f2fd;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .link-section a {
-      color: #1976d2;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .file-input-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      width: 100%;
-    }
-
-    .file-input-wrapper input[type=file] {
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    .file-input-label {
-      display: block;
-      padding: 10px;
-      background: #f0f0f0;
-      border: 1px dashed #ccc;
-      border-radius: 4px;
-      text-align: center;
-      color: #666;
-    }
-
-    .preview-img {
-      max-width: 100%;
-      max-height: 200px;
-      margin-top: 10px;
-      border-radius: 4px;
-    }
-  </style>
+  <link rel="stylesheet" href="/admin.css">
 </head>
 <body>
-  <div class="header">
-    <h1>Admin Panel - Masjid Display</h1>
-  </div>
-
-  <div class="link-section">
-    <a href="/display" target="_blank">Buka Display Masjid</a>
-  </div>
-
-  <form id="admin-form">
-    <!-- Mosque Info Section -->
-    <div class="section">
-      <h2>Informasi Masjid</h2>
-      <div class="form-group">
-        <label for="mosque-name">Nama Masjid</label>
-        <input type="text" id="mosque-name" name="mosque_name" placeholder="Masjid Al-Ikhlas">
+  <div class="admin-layout">
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">🕌</span>
+        <span class="sidebar-title">Admin Masjid</span>
       </div>
-    </div>
 
-    <!-- Prayer Times Section -->
-    <div class="section">
-      <h2>Jadwal Sholat</h2>
-      <div id="prayer-times-container">
-        <!-- Prayer times will be loaded here -->
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-section="schedule">
+          <span class="nav-icon">🕐</span>
+          <span class="nav-label">Jadwal Sholat</span>
+        </a>
+        <a href="#" class="nav-item" data-section="hadiths">
+          <span class="nav-icon">📜</span>
+          <span class="nav-label">Hadits & Quotes</span>
+        </a>
+        <a href="#" class="nav-item" data-section="announcements">
+          <span class="nav-icon">📢</span>
+          <span class="nav-label">Pengumuman</span>
+        </a>
+        <a href="#" class="nav-item" data-section="donations">
+          <span class="nav-icon">💰</span>
+          <span class="nav-label">Donasi & Infaq</span>
+        </a>
+        <a href="#" class="nav-item" data-section="running-text">
+          <span class="nav-icon">📝</span>
+          <span class="nav-label">Teks Berjalan</span>
+        </a>
+        <a href="#" class="nav-item" data-section="settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Pengaturan</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="/display" target="_blank" class="preview-btn">
+          <span>📺</span> Preview Display
+        </a>
       </div>
-    </div>
+    </aside>
 
-    <!-- Running Text Section -->
-    <div class="section">
-      <h2>Teks Berjalan</h2>
-      <div class="form-group">
-        <label for="running-text">Pesan</label>
-        <textarea id="running-text" name="running_text" placeholder="Masukkan pesan yang akan ditampilkan..."></textarea>
-      </div>
-    </div>
-
-    <!-- Background Section -->
-    <div class="section">
-      <h2>Gambar Latar</h2>
-      <div class="form-group">
-        <label>Upload Gambar</label>
-        <div class="file-input-wrapper">
-          <div class="file-input-label" id="file-label">Pilih gambar atau klik di sini</div>
-          <input type="file" id="background-input" accept="image/*">
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="main-content">
+      <header class="main-header">
+        <h1 class="page-title" id="page-title">Dashboard</h1>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="save-all-btn">
+            <span class="btn-icon">💾</span>
+            Simpan Semua
+          </button>
         </div>
-        <img id="background-preview" class="preview-img" style="display: none;">
-        <button type="button" class="btn btn-secondary" id="clear-bg-btn" style="margin-top: 10px; display: none;">Hapus Gambar</button>
+      </header>
+
+      <!-- ========== DASHBOARD SECTION ========== -->
+      <section class="content-section active" id="section-dashboard">
+        <div class="dashboard-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🕌</div>
+            <div class="stat-info">
+              <span class="stat-label">Nama Masjid</span>
+              <span class="stat-value" id="stat-mosque-name">-</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🕐</div>
+            <div class="stat-info">
+              <span class="stat-label">Sholat Berikutnya</span>
+              <span class="stat-value" id="stat-next-prayer">-</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📜</div>
+            <div class="stat-info">
+              <span class="stat-label">Hadits Aktif</span>
+              <span class="stat-value" id="stat-hadiths">0</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📢</div>
+            <div class="stat-info">
+              <span class="stat-label">Pengumuman Aktif</span>
+              <span class="stat-value" id="stat-announcements">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <h2>Quick Actions</h2>
+          <div class="action-buttons">
+            <button class="action-btn" onclick="switchSection('schedule')">✏️ Edit Jadwal</button>
+            <button class="action-btn" onclick="switchSection('hadiths')">➕ Tambah Hadits</button>
+            <button class="action-btn" onclick="switchSection('announcements')">📢 Pengumuman Baru</button>
+            <button class="action-btn" onclick="openPreview()">📺 Buka Display</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SCHEDULE SECTION ========== -->
+      <section class="content-section" id="section-schedule">
+        <div class="card">
+          <div class="card-header">
+            <h2>Jadwal Waktu Sholat</h2>
+            <p class="card-desc">Atur waktu sholat dan durasi iqomah</p>
+          </div>
+          <div class="card-body">
+            <div class="prayer-list" id="prayer-list">
+              <!-- Prayer items will be rendered here -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== HADITHS SECTION ========== -->
+      <section class="content-section" id="section-hadiths">
+        <div class="card">
+          <div class="card-header">
+            <h2>Daftar Hadits & Quotes</h2>
+            <button class="btn btn-secondary" onclick="openHadithModal()">
+              <span>+ Tambah Hadits</span>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="hadith-list" id="hadith-list">
+              <!-- Hadith items will be rendered here -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== ANNOUNCEMENTS SECTION ========== -->
+      <section class="content-section" id="section-announcements">
+        <div class="card">
+          <div class="card-header">
+            <h2>Pengumuman</h2>
+            <button class="btn btn-secondary" onclick="openAnnouncementModal()">
+              <span>+ Pengumuman Baru</span>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="announcement-list" id="announcement-list">
+              <!-- Announcements will be rendered here -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== DONATIONS SECTION ========== -->
+      <section class="content-section" id="section-donations">
+        <div class="card">
+          <div class="card-header">
+            <h2>Catatan Donasi & Infaq</h2>
+            <button class="btn btn-secondary" onclick="openDonationModal()">
+              <span>+ Tambah Kategori</span>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="donation-list" id="donation-list">
+              <!-- Donations will be rendered here -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== RUNNING TEXT SECTION ========== -->
+      <section class="content-section" id="section-running-text">
+        <div class="card">
+          <div class="card-header">
+            <h2>Teks Berjalan (Marquee)</h2>
+            <button class="btn btn-secondary" onclick="openRunningTextModal()">
+              <span>+ Tambah Teks</span>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="running-text-list" id="running-text-list">
+              <!-- Running texts will be rendered here -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SETTINGS SECTION ========== -->
+      <section class="content-section" id="section-settings">
+        <div class="settings-grid">
+          <div class="card">
+            <div class="card-header">
+              <h2>Informasi Masjid</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Nama Masjid</label>
+                <input type="text" id="setting-mosque-name" placeholder="Masjid Al-Muhajirin">
+              </div>
+              <div class="form-group">
+                <label>Alamat</label>
+                <textarea id="setting-mosque-address" rows="2" placeholder="Jl. Contoh No. 123"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Telepon / WhatsApp</label>
+                <input type="text" id="setting-mosque-phone" placeholder="081234567890">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Tampilan</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Gambar Latar</label>
+                <div class="file-upload">
+                  <input type="file" id="setting-background" accept="image/*" onchange="handleBackgroundUpload(event)">
+                  <div class="file-upload-label" id="bg-upload-label">
+                    <span>📷</span> Pilih gambar atau klik di sini
+                  </div>
+                  <img id="bg-preview" class="image-preview" style="display: none;">
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="clearBackground()" id="clear-bg-btn" style="display: none;">
+                  Hapus Gambar
+                </button>
+              </div>
+              <div class="form-group">
+                <label>Interval Rotasi Hadits (detik)</label>
+                <input type="number" id="setting-hadith-interval" value="30" min="10" max="120">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- Hadith Modal -->
+  <div class="modal" id="hadith-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="hadith-modal-title">Tambah Hadits</h3>
+        <button class="modal-close" onclick="closeModal('hadith-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="hadith-id">
+        <div class="form-group">
+          <label>Teks Hadits / Quote</label>
+          <textarea id="hadith-text" rows="4" placeholder="Masukkan teks hadits atau quote..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Sumber</label>
+          <input type="text" id="hadith-source" placeholder="HR. Bukhari & Muslim">
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="hadith-active" checked>
+            <span>Aktifkan (tampilkan di display)</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('hadith-modal')">Batal</button>
+        <button class="btn btn-primary" onclick="saveHadith()">Simpan</button>
       </div>
     </div>
+  </div>
 
-    <button type="submit" class="btn">Simpan Semua Perubahan</button>
-    <div class="success-msg" id="success-msg">Perubahan berhasil disimpan!</div>
-    <div class="error-msg" id="error-msg">Terjadi kesalahan. Silakan coba lagi.</div>
-  </form>
+  <!-- Announcement Modal -->
+  <div class="modal" id="announcement-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="announcement-modal-title">Pengumuman Baru</h3>
+        <button class="modal-close" onclick="closeModal('announcement-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="announcement-id">
+        <div class="form-group">
+          <label>Judul</label>
+          <input type="text" id="announcement-title" placeholder="Judul pengumuman">
+        </div>
+        <div class="form-group">
+          <label>Isi Pengumuman</label>
+          <textarea id="announcement-content" rows="4" placeholder="Detail pengumuman..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prioritas</label>
+            <select id="announcement-priority">
+              <option value="normal">Normal</option>
+              <option value="high">Penting</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="announcement-status">
+              <option value="draft">Draft</option>
+              <option value="published">Dipublikasi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Kadaluarsa (opsional)</label>
+          <input type="date" id="announcement-expiry">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('announcement-modal')">Batal</button>
+        <button class="btn btn-primary" onclick="saveAnnouncement()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Donation Modal -->
+  <div class="modal" id="donation-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="donation-modal-title">Tambah Kategori Donasi</h3>
+        <button class="modal-close" onclick="closeModal('donation-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="donation-id">
+        <div class="form-group">
+          <label>Kategori</label>
+          <input type="text" id="donation-category" placeholder="Infaq Jumat, Dana Renovasi, dll">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Jumlah Terkumpul (Rp)</label>
+            <input type="number" id="donation-amount" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>Target (Rp)</label>
+            <input type="number" id="donation-target" placeholder="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Keterangan</label>
+          <input type="text" id="donation-description" placeholder="Deskripsi singkat">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('donation-modal')">Batal</button>
+        <button class="btn btn-primary" onclick="saveDonation()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Running Text Modal -->
+  <div class="modal" id="running-text-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="running-text-modal-title">Tambah Teks Berjalan</h3>
+        <button class="modal-close" onclick="closeModal('running-text-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="running-text-id">
+        <div class="form-group">
+          <label>Teks</label>
+          <input type="text" id="running-text-input" placeholder="Masukkan teks yang akan ditampilkan...">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Kategori</label>
+            <select id="running-text-category">
+              <option value="info">Info</option>
+              <option value="donation">Donasi</option>
+              <option value="announcement">Pengumuman</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Prioritas</label>
+            <input type="number" id="running-text-priority" value="0" min="0" max="100">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="running-text-active" checked>
+            <span>Aktifkan</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('running-text-modal')">Batal</button>
+        <button class="btn btn-primary" onclick="saveRunningText()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toast-icon">✓</span>
+    <span class="toast-message" id="toast-message">Berhasil disimpan!</span>
+  </div>
 
   <script src="/admin.js"></script>
 </body>
