@@ -449,7 +449,6 @@ body {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-}
 
 .info-icon {
   font-size: 2.5rem;
@@ -499,7 +498,7 @@ body {
 .marquee {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xl);
+  gap: 4rem;  /* Larger gap between items */
   animation: marquee 30s linear infinite;
   padding-left: 100%;
 }

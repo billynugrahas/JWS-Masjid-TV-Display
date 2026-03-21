@@ -291,8 +291,8 @@ function renderMarquee() {
       `;
     }).join('');
 
-    // Duplicate items for seamless loop
-    marqueeEl.innerHTML = items + items;
+    // Single set of items with gap (no duplication)
+    marqueeEl.innerHTML = items;
   } else {
     // Fallback to default marquee
     const defaultText = settings.running_text || 'Selamat datang di Masjid';
