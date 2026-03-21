@@ -18,48 +18,15 @@ const AppState = {
 let currentState = AppState.IDLE;
 let prayerTimes = [];
 let settings = {};
+let hadiths = [];
+let runningTexts = [];
+let announcements = [];
 let countdownInterval = null;
 let iqomahInterval = null;
 let hadithInterval = null;
 let currentPrayerIndex = -1;
 let nextPrayerIndex = -1;
 let currentHadithIndex = 0;
-
-// ==================== HADITH COLLECTION ====================
-const hadiths = [
-  {
-    text: "Barangsiapa yang menghidupkan bulan Ramadhan dengan iman dan mengharap pahala, maka diampunilah dosa-dosanya yang telah lalu.",
-    source: "HR. Bukhari & Muslim"
-  },
-  {
-    text: "Sholat berjamaah lebih utama 27 derajat dibanding sholat sendirian.",
-    source: "HR. Bukhari"
-  },
-  {
-    text: "Barangsiapa menjaga sholat, maka ia akan mendapatkan cahaya, hujjah, dan keselamatan pada hari kiamat.",
-    source: "HR. Ahmad"
-  },
-  {
-    text: "Sesungguhnya Allah tidak mengubah keadaan suatu kaum sehingga mereka mengubah keadaan yang ada pada diri mereka sendiri.",
-    source: "QS. Ar-Ra'd: 11"
-  },
-  {
-    text: "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya.",
-    source: "HR. Thabrani"
-  },
-  {
-    text: "Sedekah itu dapat menghapus dosa sebagaimana air memadamkan api.",
-    source: "HR. Tirmidzi"
-  },
-  {
-    text: "Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya.",
-    source: "HR. Abu Dawud"
-  },
-  {
-    text: "Sesungguhnya amal itu tergantung niatnya, dan setiap orang hanya mendapatkan sesuai niatnya.",
-    source: "HR. Bukhari & Muslim"
-  }
-];
 
 // Prayer icons mapping
 const prayerIcons = {
@@ -77,6 +44,13 @@ const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 
 // Hijri month names
 const hijriMonths = ['Muharram', 'Safar', 'Rabiul Awal', 'Rabiul Akhir', 'Jumadil Awal', 'Jumadil Akhir', 'Rajab', 'Syaban', 'Ramadhan', 'Syawal', 'Dzulqaidah', 'Dzulhijjah'];
 
+// Default hadiths (fallback if API returns empty)
+const defaultHadiths = [
+  { text: "Barangsiapa yang menghidupkan bulan Ramadhan dengan iman dan mengharap pahala, maka diampunilah dosa-dosanya yang telah lalu.", source: "HR. Bukhari & Muslim" },
+  { text: "Sholat berjamaah lebih utama 27 derajat dibanding sholat sendirian.", source: "HR. Bukhari" },
+  { text: "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya.", source: "HR. Thabrani" }
+];
+
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
   initializeDisplay();
@@ -93,10 +67,6 @@ function initializeDisplay() {
   // Set up intervals
   setInterval(fetchData, 5000);      // Poll data every 5 seconds
   setInterval(checkPrayerState, 1000); // Check state every second
-
-  // Start hadith rotation
-  rotateHadith();
-  setInterval(rotateHadith, 30000);   // Rotate hadith every 30 seconds
 }
 
 // ==================== CLOCK & DATE FUNCTIONS ====================
@@ -175,12 +145,19 @@ async function fetchData() {
 
     settings = data.settings || {};
     prayerTimes = data.prayers || [];
+    hadiths = data.hadiths && data.hadiths.length > 0 ? data.hadiths : defaultHadiths;
+    runningTexts = data.runningTexts || [];
+    announcements = data.announcements || [];
 
     updateDisplayElements();
     renderPrayerGrid();
+    renderMarquee();
+    startHadithRotation();
     checkPrayerState();
   } catch (error) {
     console.error('Error fetching data:', error);
+    // Use defaults on error
+    hadiths = defaultHadiths;
   }
 }
 
@@ -190,12 +167,6 @@ function updateDisplayElements() {
   const mosqueName = settings.mosque_name || 'Masjid Al-Muhajirin';
   document.getElementById('mosque-name').textContent = mosqueName;
   document.title = `Display - ${mosqueName}`;
-
-  // Update running text / custom marquee
-  const customMarquee = document.getElementById('custom-marquee');
-  if (customMarquee && settings.running_text) {
-    customMarquee.innerHTML = `<span class="marquee-tag tag-info">INFO</span>${settings.running_text}`;
-  }
 
   // Update background image
   const bgOverlay = document.getElementById('bg-overlay');
@@ -232,7 +203,28 @@ function updatePrayerHighlight(index) {
 }
 
 // ==================== HADITH ROTATION ====================
+function startHadithRotation() {
+  // Clear existing interval
+  if (hadithInterval) {
+    clearInterval(hadithInterval);
+  }
+
+  // Only rotate if we have hadiths
+  if (hadiths.length === 0) return;
+
+  // Get rotation interval from settings (default 30 seconds)
+  const interval = (parseInt(settings.hadith_rotation_interval) || 30) * 1000;
+
+  // Initial rotation
+  rotateHadith();
+
+  // Set up rotation interval
+  hadithInterval = setInterval(rotateHadith, interval);
+}
+
 function rotateHadith() {
+  if (hadiths.length === 0) return;
+
   const hadith = hadiths[currentHadithIndex];
 
   const textEl = document.getElementById('info-text');
@@ -252,6 +244,39 @@ function rotateHadith() {
   }
 
   currentHadithIndex = (currentHadithIndex + 1) % hadiths.length;
+}
+
+// ==================== MARQUEE RENDERING ====================
+function renderMarquee() {
+  const marqueeEl = document.getElementById('marquee');
+  if (!marqueeEl) return;
+
+  // If we have dynamic running texts, use them
+  if (runningTexts.length > 0) {
+    const items = runningTexts.map(rt => {
+      const categoryClass = `tag-${rt.category || 'info'}`;
+      const categoryLabel = (rt.category || 'info').toUpperCase();
+      return `
+        <span class="marquee-item">
+          <span class="marquee-tag ${categoryClass}">${categoryLabel}</span>
+          ${rt.text}
+        </span>
+        <span class="marquee-separator">•</span>
+      `;
+    }).join('');
+
+    // Duplicate items for seamless loop
+    marqueeEl.innerHTML = items + items;
+  } else {
+    // Fallback to default marquee
+    const defaultText = settings.running_text || 'Selamat datang di Masjid';
+    marqueeEl.innerHTML = `
+      <span class="marquee-item">
+        <span class="marquee-tag tag-info">INFO</span>
+        ${defaultText}
+      </span>
+    `;
+  }
 }
 
 // ==================== PRAYER STATE MANAGEMENT ====================
