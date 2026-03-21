@@ -14,6 +14,7 @@ let settings = {};
 let countdownInterval = null;
 let iqomahInterval = null;
 let currentPrayerIndex = -1;
+let nextPrayerIndex = -1;
 
 // Indonesian day and month names
 const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -24,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClock();
   setInterval(updateClock, 1000);
   fetchData();
-  setInterval(fetchData, 5000); // Poll every 5 seconds
+  setInterval(fetchData, 5000); // Poll data every 5 seconds
+  setInterval(checkPrayerState, 1000); // Check state every second
 });
 
 // Update clock display
@@ -159,12 +161,16 @@ function checkPrayerState() {
   // If not in any prayer state, show countdown to next prayer
   if (!foundPrayer) {
     const nextIndex = getNextPrayerIndex();
-    setCountdownToNextPrayer(nextIndex);
+    // Only update if prayer index changed or not in waiting state
+    if (currentState !== state.WAITING_ADZAN || nextPrayerIndex !== nextIndex) {
+      setCountdownToNextPrayer(nextIndex);
+    }
   }
 }
 
 // Set countdown to next prayer
 function setCountdownToNextPrayer(prayerIndex) {
+  nextPrayerIndex = prayerIndex;
   currentPrayerIndex = -1;
   currentState = state.WAITING_ADZAN;
 
@@ -174,23 +180,39 @@ function setCountdownToNextPrayer(prayerIndex) {
   document.body.classList.remove('calm-mode');
 
   const prayer = prayerTimes[prayerIndex];
-  const now = new Date();
-  const [hours, minutes] = prayer.time.split(':').map(Number);
 
-  let prayerDate = new Date(now);
-  prayerDate.setHours(hours, minutes, 0, 0);
+  // Clear existing countdown interval
+  if (countdownInterval) clearInterval(countdownInterval);
 
-  // If prayer time has passed today, calculate for tomorrow
-  if (prayerDate <= now) {
-    prayerDate.setDate(prayerDate.getDate() + 1);
+  // Update countdown every second
+  function updateCountdown() {
+    const now = new Date();
+    const [hours, minutes] = prayer.time.split(':').map(Number);
+
+    let prayerDate = new Date(now);
+    prayerDate.setHours(hours, minutes, 0, 0);
+
+    // If prayer time has passed today, calculate for tomorrow
+    if (prayerDate <= now) {
+      prayerDate.setDate(prayerDate.getDate() + 1);
+    }
+
+    const diff = prayerDate - now;
+
+    // If countdown finished, check prayer state
+    if (diff <= 0) {
+      clearInterval(countdownInterval);
+      checkPrayerState();
+      return;
+    }
+
+    document.getElementById('countdown-label').textContent = `Menuju Adzan ${prayer.name}`;
+    document.getElementById('countdown-time').textContent = formatCountdown(diff);
   }
 
-  const diff = prayerDate - now;
-  const diffMinutes = Math.floor(diff / 60000);
-  const diffSeconds = Math.floor((diff % 60000) / 1000);
-
-  document.getElementById('countdown-label').textContent = `Menuju Adzan ${prayer.name}`;
-  document.getElementById('countdown-time').textContent = formatCountdown(diff);
+  // Update immediately and then every second
+  updateCountdown();
+  countdownInterval = setInterval(updateCountdown, 1000);
 
   // Update prayer grid highlight
   updatePrayerHighlight(prayerIndex);
