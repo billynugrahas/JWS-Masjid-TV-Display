@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display Masjid</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="background-overlay"></div>
+
+  <div class="container">
+    <!-- Header with mosque name -->
+    <header class="header">
+      <h1 id="mosque-name">Masjid Al-Ikhlas</h1>
+    </header>
+
+    <!-- Clock section -->
+    <section class="clock-section">
+      <div class="time-display" id="current-time">00:00:00</div>
+      <div class="date-display" id="current-date">Senin, 1 Januari 2024</div>
+    </section>
+
+    <!-- Prayer times section -->
+    <section class="prayer-section">
+      <h2>Jadwal Sholat</h2>
+      <div class="prayer-grid" id="prayer-grid">
+        <!-- Prayer times will be loaded here -->
+      </div>
+    </section>
+
+    <!-- Countdown section -->
+    <section class="countdown-section" id="countdown-section">
+      <div class="countdown-label" id="countdown-label">Menuju Adzan</div>
+      <div class="countdown-time" id="countdown-time">00:00:00</div>
+    </section>
+
+    <!-- Iqomah countdown section (hidden by default) -->
+    <section class="iqomah-section" id="iqomah-section" style="display: none;">
+      <div class="iqomah-label">IQOMAH</div>
+      <div class="iqomah-time" id="iqomah-time">00:00</div>
+    </section>
+
+    <!-- Prayer in progress section (hidden by default) -->
+    <section class="prayer-progress-section" id="prayer-progress-section" style="display: none;">
+      <div class="prayer-progress-label">SHOLAT DALAM PROSES</div>
+      <div class="prayer-name" id="current-prayer-name"></div>
+    </section>
+
+    <!-- Running text -->
+    <div class="running-text-container">
+      <div class="running-text" id="running-text"></div>
+    </div>
+  </div>
+
+  <!-- Audio for beep -->
+  <audio id="beep-sound" preload="auto">
+    <source src="/sounds/beep.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="/display.js"></script>
+</body>
+</html>

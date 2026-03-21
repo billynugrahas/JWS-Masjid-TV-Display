@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  masjid-display:
+    build: .
+    container_name: masjid-display
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - masjid-data:/app/data
+    environment:
+      - TZ=Asia/Jakarta
+      - NODE_ENV=production
+
+volumes:
+  masjid-data:

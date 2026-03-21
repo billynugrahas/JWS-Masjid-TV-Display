@@ -1,0 +1,229 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0a1628;
+  color: #ffffff;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.header h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: #4fc3f7;
+}
+
+/* Clock Section */
+.clock-section {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.time-display {
+  font-size: 8rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #ffffff;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.date-display {
+  font-size: 2rem;
+  color: #b0bec5;
+  margin-top: 10px;
+}
+
+/* Prayer Section */
+.prayer-section {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.prayer-section h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #4fc3f7;
+  margin-bottom: 20px;
+}
+
+.prayer-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+}
+
+.prayer-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px 15px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.prayer-card.active {
+  background: rgba(79, 195, 247, 0.3);
+  border-color: #4fc3f7;
+  transform: scale(1.05);
+}
+
+.prayer-card .name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #4fc3f7;
+  margin-bottom: 10px;
+}
+
+.prayer-card .time {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Countdown Section */
+.countdown-section {
+  text-align: center;
+  padding: 30px 0;
+  margin-top: auto;
+}
+
+.countdown-label {
+  font-size: 1.5rem;
+  color: #81d4fa;
+  margin-bottom: 10px;
+}
+
+.countdown-time {
+  font-size: 4rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #ffeb3b;
+}
+
+/* Iqomah Section */
+.iqomah-section {
+  text-align: center;
+  padding: 40px 0;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.iqomah-label {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ff5722;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.iqomah-time {
+  font-size: 10rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #ffffff;
+}
+
+/* Prayer Progress Section */
+.prayer-progress-section {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.prayer-progress-label {
+  font-size: 2rem;
+  color: #81d4fa;
+  margin-bottom: 20px;
+}
+
+.prayer-name {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #4fc3f7;
+}
+
+/* Running Text */
+.running-text-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 15px 0;
+  overflow: hidden;
+}
+
+.running-text {
+  white-space: nowrap;
+  font-size: 1.5rem;
+  color: #4fc3f7;
+  animation: scroll 20s linear infinite;
+  padding-left: 100%;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Calm mode (during prayer) */
+body.calm-mode .prayer-section,
+body.calm-mode .countdown-section {
+  opacity: 0.2;
+}
+
+body.calm-mode .running-text-container {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .time-display {
+    font-size: 4rem;
+  }
+
+  .prayer-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+masjid.db
+.git
+.gitignore
+*.md
+brief.md
+start.sh
