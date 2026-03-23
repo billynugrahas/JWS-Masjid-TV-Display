@@ -344,6 +344,7 @@ body {
 
 .prayer-progress-sub {
   font-size: clamp(0.9rem, 1.5vh, 1.1rem);
+  font-weight: 600;
   color: var(--color-text-muted);
   margin-top: 0.5vh;
 }
@@ -352,7 +353,6 @@ body {
   font-size: clamp(0.8rem, 1.3vh, 1rem);
   color: var(--color-text-muted);
   margin-top: 0.3vh;
-  opacity: 0.8;
 }
 
 /* ==================== PRAYER GRID ==================== */
@@ -648,6 +648,10 @@ body.calm-mode .prayer-progress-text {
 
 body.calm-mode .prayer-progress-sub {
   color: rgba(255, 255, 255, 0.7);
+}
+
+body.calm-mode .prayer-progress-sub2 {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ==================== RESPONSIVE DESIGN ==================== */
