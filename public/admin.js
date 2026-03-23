@@ -635,7 +635,18 @@ function populateSettings() {
   document.getElementById('setting-mosque-address').value = appData.settings.mosque_address || '';
   document.getElementById('setting-mosque-phone').value = appData.settings.mosque_phone || '';
   document.getElementById('setting-hadith-interval').value = appData.settings.hadith_rotation_interval || 30;
+  document.getElementById('setting-prayer-duration').value = appData.settings.prayer_duration || 15;
+  document.getElementById('setting-prayer-subtext').value = appData.settings.prayer_subtext || '';
+  document.getElementById('setting-prayer-subtext-2').value = appData.settings.prayer_subtext_2 || '';
   document.getElementById('setting-show-live').checked = appData.settings.show_live_indicator === 'true';
+
+  // Imsak & Syuruq settings
+  document.getElementById('setting-imsak-enabled').checked = appData.settings.imsak_enabled === 'true';
+  document.getElementById('setting-imsak-label').value = appData.settings.imsak_label || '';
+  document.getElementById('setting-imsak-time').value = appData.settings.imsak_time || '04:20';
+  document.getElementById('setting-syuruq-enabled').checked = appData.settings.syuruq_enabled === 'true';
+  document.getElementById('setting-syuruq-label').value = appData.settings.syuruq_label || '';
+  document.getElementById('setting-syuruq-time').value = appData.settings.syuruq_time || '05:45';
 
   // Marquee settings
   document.getElementById('setting-marquee-loop').checked = appData.settings.marquee_loop !== 'false';
@@ -691,6 +702,15 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       mosque_address: document.getElementById('setting-mosque-address').value,
       mosque_phone: document.getElementById('setting-mosque-phone').value,
       hadith_rotation_interval: document.getElementById('setting-hadith-interval').value,
+      prayer_duration: document.getElementById('setting-prayer-duration').value,
+      prayer_subtext: document.getElementById('setting-prayer-subtext').value,
+      prayer_subtext_2: document.getElementById('setting-prayer-subtext-2').value,
+      imsak_enabled: document.getElementById('setting-imsak-enabled').checked ? 'true' : 'false',
+      imsak_label: document.getElementById('setting-imsak-label').value,
+      imsak_time: document.getElementById('setting-imsak-time').value,
+      syuruq_enabled: document.getElementById('setting-syuruq-enabled').checked ? 'true' : 'false',
+      syuruq_label: document.getElementById('setting-syuruq-label').value,
+      syuruq_time: document.getElementById('setting-syuruq-time').value,
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,

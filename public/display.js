@@ -151,6 +151,7 @@ async function fetchData() {
 
     updateDisplayElements();
     renderPrayerGrid();
+    renderOptionalTimes();
     renderMarquee();
     startHadithRotation();
     checkPrayerState();
@@ -196,6 +197,18 @@ function updateDisplayElements() {
       bgOverlay.classList.remove('active');
     }
   }
+
+  // Update prayer subtext
+  const prayerSubtext = document.getElementById('prayer-subtext');
+  if (prayerSubtext) {
+    prayerSubtext.textContent = settings.prayer_subtext || 'Luruskan dan Rapatkan Shaf';
+  }
+
+  // Update prayer subtext 2 (optional)
+  const prayerSubtext2 = document.getElementById('prayer-subtext-2');
+  if (prayerSubtext2) {
+    prayerSubtext2.textContent = settings.prayer_subtext_2 || '';
+  }
 }
 
 // ==================== PRAYER GRID RENDERING ====================
@@ -218,6 +231,47 @@ function updatePrayerHighlight(index) {
   cards.forEach((card, i) => {
     card.classList.toggle('active', i === index);
   });
+}
+
+// ==================== OPTIONAL TIMES RENDERING ====================
+function renderOptionalTimes() {
+  const section = document.getElementById('optional-times-section');
+  const grid = document.getElementById('optional-times-grid');
+  if (!section || !grid) return;
+
+  const items = [];
+
+  // Imsak
+  if (settings.imsak_enabled === 'true' && settings.imsak_time) {
+    items.push({
+      icon: '🌙',
+      name: settings.imsak_label || 'Imsak',
+      time: settings.imsak_time
+    });
+  }
+
+  // Syuruq
+  if (settings.syuruq_enabled === 'true' && settings.syuruq_time) {
+    items.push({
+      icon: '🌅',
+      name: settings.syuruq_label || 'Syuruq',
+      time: settings.syuruq_time
+    });
+  }
+
+  if (items.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  grid.innerHTML = items.map(item => `
+    <div class="optional-time-card">
+      <div class="icon">${item.icon}</div>
+      <div class="name">${item.name}</div>
+      <div class="time">${item.time}</div>
+    </div>
+  `).join('');
 }
 
 // ==================== HADITH ROTATION ====================
@@ -333,6 +387,9 @@ function checkPrayerState() {
   const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
   const currentSeconds = now.getSeconds();
 
+  // Get prayer duration from settings (default 15 minutes)
+  const prayerDuration = parseInt(settings.prayer_duration) || 15;
+
   let foundState = false;
 
   for (let i = 0; i < prayerTimes.length; i++) {
@@ -340,7 +397,7 @@ function checkPrayerState() {
     const [hours, minutes] = prayer.time.split(':').map(Number);
     const prayerTimeMinutes = hours * 60 + minutes;
     const iqomahEndMinutes = prayerTimeMinutes + prayer.iqomah_duration;
-    const prayerEndMinutes = iqomahEndMinutes + 15; // Assume 15 min prayer
+    const prayerEndMinutes = iqomahEndMinutes + prayerDuration;
 
     // Check if currently in prayer
     if (currentTimeMinutes >= iqomahEndMinutes && currentTimeMinutes < prayerEndMinutes) {

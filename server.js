@@ -78,7 +78,16 @@ const defaultSettings = {
   show_live_indicator: 'true',
   marquee_loop: 'true',
   marquee_speed: 30,
-  marquee_gap: 4
+  marquee_gap: 4,
+  prayer_duration: 15,
+  prayer_subtext: 'Luruskan dan Rapatkan Shaf',
+  prayer_subtext_2: '',
+  imsak_time: '04:20',
+  imsak_label: 'Imsak',
+  imsak_enabled: 'false',
+  syuruq_time: '05:45',
+  syuruq_label: 'Syuruq',
+  syuruq_enabled: 'false'
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');

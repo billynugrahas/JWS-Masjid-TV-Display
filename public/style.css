@@ -348,6 +348,13 @@ body {
   margin-top: 0.5vh;
 }
 
+.prayer-progress-sub2 {
+  font-size: clamp(0.8rem, 1.3vh, 1rem);
+  color: var(--color-text-muted);
+  margin-top: 0.3vh;
+  opacity: 0.8;
+}
+
 /* ==================== PRAYER GRID ==================== */
 .prayer-section {
   padding: 0 1vw;
@@ -357,6 +364,50 @@ body {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+/* ==================== OPTIONAL TIMES SECTION ==================== */
+.optional-times-section {
+  padding: 0 1vw;
+  margin-bottom: 0.5vh;
+}
+
+.optional-times-grid {
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 3rem);
+}
+
+.optional-time-card {
+  background: rgba(212, 175, 55, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: clamp(0.5rem, 1vh, 1rem) clamp(1rem, 2vw, 2rem);
+  text-align: center;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+.optional-time-card .icon {
+  font-size: clamp(1.2rem, 2vh, 1.5rem);
+}
+
+.optional-time-card .name {
+  font-family: var(--font-display);
+  font-size: clamp(0.8rem, 1.3vh, 1rem);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.optional-time-card .time {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2vh, 1.5rem);
+  font-weight: 700;
+  color: var(--color-accent);
 }
 
 /* ==================== PRAYER CARD - GLASSMORPHISM ==================== */

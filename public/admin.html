@@ -253,10 +253,66 @@
                 <input type="number" id="setting-hadith-interval" value="30" min="10" max="120">
               </div>
               <div class="form-group">
+                <label>Durasi Tampilan Sholat (menit)</label>
+                <input type="number" id="setting-prayer-duration" value="15" min="5" max="60">
+                <small style="color: var(--color-text-muted);">Layar "Sholat berjamaah" akan otomatis tertutup setelah durasi ini (default: 15)</small>
+              </div>
+              <div class="form-group">
+                <label>Teks Saat Sholat (Baris 1)</label>
+                <input type="text" id="setting-prayer-subtext" placeholder="Luruskan dan Rapatkan Shaf">
+                <small style="color: var(--color-text-muted);">Teks utama yang tampil di bawah "SHOLAT [nama]"</small>
+              </div>
+              <div class="form-group">
+                <label>Teks Saat Sholat (Baris 2) - Opsional</label>
+                <input type="text" id="setting-prayer-subtext-2" placeholder="Harap HP di-setting mode silent">
+                <small style="color: var(--color-text-muted);">Teks tambahan (kosongkan jika tidak diperlukan)</small>
+              </div>
+              <div class="form-group">
                 <label class="checkbox-label">
                   <input type="checkbox" id="setting-show-live">
                   <span>Tampilkan indikator LIVE di header</span>
                 </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Waktu Tambahan (Imsak & Syuruq)</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-imsak-enabled">
+                  <span>Tampilkan Imsak</span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Label Imsak</label>
+                  <input type="text" id="setting-imsak-label" placeholder="Imsak">
+                </div>
+                <div class="form-group">
+                  <label>Waktu Imsak</label>
+                  <input type="time" id="setting-imsak-time" value="04:20">
+                </div>
+              </div>
+              <hr style="border-color: var(--color-text-light); margin: 1rem 0;">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-syuruq-enabled">
+                  <span>Tampilkan Syuruq</span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Label Syuruq</label>
+                  <input type="text" id="setting-syuruq-label" placeholder="Syuruq">
+                </div>
+                <div class="form-group">
+                  <label>Waktu Syuruq</label>
+                  <input type="time" id="setting-syuruq-time" value="05:45">
+                </div>
               </div>
             </div>
           </div>
