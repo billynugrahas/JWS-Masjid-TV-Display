@@ -353,14 +353,15 @@ function renderAnnouncementsList() {
   const list = document.getElementById('announcements-list');
   if (!list) return;
 
-  const published = announcements.slice(0, 3); // Max 3 items (already filtered by API)
+  // announcements are already filtered by /api/state (published + not expired)
+  const items = announcements.slice(0, 3);
 
-  if (published.length === 0) {
+  if (items.length === 0) {
     list.innerHTML = '<li style="color: var(--color-text-muted);">Tidak ada pengumuman</li>';
     return;
   }
 
-  list.innerHTML = published.map(a => `<li>${a.title}</li>`).join('');
+  list.innerHTML = items.map(a => `<li>${a.title}</li>`).join('');
 }
 ```
 
@@ -408,7 +409,8 @@ function setAdzanState(prayer) {
   document.getElementById('iqomah-section').style.display = 'none';
   document.getElementById('prayer-progress').style.display = 'none';
   document.getElementById('countdown-pill').style.display = 'flex';
-  document.body.classList.add('adhan-mode');  // <-- ADD THIS LINE
+  document.body.classList.add('adhan-mode');     // <-- ADD THIS LINE
+  document.body.classList.remove('calm-mode');   // <-- ADD THIS LINE
 
   document.getElementById('countdown-label').textContent = `WAKTU ADZAN ${prayer.name.toUpperCase()}`;
   document.getElementById('countdown-time').textContent = prayer.time;
