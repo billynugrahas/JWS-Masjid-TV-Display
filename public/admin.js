@@ -15,6 +15,7 @@ let appData = {
 };
 
 let backgroundImageData = '';
+let logoImageData = '';
 let indonesiaCitiesData = null;
 
 // ==================== INITIALIZATION ====================
@@ -798,6 +799,21 @@ function populateSettings() {
   document.getElementById('setting-mosque-tagline').value = appData.settings.mosque_tagline || '';
   document.getElementById('setting-mosque-address').value = appData.settings.mosque_address || '';
   document.getElementById('setting-mosque-phone').value = appData.settings.mosque_phone || '';
+
+  // Logo image preview
+  if (appData.settings.mosque_logo_image) {
+    logoImageData = appData.settings.mosque_logo_image;
+    document.getElementById('logo-preview').src = appData.settings.mosque_logo_image;
+    document.getElementById('logo-preview').style.display = 'block';
+    document.getElementById('clear-logo-btn').style.display = 'inline-flex';
+    document.getElementById('logo-upload-label').innerHTML = '<span>📷</span> Ganti Logo';
+  } else {
+    logoImageData = '';
+    document.getElementById('logo-preview').style.display = 'none';
+    document.getElementById('clear-logo-btn').style.display = 'none';
+    document.getElementById('logo-upload-label').innerHTML = '<span>📷</span> Upload Logo (PNG/JPG/SVG)';
+  }
+
   document.getElementById('setting-hadith-interval').value = appData.settings.hadith_rotation_interval || 30;
   document.getElementById('setting-prayer-duration').value = appData.settings.prayer_duration || 15;
   document.getElementById('setting-prayer-subtext').value = appData.settings.prayer_subtext || '';
@@ -933,6 +949,29 @@ function clearBackground() {
   document.getElementById('setting-background').value = '';
 }
 
+function handleLogoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    logoImageData = e.target.result;
+    document.getElementById('logo-preview').src = logoImageData;
+    document.getElementById('logo-preview').style.display = 'block';
+    document.getElementById('clear-logo-btn').style.display = 'inline-flex';
+    document.getElementById('logo-upload-label').innerHTML = '<span>📷</span> Ganti Logo';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearLogoImage() {
+  logoImageData = '';
+  document.getElementById('logo-preview').style.display = 'none';
+  document.getElementById('clear-logo-btn').style.display = 'none';
+  document.getElementById('logo-upload-label').innerHTML = '<span>📷</span> Upload Logo (PNG/JPG/SVG)';
+  document.getElementById('setting-mosque-logo-image').value = '';
+}
+
 // ==================== SAVE ALL ====================
 document.getElementById('save-all-btn').addEventListener('click', async () => {
   const btn = document.getElementById('save-all-btn');
@@ -977,6 +1016,10 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
 
     if (backgroundImageData !== appData.settings.background_image) {
       settings.background_image = backgroundImageData;
+    }
+
+    if (logoImageData !== appData.settings.mosque_logo_image) {
+      settings.mosque_logo_image = logoImageData;
     }
 
     await fetch('/api/settings', {

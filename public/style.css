@@ -120,6 +120,17 @@ body {
 .mosque-logo {
   font-size: clamp(1.5rem, 3vh, 2.5rem);
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mosque-logo-img {
+  max-width: clamp(3rem, 6vh, 5rem);
+  max-height: clamp(3rem, 6vh, 5rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .mosque-name {

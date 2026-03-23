@@ -565,6 +565,78 @@ body {
   border-radius: var(--radius-md);
 }
 
+/* Logo Selector */
+.logo-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.logo-image-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.logo-image-section .file-upload {
+  padding: 0.5rem;
+  position: relative;
+  cursor: pointer;
+}
+
+.logo-image-section .file-upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.logo-image-section .file-upload-label {
+  padding: 1rem 1.5rem;
+  flex-direction: row;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin: 0;
+}
+
+.logo-image-section .file-upload:hover .file-upload-label {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.logo-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  padding: 0.25rem;
+  background: var(--bg-card);
+}
+
+.logo-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.logo-divider::before,
+.logo-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.logo-emoji-section input {
+  text-align: center;
+  font-size: 2rem;
+  padding: 0.5rem;
+}
+
 /* ==================== PRAYER LIST ==================== */
 .prayer-list {
   display: flex;

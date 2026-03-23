@@ -169,10 +169,28 @@ function updateDisplayElements() {
   document.getElementById('mosque-name').textContent = mosqueName;
   document.title = `Display - ${mosqueName}`;
 
-  // Update mosque logo
-  const mosqueLogo = document.getElementById('mosque-logo');
-  if (mosqueLogo) {
-    mosqueLogo.textContent = settings.mosque_logo || '🕌';
+  // Update mosque logo (image or emoji)
+  const logoImg = document.getElementById('mosque-logo-img');
+  const logoEmoji = document.getElementById('mosque-logo-emoji');
+
+  if (settings.mosque_logo_image) {
+    // Use image if available
+    if (logoImg) {
+      logoImg.src = settings.mosque_logo_image;
+      logoImg.style.display = 'block';
+    }
+    if (logoEmoji) {
+      logoEmoji.style.display = 'none';
+    }
+  } else {
+    // Fallback to emoji
+    if (logoImg) {
+      logoImg.style.display = 'none';
+    }
+    if (logoEmoji) {
+      logoEmoji.textContent = settings.mosque_logo || '🕌';
+      logoEmoji.style.display = 'block';
+    }
   }
 
   // Update mosque tagline
