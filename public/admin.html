@@ -305,16 +305,41 @@
                 <small style="color: var(--color-text-muted);">Jika diaktifkan, waktu sholat dihitung otomatis berdasarkan lokasi</small>
               </div>
 
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Latitude</label>
-                  <input type="number" id="setting-mosque-latitude" step="0.0001" placeholder="-6.2088">
-                  <small style="color: var(--color-text-muted);">Contoh: Jakarta -6.2088</small>
+              <!-- Location Selector -->
+              <div class="location-selector">
+                <h4 style="margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--color-text-muted);">📍 Pilih Lokasi</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Provinsi</label>
+                    <select id="setting-province" onchange="onProvinceChange()">
+                      <option value="">-- Pilih Provinsi --</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Kota/Kabupaten</label>
+                    <select id="setting-city" onchange="onCityChange()">
+                      <option value="">-- Pilih Kota --</option>
+                    </select>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label>Longitude</label>
-                  <input type="number" id="setting-mosque-longitude" step="0.0001" placeholder="106.8456">
-                  <small style="color: var(--color-text-muted);">Contoh: Jakarta 106.8456</small>
+
+                <div class="coords-toggle">
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="toggleCoordsInput()">
+                    <span>📐</span> Input Koordinat Manual
+                  </button>
+                </div>
+
+                <div id="manual-coords" class="form-row" style="display: none; margin-top: 0.75rem;">
+                  <div class="form-group">
+                    <label>Latitude</label>
+                    <input type="number" id="setting-mosque-latitude" step="0.0001" placeholder="-6.2088">
+                    <small style="color: var(--color-text-muted);">Contoh: Jakarta -6.2088</small>
+                  </div>
+                  <div class="form-group">
+                    <label>Longitude</label>
+                    <input type="number" id="setting-mosque-longitude" step="0.0001" placeholder="106.8456">
+                    <small style="color: var(--color-text-muted);">Contoh: Jakarta 106.8456</small>
+                  </div>
                 </div>
               </div>
 

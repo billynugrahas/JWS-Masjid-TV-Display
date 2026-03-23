@@ -15,12 +15,95 @@ let appData = {
 };
 
 let backgroundImageData = '';
+let indonesiaCitiesData = null;
 
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
+  loadIndonesiaCities();
   fetchAllData();
 });
+
+// ==================== INDONESIA CITIES LOADER ====================
+async function loadIndonesiaCities() {
+  try {
+    const response = await fetch('/indonesia-cities.json');
+    indonesiaCitiesData = await response.json();
+    populateProvinceDropdown();
+  } catch (error) {
+    console.error('Failed to load Indonesia cities data:', error);
+  }
+}
+
+function populateProvinceDropdown() {
+  const select = document.getElementById('setting-province');
+  if (!select || !indonesiaCitiesData) return;
+
+  select.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
+
+  indonesiaCitiesData.provinces.forEach(province => {
+    const option = document.createElement('option');
+    option.value = province.id;
+    option.textContent = province.name;
+    select.appendChild(option);
+  });
+}
+
+function onProvinceChange() {
+  const provinceId = document.getElementById('setting-province').value;
+  const citySelect = document.getElementById('setting-city');
+
+  citySelect.innerHTML = '<option value="">-- Pilih Kota --</option>';
+
+  if (!provinceId || !indonesiaCitiesData) return;
+
+  const province = indonesiaCitiesData.provinces.find(p => p.id === provinceId);
+  if (!province) return;
+
+  province.cities.forEach(city => {
+    const option = document.createElement('option');
+    option.value = JSON.stringify({ lat: city.lat, lng: city.lng });
+    option.textContent = city.name;
+    citySelect.appendChild(option);
+  });
+}
+
+function onCityChange() {
+  const cityValue = document.getElementById('setting-city').value;
+  if (!cityValue) return;
+
+  try {
+    const coords = JSON.parse(cityValue);
+    document.getElementById('setting-mosque-latitude').value = coords.lat;
+    document.getElementById('setting-mosque-longitude').value = coords.lng;
+  } catch (e) {
+    console.error('Failed to parse city coordinates:', e);
+  }
+}
+
+function toggleCoordsInput() {
+  const coordsDiv = document.getElementById('manual-coords');
+  if (coordsDiv.style.display === 'none') {
+    coordsDiv.style.display = 'grid';
+  } else {
+    coordsDiv.style.display = 'none';
+  }
+}
+
+function findCityByCoords(lat, lng) {
+  if (!indonesiaCitiesData) return null;
+
+  const tolerance = 0.1; // ~10km tolerance
+
+  for (const province of indonesiaCitiesData.provinces) {
+    for (const city of province.cities) {
+      if (Math.abs(city.lat - lat) < tolerance && Math.abs(city.lng - lng) < tolerance) {
+        return { provinceId: province.id, cityName: city.name, cityCoords: city };
+      }
+    }
+  }
+  return null;
+}
 
 // ==================== NAVIGATION ====================
 function initNavigation() {
@@ -731,6 +814,32 @@ function populateSettings() {
   document.getElementById('setting-prayer-offset-ashar').value = appData.settings.prayer_offset_ashar || 0;
   document.getElementById('setting-prayer-offset-maghrib').value = appData.settings.prayer_offset_maghrib || 0;
   document.getElementById('setting-prayer-offset-isya').value = appData.settings.prayer_offset_isya || 0;
+
+  // Set province and city dropdowns based on stored coordinates
+  if (indonesiaCitiesData && appData.settings.mosque_latitude && appData.settings.mosque_longitude) {
+    const lat = parseFloat(appData.settings.mosque_latitude);
+    const lng = parseFloat(appData.settings.mosque_longitude);
+    const matched = findCityByCoords(lat, lng);
+
+    if (matched) {
+      document.getElementById('setting-province').value = matched.provinceId;
+      onProvinceChange();
+      // Find and select the matching city
+      setTimeout(() => {
+        const citySelect = document.getElementById('setting-city');
+        for (const option of citySelect.options) {
+          if (option.value) {
+            const coords = JSON.parse(option.value);
+            if (Math.abs(coords.lat - matched.cityCoords.lat) < 0.01 &&
+                Math.abs(coords.lng - matched.cityCoords.lng) < 0.01) {
+              option.selected = true;
+              break;
+            }
+          }
+        }
+      }, 100);
+    }
+  }
 
   // Imsak & Syuruq settings
   document.getElementById('setting-imsak-enabled').checked = appData.settings.imsak_enabled === 'true';

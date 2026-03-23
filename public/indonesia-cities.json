@@ -1,0 +1,597 @@
+{
+  "provinces": [
+    {
+      "id": "aceh",
+      "name": "Aceh",
+      "cities": [
+        { "name": "Banda Aceh", "lat": 5.55, "lng": 95.32 },
+        { "name": "Sabang", "lat": 5.89, "lng": 95.32 },
+        { "name": "Langsa", "lat": 4.47, "lng": 97.97 },
+        { "name": "Lhokseumawe", "lat": 5.18, "lng": 97.14 },
+        { "name": "Meulaboh", "lat": 4.27, "lng": 96.13 },
+        { "name": "Sigli", "lat": 5.38, "lng": 95.96 },
+        { "name": "Bireuen", "lat": 5.21, "lng": 96.70 },
+        { "name": "Takengon", "lat": 4.62, "lng": 96.85 }
+      ]
+    },
+    {
+      "id": "sumatera-utara",
+      "name": "Sumatera Utara",
+      "cities": [
+        { "name": "Medan", "lat": 3.59, "lng": 98.67 },
+        { "name": "Binjai", "lat": 3.60, "lng": 98.48 },
+        { "name": "Pematangsiantar", "lat": 2.96, "lng": 99.06 },
+        { "name": "Tebing Tinggi", "lat": 3.33, "lng": 99.16 },
+        { "name": "Tanjungbalai", "lat": 2.97, "lng": 99.80 },
+        { "name": "Sibolga", "lat": 1.75, "lng": 98.78 },
+        { "name": "Padang Sidempuan", "lat": 1.38, "lng": 99.27 },
+        { "name": "Deli Serdang", "lat": 3.57, "lng": 98.75 },
+        { "name": "Labuhanbatu", "lat": 2.35, "lng": 99.72 },
+        { "name": "Asahan", "lat": 2.95, "lng": 99.63 }
+      ]
+    },
+    {
+      "id": "sumatera-barat",
+      "name": "Sumatera Barat",
+      "cities": [
+        { "name": "Padang", "lat": -0.95, "lng": 100.35 },
+        { "name": "Bukittinggi", "lat": -0.31, "lng": 100.37 },
+        { "name": "Payakumbuh", "lat": -0.22, "lng": 100.63 },
+        { "name": "Pariaman", "lat": -0.62, "lng": 100.12 },
+        { "name": "Solok", "lat": -0.79, "lng": 100.66 },
+        { "name": "Sawahlunto", "lat": -0.67, "lng": 100.78 },
+        { "name": "Padang Panjang", "lat": -0.36, "lng": 100.40 }
+      ]
+    },
+    {
+      "id": "riau",
+      "name": "Riau",
+      "cities": [
+        { "name": "Pekanbaru", "lat": 0.51, "lng": 101.45 },
+        { "name": "Dumai", "lat": 1.67, "lng": 101.45 },
+        { "name": "Bengkalis", "lat": 1.49, "lng": 102.11 },
+        { "name": "Siak Sri Indrapura", "lat": 0.95, "lng": 102.05 },
+        { "name": "Tembilahan", "lat": 0.25, "lng": 103.08 }
+      ]
+    },
+    {
+      "id": "kepulauan-riau",
+      "name": "Kepulauan Riau",
+      "cities": [
+        { "name": "Batam", "lat": 1.05, "lng": 104.05 },
+        { "name": "Tanjung Pinang", "lat": 0.92, "lng": 104.45 }
+      ]
+    },
+    {
+      "id": "jambi",
+      "name": "Jambi",
+      "cities": [
+        { "name": "Jambi", "lat": -1.59, "lng": 103.61 },
+        { "name": "Muara Bungo", "lat": -1.48, "lng": 102.12 },
+        { "name": "Bangko", "lat": -1.40, "lng": 101.90 }
+      ]
+    },
+    {
+      "id": "sumatera-selatan",
+      "name": "Sumatera Selatan",
+      "cities": [
+        { "name": "Palembang", "lat": -2.99, "lng": 104.76 },
+        { "name": "Prabumulih", "lat": -3.43, "lng": 104.23 },
+        { "name": "Lubuklinggau", "lat": -3.29, "lng": 102.86 },
+        { "name": "Pagar Alam", "lat": -4.13, "lng": 103.25 },
+        { "name": "Banyuasin", "lat": -2.45, "lng": 104.85 }
+      ]
+    },
+    {
+      "id": "bangka-belitung",
+      "name": "Kepulauan Bangka Belitung",
+      "cities": [
+        { "name": "Pangkal Pinang", "lat": -2.13, "lng": 106.11 },
+        { "name": "Sungailiat", "lat": -1.86, "lng": 106.12 },
+        { "name": "Tanjung Pandan", "lat": -2.75, "lng": 107.63 }
+      ]
+    },
+    {
+      "id": "bengkulu",
+      "name": "Bengkulu",
+      "cities": [
+        { "name": "Bengkulu", "lat": -3.80, "lng": 102.26 },
+        { "name": "Curup", "lat": -3.47, "lng": 102.52 },
+        { "name": "Arga Makmur", "lat": -3.48, "lng": 102.03 }
+      ]
+    },
+    {
+      "id": "lampung",
+      "name": "Lampung",
+      "cities": [
+        { "name": "Bandar Lampung", "lat": -5.43, "lng": 105.27 },
+        { "name": "Metro", "lat": -5.11, "lng": 105.31 },
+        { "name": "Liang Anggang", "lat": -5.05, "lng": 105.66 },
+        { "name": "Kotabumi", "lat": -4.83, "lng": 104.89 }
+      ]
+    },
+    {
+      "id": "banten",
+      "name": "Banten",
+      "cities": [
+        { "name": "Serang", "lat": -6.12, "lng": 106.15 },
+        { "name": "Cilegon", "lat": -5.99, "lng": 106.01 },
+        { "name": "Tangerang", "lat": -6.17, "lng": 106.63 },
+        { "name": "Tangerang Selatan", "lat": -6.29, "lng": 106.72 },
+        { "name": "Pandeglang", "lat": -6.31, "lng": 106.10 },
+        { "name": "Lebak", "lat": -6.55, "lng": 106.24 },
+        { "name": "Rangkasbitung", "lat": -6.37, "lng": 106.24 }
+      ]
+    },
+    {
+      "id": "dkI-jakarta",
+      "name": "DKI Jakarta",
+      "cities": [
+        { "name": "Jakarta Pusat", "lat": -6.18, "lng": 106.83 },
+        { "name": "Jakarta Utara", "lat": -6.13, "lng": 106.82 },
+        { "name": "Jakarta Barat", "lat": -6.16, "lng": 106.75 },
+        { "name": "Jakarta Selatan", "lat": -6.27, "lng": 106.81 },
+        { "name": "Jakarta Timur", "lat": -6.23, "lng": 106.90 }
+      ]
+    },
+    {
+      "id": "jawa-barat",
+      "name": "Jawa Barat",
+      "cities": [
+        { "name": "Bandung", "lat": -6.91, "lng": 107.60 },
+        { "name": "Bogor", "lat": -6.60, "lng": 106.79 },
+        { "name": "Cimahi", "lat": -6.88, "lng": 107.54 },
+        { "name": "Cirebon", "lat": -6.73, "lng": 108.55 },
+        { "name": "Sukabumi", "lat": -6.92, "lng": 106.93 },
+        { "name": "Depok", "lat": -6.40, "lng": 106.82 },
+        { "name": "Bekasi", "lat": -6.24, "lng": 106.99 },
+        { "name": "Karawang", "lat": -6.32, "lng": 107.33 },
+        { "name": "Purwakarta", "lat": -6.56, "lng": 107.45 },
+        { "name": "Subang", "lat": -6.56, "lng": 107.76 },
+        { "name": "Sumedang", "lat": -6.84, "lng": 107.92 },
+        { "name": "Garut", "lat": -7.23, "lng": 107.91 },
+        { "name": "Tasikmalaya", "lat": -7.33, "lng": 108.20 },
+        { "name": "Ciamis", "lat": -7.33, "lng": 108.35 },
+        { "name": "Kuningan", "lat": -6.98, "lng": 108.48 },
+        { "name": "Majalengka", "lat": -6.84, "lng": 108.23 },
+        { "name": "Indramayu", "lat": -6.33, "lng": 108.32 },
+        { "name": "Pangandaran", "lat": -7.68, "lng": 108.65 }
+      ]
+    },
+    {
+      "id": "jawa-tengah",
+      "name": "Jawa Tengah",
+      "cities": [
+        { "name": "Semarang", "lat": -6.97, "lng": 110.42 },
+        { "name": "Surakarta (Solo)", "lat": -7.57, "lng": 110.83 },
+        { "name": "Pekalongan", "lat": -6.89, "lng": 109.68 },
+        { "name": "Tegal", "lat": -6.88, "lng": 109.14 },
+        { "name": "Salatiga", "lat": -7.33, "lng": 110.51 },
+        { "name": "Magelang", "lat": -7.48, "lng": 110.22 },
+        { "name": "Kendal", "lat": -6.91, "lng": 110.19 },
+        { "name": "Demak", "lat": -6.89, "lng": 110.64 },
+        { "name": "Kudus", "lat": -6.81, "lng": 110.84 },
+        { "name": "Jepara", "lat": -6.59, "lng": 110.66 },
+        { "name": "Pati", "lat": -6.76, "lng": 111.04 },
+        { "name": "Rembang", "lat": -6.71, "lng": 111.35 },
+        { "name": "Blora", "lat": -6.97, "lng": 111.42 },
+        { "name": "Klaten", "lat": -7.71, "lng": 110.60 },
+        { "name": "Sukoharjo", "lat": -7.68, "lng": 110.83 },
+        { "name": "Karanganyar", "lat": -7.65, "lng": 110.96 },
+        { "name": "Sragen", "lat": -7.43, "lng": 111.02 },
+        { "name": "Wonogiri", "lat": -7.93, "lng": 111.03 },
+        { "name": "Boyolali", "lat": -7.50, "lng": 110.60 },
+        { "name": "Kebumen", "lat": -7.68, "lng": 109.65 },
+        { "name": "Purworejo", "lat": -7.72, "lng": 110.02 },
+        { "name": "Wonosobo", "lat": -7.36, "lng": 109.90 },
+        { "name": "Temanggung", "lat": -7.26, "lng": 110.09 },
+        { "name": "Batang", "lat": -6.92, "lng": 109.75 },
+        { "name": "Pemalang", "lat": -6.89, "lng": 109.38 },
+        { "name": "Brebes", "lat": -6.88, "lng": 109.03 },
+        { "name": "Banyumas", "lat": -7.42, "lng": 109.23 },
+        { "name": "Cilacap", "lat": -7.70, "lng": 109.00 },
+        { "name": "Banjarnegara", "lat": -7.38, "lng": 109.54 }
+      ]
+    },
+    {
+      "id": "diy-yogyakarta",
+      "name": "DI Yogyakarta",
+      "cities": [
+        { "name": "Yogyakarta", "lat": -7.80, "lng": 110.36 },
+        { "name": "Sleman", "lat": -7.71, "lng": 110.35 },
+        { "name": "Bantul", "lat": -7.90, "lng": 110.33 },
+        { "name": "Gunung Kidul", "lat": -7.97, "lng": 110.60 },
+        { "name": "Kulon Progo", "lat": -7.84, "lng": 110.16 }
+      ]
+    },
+    {
+      "id": "jawa-timur",
+      "name": "Jawa Timur",
+      "cities": [
+        { "name": "Surabaya", "lat": -7.26, "lng": 112.75 },
+        { "name": "Malang", "lat": -7.98, "lng": 112.63 },
+        { "name": "Kediri", "lat": -7.82, "lng": 112.01 },
+        { "name": "Blitar", "lat": -7.99, "lng": 112.17 },
+        { "name": "Mojokerto", "lat": -7.47, "lng": 112.43 },
+        { "name": "Pasuruan", "lat": -7.64, "lng": 112.91 },
+        { "name": "Probolinggo", "lat": -7.75, "lng": 113.22 },
+        { "name": "Madiun", "lat": -7.63, "lng": 111.53 },
+        { "name": "Jember", "lat": -8.17, "lng": 113.70 },
+        { "name": "Banyuwangi", "lat": -8.22, "lng": 114.37 },
+        { "name": "Bondowoso", "lat": -7.91, "lng": 113.82 },
+        { "name": "Situbondo", "lat": -7.71, "lng": 113.85 },
+        { "name": "Lumajang", "lat": -8.13, "lng": 113.21 },
+        { "name": "Sidoarjo", "lat": -7.45, "lng": 112.72 },
+        { "name": "Gresik", "lat": -7.16, "lng": 112.65 },
+        { "name": "Lamongan", "lat": -7.12, "lng": 112.42 },
+        { "name": "Tuban", "lat": -6.90, "lng": 112.04 },
+        { "name": "Bojonegoro", "lat": -7.05, "lng": 111.88 },
+        { "name": "Nganjuk", "lat": -7.60, "lng": 111.90 },
+        { "name": "Magetan", "lat": -7.65, "lng": 111.36 },
+        { "name": "Ponorogo", "lat": -7.69, "lng": 111.46 },
+        { "name": "Pacitan", "lat": -8.20, "lng": 111.09 },
+        { "name": "Trenggalek", "lat": -8.05, "lng": 111.68 },
+        { "name": "Tulungagung", "lat": -8.07, "lng": 111.90 },
+        { "name": "Ngawi", "lat": -7.41, "lng": 111.46 },
+        { "name": "Tuban", "lat": -6.90, "lng": 112.04 },
+        { "name": "Bangkalan", "lat": -7.05, "lng": 112.75 },
+        { "name": "Sampang", "lat": -7.20, "lng": 113.23 },
+        { "name": "Pamekasan", "lat": -7.13, "lng": 113.49 },
+        { "name": "Sumenep", "lat": -6.96, "lng": 113.86 }
+      ]
+    },
+    {
+      "id": "bali",
+      "name": "Bali",
+      "cities": [
+        { "name": "Denpasar", "lat": -8.65, "lng": 115.22 },
+        { "name": "Singaraja", "lat": -8.11, "lng": 115.09 },
+        { "name": "Badung", "lat": -8.51, "lng": 115.18 },
+        { "name": "Gianyar", "lat": -8.57, "lng": 115.32 },
+        { "name": "Tabanan", "lat": -8.55, "lng": 115.12 },
+        { "name": "Bangli", "lat": -8.45, "lng": 115.35 },
+        { "name": "Karangasem", "lat": -8.39, "lng": 115.57 },
+        { "name": "Klungkung", "lat": -8.54, "lng": 115.40 },
+        { "name": "Bangli", "lat": -8.45, "lng": 115.35 },
+        { "name": "Buleleng", "lat": -8.20, "lng": 114.96 },
+        { "name": "Jembrana", "lat": -8.31, "lng": 114.75 },
+        { "name": "Negara", "lat": -8.32, "lng": 114.90 }
+      ]
+    },
+    {
+      "id": "nusa-tenggara-barat",
+      "name": "Nusa Tenggara Barat",
+      "cities": [
+        { "name": "Mataram", "lat": -8.58, "lng": 116.12 },
+        { "name": "Bima", "lat": -8.46, "lng": 118.73 },
+        { "name": "Sumbawa Besar", "lat": -8.49, "lng": 117.42 },
+        { "name": "Lombok Timur", "lat": -8.57, "lng": 116.55 },
+        { "name": "Lombok Tengah", "lat": -8.60, "lng": 116.30 },
+        { "name": "Lombok Barat", "lat": -8.65, "lng": 116.00 }
+      ]
+    },
+    {
+      "id": "nusa-tenggara-timur",
+      "name": "Nusa Tenggara Timur",
+      "cities": [
+        { "name": "Kupang", "lat": -10.17, "lng": 123.58 },
+        { "name": "Ende", "lat": -8.84, "lng": 121.67 },
+        { "name": "Maumere", "lat": -8.62, "lng": 122.22 },
+        { "name": "Ruteng", "lat": -8.61, "lng": 120.46 },
+        { "name": "Bajawa", "lat": -8.82, "lng": 120.99 },
+        { "name": "Labuan Bajo", "lat": -8.45, "lng": 119.88 },
+        { "name": "Waingapu", "lat": -9.65, "lng": 120.26 },
+        { "name": "Waikabubak", "lat": -9.66, "lng": 119.43 },
+        { "name": "Atambua", "lat": -9.10, "lng": 124.90 },
+        { "name": "Kefamenanu", "lat": -9.44, "lng": 124.47 },
+        { "name": "Kalabahi", "lat": -8.20, "lng": 124.60 },
+        { "name": "Larantuka", "lat": -8.85, "lng": 121.30 },
+        { "name": "Rote", "lat": -10.79, "lng": 123.08 },
+        { "name": "Sabu", "lat": -10.50, "lng": 121.90 }
+      ]
+    },
+    {
+      "id": "kalimantan-barat",
+      "name": "Kalimantan Barat",
+      "cities": [
+        { "name": "Pontianak", "lat": -0.03, "lng": 109.34 },
+        { "name": "Singkawang", "lat": 0.91, "lng": 108.99 },
+        { "name": "Sambas", "lat": 1.36, "lng": 109.31 },
+        { "name": "Mempawah", "lat": 0.35, "lng": 109.10 },
+        { "name": "Ketapang", "lat": -1.81, "lng": 109.98 },
+        { "name": "Sanggau", "lat": 0.12, "lng": 110.59 },
+        { "name": "Sintang", "lat": 0.12, "lng": 111.48 },
+        { "name": "Kapuas Hulu", "lat": 0.43, "lng": 112.91 }
+      ]
+    },
+    {
+      "id": "kalimantan-tengah",
+      "name": "Kalimantan Tengah",
+      "cities": [
+        { "name": "Palangka Raya", "lat": -2.21, "lng": 113.92 },
+        { "name": "Kotawaringin Timur", "lat": -2.59, "lng": 112.97 },
+        { "name": "Kotawaringin Barat", "lat": -2.69, "lng": 111.63 },
+        { "name": "Kapuas", "lat": -2.91, "lng": 114.39 },
+        { "name": "Barito Selatan", "lat": -2.60, "lng": 115.45 },
+        { "name": "Barito Utara", "lat": -0.80, "lng": 114.88 },
+        { "name": "Murung Raya", "lat": -0.35, "lng": 114.87 },
+        { "name": "Pulang Pisau", "lat": -2.82, "lng": 114.07 },
+        { "name": "Gunung Mas", "lat": -0.91, "lng": 113.79 },
+        { "name": "Katingan", "lat": -1.88, "lng": 113.35 },
+        { "name": "Seruyan", "lat": -2.51, "lng": 112.13 },
+        { "name": "Sukamara", "lat": -2.68, "lng": 111.32 },
+        { "name": "Lamandau", "lat": -1.76, "lng": 111.09 }
+      ]
+    },
+    {
+      "id": "kalimantan-selatan",
+      "name": "Kalimantan Selatan",
+      "cities": [
+        { "name": "Banjarmasin", "lat": -3.32, "lng": 114.59 },
+        { "name": "Banjarbaru", "lat": -3.45, "lng": 114.84 },
+        { "name": "Martapura", "lat": -3.41, "lng": 114.85 },
+        { "name": "Kandangan", "lat": -2.99, "lng": 115.02 },
+        { "name": "Rantau", "lat": -2.68, "lng": 115.21 },
+        { "name": "Amuntai", "lat": -2.41, "lng": 115.45 },
+        { "name": "Barabai", "lat": -2.95, "lng": 115.38 },
+        { "name": "Batulicin", "lat": -3.49, "lng": 116.03 },
+        { "name": "Kotabaru", "lat": -3.26, "lng": 116.20 },
+        { "name": "Pelaihari", "lat": -3.79, "lng": 114.74 }
+      ]
+    },
+    {
+      "id": "kalimantan-timur",
+      "name": "Kalimantan Timur",
+      "cities": [
+        { "name": "Samarinda", "lat": -0.50, "lng": 117.15 },
+        { "name": "Balikpapan", "lat": -1.27, "lng": 116.83 },
+        { "name": "Tenggarong", "lat": -0.53, "lng": 117.00 },
+        { "name": "Bontang", "lat": 0.13, "lng": 117.49 },
+        { "name": "Tarakan", "lat": 3.30, "lng": 117.60 },
+        { "name": "Nunukan", "lat": 4.09, "lng": 117.66 },
+        { "name": "Malinau", "lat": 3.53, "lng": 116.64 },
+        { "name": "Bulungan", "lat": 2.99, "lng": 117.14 },
+        { "name": "Tanah Grogot", "lat": -1.87, "lng": 116.22 },
+        { "name": "Penajam", "lat": -1.21, "lng": 116.84 },
+        { "name": "Sangatta", "lat": 0.49, "lng": 117.54 }
+      ]
+    },
+    {
+      "id": "kalimantan-utara",
+      "name": "Kalimantan Utara",
+      "cities": [
+        { "name": "Tanjung Selor", "lat": 2.85, "lng": 117.36 },
+        { "name": "Tarakan", "lat": 3.30, "lng": 117.60 },
+        { "name": "Nunukan", "lat": 4.09, "lng": 117.66 },
+        { "name": "Malinau", "lat": 3.53, "lng": 116.64 }
+      ]
+    },
+    {
+      "id": "sulawesi-utara",
+      "name": "Sulawesi Utara",
+      "cities": [
+        { "name": "Manado", "lat": 1.47, "lng": 124.84 },
+        { "name": "Bitung", "lat": 1.44, "lng": 125.09 },
+        { "name": "Tomohon", "lat": 1.32, "lng": 124.84 },
+        { "name": "Kotamobagu", "lat": 0.74, "lng": 123.95 },
+        { "name": "Tondano", "lat": 1.30, "lng": 124.95 }
+      ]
+    },
+    {
+      "id": "sulawesi-tengah",
+      "name": "Sulawesi Tengah",
+      "cities": [
+        { "name": "Palu", "lat": -0.87, "lng": 119.87 },
+        { "name": "Poso", "lat": -1.39, "lng": 120.75 },
+        { "name": "Luwuk", "lat": -0.94, "lng": 122.79 },
+        { "name": "Toli-Toli", "lat": 1.04, "lng": 120.82 },
+        { "name": "Donggala", "lat": -0.68, "lng": 119.71 },
+        { "name": "Parigi", "lat": -0.62, "lng": 120.39 },
+        { "name": "Tentena", "lat": -1.76, "lng": 120.88 }
+      ]
+    },
+    {
+      "id": "sulawesi-selatan",
+      "name": "Sulawesi Selatan",
+      "cities": [
+        { "name": "Makassar", "lat": -5.15, "lng": 119.44 },
+        { "name": "Parepare", "lat": -4.01, "lng": 119.63 },
+        { "name": "Palopo", "lat": -2.99, "lng": 120.20 },
+        { "name": "Gowa", "lat": -5.21, "lng": 119.48 },
+        { "name": "Takalar", "lat": -5.37, "lng": 119.37 },
+        { "name": "Jeneponto", "lat": -5.63, "lng": 119.62 },
+        { "name": "Bantaeng", "lat": -5.36, "lng": 119.87 },
+        { "name": "Bulukumba", "lat": -5.55, "lng": 120.23 },
+        { "name": "Selayar", "lat": -6.20, "lng": 120.44 },
+        { "name": "Sinjai", "lat": -5.20, "lng": 120.11 },
+        { "name": "Bone", "lat": -4.92, "lng": 120.33 },
+        { "name": "Soppeng", "lat": -4.36, "lng": 119.90 },
+        { "name": "Wajo", "lat": -4.03, "lng": 120.03 },
+        { "name": "Sidrap", "lat": -3.95, "lng": 119.84 },
+        { "name": "Pinrang", "lat": -3.57, "lng": 119.69 },
+        { "name": "Enrekang", "lat": -3.33, "lng": 119.81 },
+        { "name": "Tana Toraja", "lat": -3.05, "lng": 119.87 },
+        { "name": "Toraja Utara", "lat": -2.92, "lng": 119.84 },
+        { "name": "Luwu", "lat": -2.75, "lng": 120.19 },
+        { "name": "Luwu Utara", "lat": -2.31, "lng": 120.52 },
+        { "name": "Luwu Timur", "lat": -2.31, "lng": 121.08 },
+        { "name": "Maros", "lat": -5.02, "lng": 119.58 },
+        { "name": "Pangkajene", "lat": -4.85, "lng": 119.54 },
+        { "name": "Barru", "lat": -4.41, "lng": 119.62 }
+      ]
+    },
+    {
+      "id": "sulawesi-tenggara",
+      "name": "Sulawesi Tenggara",
+      "cities": [
+        { "name": "Kendari", "lat": -3.98, "lng": 122.51 },
+        { "name": "Baubau", "lat": -5.48, "lng": 122.60 },
+        { "name": "Unaaha", "lat": -3.67, "lng": 122.06 },
+        { "name": "Raha", "lat": -4.81, "lng": 122.81 },
+        { "name": "Wanggodo", "lat": -4.30, "lng": 122.03 },
+        { "name": "Kolaka", "lat": -3.65, "lng": 121.60 },
+        { "name": "Kolaka Utara", "lat": -3.10, "lng": 121.27 },
+        { "name": "Konawe", "lat": -3.89, "lng": 122.34 },
+        { "name": "Konawe Selatan", "lat": -4.19, "lng": 122.65 },
+        { "name": "Konawe Utara", "lat": -3.29, "lng": 122.13 },
+        { "name": "Konawe Kepulauan", "lat": -4.01, "lng": 123.11 },
+        { "name": "Muna", "lat": -4.88, "lng": 122.62 },
+        { "name": "Buton", "lat": -5.28, "lng": 122.90 },
+        { "name": "Buton Utara", "lat": -5.05, "lng": 122.97 },
+        { "name": "Wakatobi", "lat": -5.33, "lng": 123.60 }
+      ]
+    },
+    {
+      "id": "gorontalo",
+      "name": "Gorontalo",
+      "cities": [
+        { "name": "Gorontalo", "lat": 0.54, "lng": 123.06 },
+        { "name": "Limboto", "lat": 0.61, "lng": 122.95 },
+        { "name": "Kwandang", "lat": 0.81, "lng": 122.88 },
+        { "name": "Marisa", "lat": 0.49, "lng": 122.38 },
+        { "name": "Tilamuta", "lat": 0.68, "lng": 122.43 }
+      ]
+    },
+    {
+      "id": "sulawesi-barat",
+      "name": "Sulawesi Barat",
+      "cities": [
+        { "name": "Mamuju", "lat": -2.68, "lng": 118.90 },
+        { "name": "Mamuju Utara", "lat": -1.78, "lng": 119.17 },
+        { "name": "Mamuju Tengah", "lat": -2.25, "lng": 119.14 },
+        { "name": "Pasangkayu", "lat": -1.40, "lng": 119.41 },
+        { "name": "Majene", "lat": -2.99, "lng": 118.96 },
+        { "name": "Polman", "lat": -2.57, "lng": 119.34 }
+      ]
+    },
+    {
+      "id": "maluku",
+      "name": "Maluku",
+      "cities": [
+        { "name": "Ambon", "lat": -3.70, "lng": 128.17 },
+        { "name": "Masohi", "lat": -3.28, "lng": 128.66 },
+        { "name": "Tual", "lat": -5.65, "lng": 132.75 },
+        { "name": "Dataran Hunipopu", "lat": -3.67, "lng": 128.18 },
+        { "name": "Namlea", "lat": -3.26, "lng": 127.08 },
+        { "name": "Namrole", "lat": -3.04, "lng": 127.65 },
+        { "name": "Piru", "lat": -3.15, "lng": 128.28 },
+        { "name": "Sanana", "lat": -2.08, "lng": 126.08 },
+        { "name": "Saumlaki", "lat": -7.99, "lng": 131.31 }
+      ]
+    },
+    {
+      "id": "maluku-utara",
+      "name": "Maluku Utara",
+      "cities": [
+        { "name": "Ternate", "lat": 0.79, "lng": 127.38 },
+        { "name": "Tidore", "lat": 0.69, "lng": 127.42 },
+        { "name": "Sofifi", "lat": 0.73, "lng": 127.55 },
+        { "name": "Tobelo", "lat": 1.44, "lng": 127.98 },
+        { "name": "Kao", "lat": 1.38, "lng": 127.68 },
+        { "name": "Galela", "lat": 1.87, "lng": 127.79 },
+        { "name": "Wasile", "lat": 1.15, "lng": 127.63 },
+        { "name": "Maba", "lat": -0.66, "lng": 129.10 },
+        { "name": "Sanana", "lat": -2.08, "lng": 126.08 },
+        { "name": "Labuha", "lat": -0.63, "lng": 127.12 }
+      ]
+    },
+    {
+      "id": "papua",
+      "name": "Papua",
+      "cities": [
+        { "name": "Jayapura", "lat": -2.53, "lng": 140.72 },
+        { "name": "Biak", "lat": -1.18, "lng": 136.11 },
+        { "name": "Serui", "lat": -1.88, "lng": 136.24 },
+        { "name": "Nabire", "lat": -3.38, "lng": 135.50 },
+        { "name": "Timika", "lat": -4.41, "lng": 136.04 },
+        { "name": "Merauke", "lat": -8.47, "lng": 140.34 },
+        { "name": "Wamena", "lat": -4.11, "lng": 138.95 },
+        { "name": "Sentani", "lat": -2.60, "lng": 140.61 },
+        { "name": "Sarmi", "lat": -1.87, "lng": 138.70 },
+        { "name": "Waropen", "lat": -2.10, "lng": 137.45 },
+        { "name": "Supiori", "lat": -1.17, "lng": 136.05 },
+        { "name": "Keerom", "lat": -2.93, "lng": 140.65 },
+        { "name": "Pegunungan Bintang", "lat": -4.55, "lng": 140.35 },
+        { "name": "Yahukimo", "lat": -4.15, "lng": 138.45 },
+        { "name": "Tolikara", "lat": -3.70, "lng": 138.45 },
+        { "name": "Paniai", "lat": -4.04, "lng": 136.45 },
+        { "name": "Mimika", "lat": -4.41, "lng": 136.04 },
+        { "name": "Asmat", "lat": -5.83, "lng": 138.65 },
+        { "name": "Mappi", "lat": -6.25, "lng": 139.95 },
+        { "name": "Boven Digoel", "lat": -6.55, "lng": 140.45 },
+        { "name": "Puncak Jaya", "lat": -3.95, "lng": 137.08 },
+        { "name": "Puncak", "lat": -4.25, "lng": 137.08 },
+        { "name": "Dogiyai", "lat": -3.95, "lng": 135.83 },
+        { "name": "Intan Jaya", "lat": -3.75, "lng": 136.65 },
+        { "name": "Deiyai", "lat": -3.95, "lng": 136.40 },
+        { "name": "Waropen", "lat": -2.10, "lng": 137.45 },
+        { "name": "Kepulauan Yapen", "lat": -1.88, "lng": 136.24 }
+      ]
+    },
+    {
+      "id": "papua-barat",
+      "name": "Papua Barat",
+      "cities": [
+        { "name": "Manokwari", "lat": -0.86, "lng": 134.06 },
+        { "name": "Sorong", "lat": -0.88, "lng": 131.25 },
+        { "name": "Fakfak", "lat": -2.92, "lng": 132.28 },
+        { "name": "Kaimana", "lat": -3.65, "lng": 133.71 },
+        { "name": "Teluk Bintuni", "lat": -1.55, "lng": 133.62 },
+        { "name": "Teluk Wondama", "lat": -2.55, "lng": 134.55 },
+        { "name": "Raja Ampat", "lat": -0.50, "lng": 130.50 },
+        { "name": "Sorong Selatan", "lat": -1.33, "lng": 131.85 },
+        { "name": "Maybrat", "lat": -1.25, "lng": 132.85 },
+        { "name": "Pegunungan Arfak", "lat": -1.15, "lng": 133.85 }
+      ]
+    },
+    {
+      "id": "papua-tengah",
+      "name": "Papua Tengah",
+      "cities": [
+        { "name": "Nabire", "lat": -3.38, "lng": 135.50 },
+        { "name": "Timika", "lat": -4.41, "lng": 136.04 },
+        { "name": "Enarotali", "lat": -3.92, "lng": 136.38 },
+        { "name": "Sugapa", "lat": -3.75, "lng": 136.65 },
+        { "name": "Karbonai", "lat": -3.95, "lng": 136.15 }
+      ]
+    },
+    {
+      "id": "papua-penggunungan",
+      "name": "Papua Pegunungan",
+      "cities": [
+        { "name": "Wamena", "lat": -4.11, "lng": 138.95 },
+        { "name": "Oksibil", "lat": -4.85, "lng": 140.65 },
+        { "name": "Karubaga", "lat": -3.70, "lng": 138.45 },
+        { "name": "Sumtamon", "lat": -4.55, "lng": 138.70 },
+        { "name": "Kelogap", "lat": -3.95, "lng": 137.08 },
+        { "name": "Ilaga", "lat": -3.95, "lng": 137.08 },
+        { "name": "Elelim", "lat": -3.70, "lng": 138.45 }
+      ]
+    },
+    {
+      "id": "papua-selatan",
+      "name": "Papua Selatan",
+      "cities": [
+        { "name": "Merauke", "lat": -8.47, "lng": 140.34 },
+        { "name": "Agats", "lat": -5.83, "lng": 138.65 },
+        { "name": "Bade", "lat": -6.25, "lng": 139.95 },
+        { "name": "Tanah Merah", "lat": -6.55, "lng": 140.45 },
+        { "name": "Kimaam", "lat": -8.25, "lng": 138.95 },
+        { "name": "Asmat", "lat": -5.83, "lng": 138.65 }
+      ]
+    },
+    {
+      "id": "papua-barat-daya",
+      "name": "Papua Barat Daya",
+      "cities": [
+        { "name": "Sorong", "lat": -0.88, "lng": 131.25 },
+        { "name": "Teminabuan", "lat": -1.33, "lng": 131.85 },
+        { "name": "Ayamaru", "lat": -1.25, "lng": 132.85 },
+        { "name": "Aifat", "lat": -1.15, "lng": 133.85 },
+        { "name": "Saifi", "lat": -1.45, "lng": 132.25 },
+        { "name": "Fakfak", "lat": -2.92, "lng": 132.28 },
+        { "name": "Kaimana", "lat": -3.65, "lng": 133.71 }
+      ]
+    }
+  ]
+}
