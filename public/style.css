@@ -379,12 +379,12 @@ body {
 }
 
 .optional-time-card {
-  background: rgba(212, 175, 55, 0.15);
+  background: rgba(27, 67, 50, 0.12);
   backdrop-filter: blur(12px);
   border-radius: var(--radius-lg);
   padding: clamp(0.5rem, 1vh, 1rem) clamp(1rem, 2vw, 2rem);
   text-align: center;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 2px solid rgba(27, 67, 50, 0.3);
   display: flex;
   align-items: center;
   gap: clamp(0.5rem, 1vw, 1rem);
@@ -397,7 +397,7 @@ body {
 .optional-time-card .name {
   font-family: var(--font-display);
   font-size: clamp(0.8rem, 1.3vh, 1rem);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -406,8 +406,8 @@ body {
 .optional-time-card .time {
   font-family: var(--font-display);
   font-size: clamp(1.2rem, 2vh, 1.5rem);
-  font-weight: 700;
-  color: var(--color-accent);
+  font-weight: 800;
+  color: var(--color-primary);
 }
 
 /* ==================== PRAYER CARD - GLASSMORPHISM ==================== */
