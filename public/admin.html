@@ -286,6 +286,7 @@
                   <input type="checkbox" id="setting-imsak-enabled">
                   <span>Tampilkan Imsak</span>
                 </label>
+                <small style="color: var(--color-text-muted);">Dihitung otomatis: Subuh - X menit</small>
               </div>
               <div class="form-row">
                 <div class="form-group">
@@ -293,8 +294,8 @@
                   <input type="text" id="setting-imsak-label" placeholder="Imsak">
                 </div>
                 <div class="form-group">
-                  <label>Waktu Imsak</label>
-                  <input type="time" id="setting-imsak-time" value="04:20">
+                  <label>Offset (menit sebelum Subuh)</label>
+                  <input type="number" id="setting-imsak-offset" value="10" min="5" max="30">
                 </div>
               </div>
               <hr style="border-color: var(--color-text-light); margin: 1rem 0;">
@@ -303,6 +304,7 @@
                   <input type="checkbox" id="setting-syuruq-enabled">
                   <span>Tampilkan Syuruq</span>
                 </label>
+                <small style="color: var(--color-text-muted);">Dihitung otomatis: Subuh + Y menit</small>
               </div>
               <div class="form-row">
                 <div class="form-group">
@@ -310,8 +312,8 @@
                   <input type="text" id="setting-syuruq-label" placeholder="Syuruq">
                 </div>
                 <div class="form-group">
-                  <label>Waktu Syuruq</label>
-                  <input type="time" id="setting-syuruq-time" value="05:45">
+                  <label>Offset (menit setelah Subuh)</label>
+                  <input type="number" id="setting-syuruq-offset" value="20" min="10" max="60">
                 </div>
               </div>
             </div>

@@ -642,11 +642,11 @@ function populateSettings() {
 
   // Imsak & Syuruq settings
   document.getElementById('setting-imsak-enabled').checked = appData.settings.imsak_enabled === 'true';
-  document.getElementById('setting-imsak-label').value = appData.settings.imsak_label || '';
-  document.getElementById('setting-imsak-time').value = appData.settings.imsak_time || '04:20';
+  document.getElementById('setting-imsak-label').value = appData.settings.imsak_label || 'Imsak';
+  document.getElementById('setting-imsak-offset').value = appData.settings.imsak_offset || 10;
   document.getElementById('setting-syuruq-enabled').checked = appData.settings.syuruq_enabled === 'true';
-  document.getElementById('setting-syuruq-label').value = appData.settings.syuruq_label || '';
-  document.getElementById('setting-syuruq-time').value = appData.settings.syuruq_time || '05:45';
+  document.getElementById('setting-syuruq-label').value = appData.settings.syuruq_label || 'Syuruq';
+  document.getElementById('setting-syuruq-offset').value = appData.settings.syuruq_offset || 20;
 
   // Marquee settings
   document.getElementById('setting-marquee-loop').checked = appData.settings.marquee_loop !== 'false';
@@ -707,10 +707,10 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       prayer_subtext_2: document.getElementById('setting-prayer-subtext-2').value,
       imsak_enabled: document.getElementById('setting-imsak-enabled').checked ? 'true' : 'false',
       imsak_label: document.getElementById('setting-imsak-label').value,
-      imsak_time: document.getElementById('setting-imsak-time').value,
+      imsak_offset: document.getElementById('setting-imsak-offset').value,
       syuruq_enabled: document.getElementById('setting-syuruq-enabled').checked ? 'true' : 'false',
       syuruq_label: document.getElementById('setting-syuruq-label').value,
-      syuruq_time: document.getElementById('setting-syuruq-time').value,
+      syuruq_offset: document.getElementById('setting-syuruq-offset').value,
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,

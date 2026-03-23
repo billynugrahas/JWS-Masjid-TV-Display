@@ -241,21 +241,40 @@ function renderOptionalTimes() {
 
   const items = [];
 
-  // Imsak
-  if (settings.imsak_enabled === 'true' && settings.imsak_time) {
+  // Get Subuh time for calculation
+  const subuhPrayer = prayerTimes.find(p => p.name.toLowerCase() === 'subuh');
+  if (!subuhPrayer) return;
+
+  const [subuhHours, subuhMinutes] = subuhPrayer.time.split(':').map(Number);
+  const subuhTotalMinutes = subuhHours * 60 + subuhMinutes;
+
+  // Imsak - X minutes before Subuh
+  if (settings.imsak_enabled === 'true') {
+    const imsakOffset = parseInt(settings.imsak_offset) || 10;
+    const imsakTotalMinutes = subuhTotalMinutes - imsakOffset;
+    const imsakHours = Math.floor(imsakTotalMinutes / 60) % 24;
+    const imsakMinutes = imsakTotalMinutes % 60;
+    const imsakTime = `${String(imsakHours).padStart(2, '0')}:${String(imsakMinutes).padStart(2, '0')}`;
+
     items.push({
       icon: '🌙',
       name: settings.imsak_label || 'Imsak',
-      time: settings.imsak_time
+      time: imsakTime
     });
   }
 
-  // Syuruq
-  if (settings.syuruq_enabled === 'true' && settings.syuruq_time) {
+  // Syuruq - Y minutes after Subuh
+  if (settings.syuruq_enabled === 'true') {
+    const syuruqOffset = parseInt(settings.syuruq_offset) || 20;
+    const syuruqTotalMinutes = subuhTotalMinutes + syuruqOffset;
+    const syuruqHours = Math.floor(syuruqTotalMinutes / 60) % 24;
+    const syuruqMinutes = syuruqTotalMinutes % 60;
+    const syuruqTime = `${String(syuruqHours).padStart(2, '0')}:${String(syuruqMinutes).padStart(2, '0')}`;
+
     items.push({
       icon: '🌅',
       name: settings.syuruq_label || 'Syuruq',
-      time: settings.syuruq_time
+      time: syuruqTime
     });
   }
 

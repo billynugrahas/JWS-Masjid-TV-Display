@@ -82,10 +82,10 @@ const defaultSettings = {
   prayer_duration: 15,
   prayer_subtext: 'Luruskan dan Rapatkan Shaf',
   prayer_subtext_2: '',
-  imsak_time: '04:20',
+  imsak_offset: 10,
   imsak_label: 'Imsak',
   imsak_enabled: 'false',
-  syuruq_time: '05:45',
+  syuruq_offset: 20,
   syuruq_label: 'Syuruq',
   syuruq_enabled: 'false'
 };
