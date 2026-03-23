@@ -124,22 +124,103 @@ function openPreview() {
 // ==================== PRAYERS ====================
 function renderPrayers() {
   const container = document.getElementById('prayer-list');
-  container.innerHTML = appData.prayers.map(prayer => `
-    <div class="prayer-item" data-id="${prayer.id}">
-      <span class="prayer-name">${prayer.name}</span>
-      <div class="prayer-inputs">
-        <div>
-          <label>Waktu</label>
-          <input type="time" value="${prayer.time}" onchange="updatePrayer(${prayer.id}, 'time', this.value)">
-        </div>
-        <div>
-          <label>Iqomah (menit)</label>
-          <input type="number" value="${prayer.iqomah_duration}" min="1" max="30"
-                 onchange="updatePrayer(${prayer.id}, 'iqomah_duration', this.value)">
+  const autoCalcBanner = document.getElementById('auto-calc-banner');
+  const calculatedDisplay = document.getElementById('calculated-times-display');
+  const calculatedGrid = document.getElementById('calculated-times-grid');
+
+  const isAutoCalcEnabled = appData.settings.prayer_calc_enabled === 'true';
+
+  if (isAutoCalcEnabled) {
+    // Show auto-calculation mode
+    autoCalcBanner.style.display = 'flex';
+    calculatedDisplay.style.display = 'block';
+    container.style.display = 'none';
+
+    // Render calculated times with editable iqomah
+    renderCalculatedTimes();
+  } else {
+    // Show manual mode
+    autoCalcBanner.style.display = 'none';
+    calculatedDisplay.style.display = 'none';
+    container.style.display = 'block';
+
+    container.innerHTML = appData.prayers.map(prayer => `
+      <div class="prayer-item" data-id="${prayer.id}">
+        <span class="prayer-name">${prayer.name}</span>
+        <div class="prayer-inputs">
+          <div>
+            <label>Waktu</label>
+            <input type="time" value="${prayer.time}" onchange="updatePrayer(${prayer.id}, 'time', this.value)">
+          </div>
+          <div>
+            <label>Iqomah (menit)</label>
+            <input type="number" value="${prayer.iqomah_duration}" min="1" max="30"
+                   onchange="updatePrayer(${prayer.id}, 'iqomah_duration', this.value)">
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `).join('');
+  }
+}
+
+async function renderCalculatedTimes() {
+  const calculatedGrid = document.getElementById('calculated-times-grid');
+
+  try {
+    // Fetch calculated times
+    const response = await fetch('/api/prayers/calculate');
+    const data = await response.json();
+
+    // Prayer icons
+    const prayerIcons = {
+      'Subuh': '🌅',
+      'Dzuhur': '☀️',
+      'Ashar': '🌤️',
+      'Maghrib': '🌅',
+      'Isya': '🌙'
+    };
+
+    const prayerOrder = ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+
+    calculatedGrid.innerHTML = prayerOrder.map(name => {
+      const prayer = appData.prayers.find(p => p.name === name) || { id: 0, iqomah_duration: 10 };
+      return `
+        <div class="calc-time-card">
+          <div class="prayer-name">${prayerIcons[name] || '🕌'} ${name}</div>
+          <div class="prayer-time">${data.times[name]}</div>
+          <div class="iqomah-section">
+            <label>Iqomah (menit)</label>
+            <input type="number" value="${prayer.iqomah_duration}" min="1" max="30"
+                   onchange="updatePrayerIqomah(${prayer.id}, this.value)">
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (error) {
+    calculatedGrid.innerHTML = '<p style="color: var(--color-danger);">Gagal memuat jadwal otomatis</p>';
+  }
+}
+
+async function updatePrayerIqomah(prayerId, value) {
+  if (!prayerId) return;
+
+  try {
+    await fetch(`/api/prayers/${prayerId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ iqomah_duration: parseInt(value) })
+    });
+
+    // Update local data
+    const prayer = appData.prayers.find(p => p.id === prayerId);
+    if (prayer) {
+      prayer.iqomah_duration = parseInt(value);
+    }
+
+    showToast('Durasi iqomah diperbarui', 'success');
+  } catch (error) {
+    showToast('Gagal memperbarui iqomah', 'error');
+  }
 }
 
 async function updatePrayer(id, field, value) {
@@ -640,6 +721,17 @@ function populateSettings() {
   document.getElementById('setting-prayer-subtext-2').value = appData.settings.prayer_subtext_2 || '';
   document.getElementById('setting-show-live').checked = appData.settings.show_live_indicator === 'true';
 
+  // Prayer calculation settings
+  document.getElementById('setting-prayer-calc-enabled').checked = appData.settings.prayer_calc_enabled === 'true';
+  document.getElementById('setting-mosque-latitude').value = appData.settings.mosque_latitude || '-6.2088';
+  document.getElementById('setting-mosque-longitude').value = appData.settings.mosque_longitude || '106.8456';
+  document.getElementById('setting-prayer-calc-method').value = appData.settings.prayer_calc_method || 'Singapore';
+  document.getElementById('setting-prayer-offset-subuh').value = appData.settings.prayer_offset_subuh || 0;
+  document.getElementById('setting-prayer-offset-dzuhur').value = appData.settings.prayer_offset_dzuhur || 0;
+  document.getElementById('setting-prayer-offset-ashar').value = appData.settings.prayer_offset_ashar || 0;
+  document.getElementById('setting-prayer-offset-maghrib').value = appData.settings.prayer_offset_maghrib || 0;
+  document.getElementById('setting-prayer-offset-isya').value = appData.settings.prayer_offset_isya || 0;
+
   // Imsak & Syuruq settings
   document.getElementById('setting-imsak-enabled').checked = appData.settings.imsak_enabled === 'true';
   document.getElementById('setting-imsak-label').value = appData.settings.imsak_label || 'Imsak';
@@ -660,6 +752,52 @@ function populateSettings() {
     document.getElementById('bg-preview').style.display = 'block';
     document.getElementById('clear-bg-btn').style.display = 'inline-flex';
     document.getElementById('bg-upload-label').innerHTML = '<span>📷</span> Ganti gambar';
+  }
+}
+
+// Preview prayer calculation
+async function previewPrayerCalculation() {
+  try {
+    const response = await fetch('/api/prayers/calculate');
+    const data = await response.json();
+
+    const previewEl = document.getElementById('prayer-calc-preview');
+    const contentEl = document.getElementById('prayer-calc-preview-content');
+
+    contentEl.innerHTML = `
+      <div style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">
+        Metode: ${data.method} | Lokasi: ${data.location.latitude.toFixed(4)}, ${data.location.longitude.toFixed(4)}
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+        <div><strong>Subuh:</strong> ${data.times.Subuh}</div>
+        <div><strong>Dzuhur:</strong> ${data.times.Dzuhur}</div>
+        <div><strong>Ashar:</strong> ${data.times.Ashar}</div>
+        <div><strong>Maghrib:</strong> ${data.times.Maghrib}</div>
+        <div><strong>Isya:</strong> ${data.times.Isya}</div>
+        <div><strong>Syuruq:</strong> ${data.times.Syuruq}</div>
+      </div>
+    `;
+
+    previewEl.style.display = 'block';
+  } catch (error) {
+    showToast('Gagal memuat preview', 'error');
+  }
+}
+
+// Sync calculated prayer times to database
+async function syncPrayerTimes() {
+  if (!confirm('Ini akan mengupdate jadwal sholat manual dengan hasil perhitungan otomatis. Lanjutkan?')) return;
+
+  try {
+    const response = await fetch('/api/prayers/sync', { method: 'POST' });
+    const data = await response.json();
+
+    if (data.success) {
+      fetchAllData();
+      showToast('Jadwal sholat berhasil disinkronkan', 'success');
+    }
+  } catch (error) {
+    showToast('Gagal menyinkronkan jadwal', 'error');
   }
 }
 
@@ -705,6 +843,17 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       prayer_duration: document.getElementById('setting-prayer-duration').value,
       prayer_subtext: document.getElementById('setting-prayer-subtext').value,
       prayer_subtext_2: document.getElementById('setting-prayer-subtext-2').value,
+      // Prayer calculation settings
+      prayer_calc_enabled: document.getElementById('setting-prayer-calc-enabled').checked ? 'true' : 'false',
+      mosque_latitude: document.getElementById('setting-mosque-latitude').value,
+      mosque_longitude: document.getElementById('setting-mosque-longitude').value,
+      prayer_calc_method: document.getElementById('setting-prayer-calc-method').value,
+      prayer_offset_subuh: document.getElementById('setting-prayer-offset-subuh').value,
+      prayer_offset_dzuhur: document.getElementById('setting-prayer-offset-dzuhur').value,
+      prayer_offset_ashar: document.getElementById('setting-prayer-offset-ashar').value,
+      prayer_offset_maghrib: document.getElementById('setting-prayer-offset-maghrib').value,
+      prayer_offset_isya: document.getElementById('setting-prayer-offset-isya').value,
+      // Imsak & Syuruq settings
       imsak_enabled: document.getElementById('setting-imsak-enabled').checked ? 'true' : 'false',
       imsak_label: document.getElementById('setting-imsak-label').value,
       imsak_offset: document.getElementById('setting-imsak-offset').value,
@@ -728,6 +877,10 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
     });
 
     appData.settings = { ...appData.settings, ...settings };
+
+    // Re-render prayers to reflect auto-calculation mode changes
+    renderPrayers();
+
     showToast('Semua perubahan disimpan!', 'success');
   } catch (error) {
     showToast('Gagal menyimpan perubahan', 'error');

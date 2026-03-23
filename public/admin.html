@@ -123,6 +123,22 @@
             <p class="card-desc">Atur waktu sholat dan durasi iqomah</p>
           </div>
           <div class="card-body">
+            <!-- Auto-calculation info banner -->
+            <div id="auto-calc-banner" class="info-banner" style="display: none;">
+              <div class="info-banner-icon">ℹ️</div>
+              <div class="info-banner-content">
+                <strong>Perhitungan Otomatis Aktif</strong>
+                <p>Waktu sholat dihitung otomatis berdasarkan lokasi dan metode yang dipilih di Pengaturan. Durasi Iqomah masih bisa diatur manual.</p>
+              </div>
+            </div>
+
+            <!-- Calculated times display (shown when auto-calc is enabled) -->
+            <div id="calculated-times-display" style="display: none;">
+              <h3 style="margin-bottom: 1rem;">Jadwal Hari Ini (Otomatis)</h3>
+              <div id="calculated-times-grid"></div>
+            </div>
+
+            <!-- Manual prayer list (shown when auto-calc is disabled) -->
             <div class="prayer-list" id="prayer-list">
               <!-- Prayer items will be rendered here -->
             </div>
@@ -272,6 +288,91 @@
                   <input type="checkbox" id="setting-show-live">
                   <span>Tampilkan indikator LIVE di header</span>
                 </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Perhitungan Jadwal Sholat Otomatis</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-prayer-calc-enabled">
+                  <span>Gunakan perhitungan otomatis</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Jika diaktifkan, waktu sholat dihitung otomatis berdasarkan lokasi</small>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Latitude</label>
+                  <input type="number" id="setting-mosque-latitude" step="0.0001" placeholder="-6.2088">
+                  <small style="color: var(--color-text-muted);">Contoh: Jakarta -6.2088</small>
+                </div>
+                <div class="form-group">
+                  <label>Longitude</label>
+                  <input type="number" id="setting-mosque-longitude" step="0.0001" placeholder="106.8456">
+                  <small style="color: var(--color-text-muted);">Contoh: Jakarta 106.8456</small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Metode Perhitungan</label>
+                <select id="setting-prayer-calc-method">
+                  <option value="Singapore">Singapore (Kemenag Indonesia)</option>
+                  <option value="MuslimWorldLeague">Muslim World League</option>
+                  <option value="Egyptian">Egyptian General Authority</option>
+                  <option value="Karachi">University of Islamic Sciences, Karachi</option>
+                  <option value="UmmAlQura">Umm al-Qura University (Saudi)</option>
+                  <option value="Dubai">Dubai</option>
+                  <option value="NorthAmerica">Islamic Society of North America</option>
+                  <option value="Kuwait">Kuwait</option>
+                  <option value="Qatar">Qatar</option>
+                </select>
+                <small style="color: var(--color-text-muted);">Singapore = Kemenag Indonesia (direkomendasikan)</small>
+              </div>
+
+              <div class="form-group">
+                <label>Pengaturan Offset Waktu (menit)</label>
+                <small style="color: var(--color-text-muted); display: block; margin-bottom: 0.5rem;">Tambah atau kurangi waktu hasil perhitungan</small>
+                <div class="offset-grid">
+                  <div class="offset-item">
+                    <label>Subuh</label>
+                    <input type="number" id="setting-prayer-offset-subuh" value="0" min="-30" max="30">
+                  </div>
+                  <div class="offset-item">
+                    <label>Dzuhur</label>
+                    <input type="number" id="setting-prayer-offset-dzuhur" value="0" min="-30" max="30">
+                  </div>
+                  <div class="offset-item">
+                    <label>Ashar</label>
+                    <input type="number" id="setting-prayer-offset-ashar" value="0" min="-30" max="30">
+                  </div>
+                  <div class="offset-item">
+                    <label>Maghrib</label>
+                    <input type="number" id="setting-prayer-offset-maghrib" value="0" min="-30" max="30">
+                  </div>
+                  <div class="offset-item">
+                    <label>Isya</label>
+                    <input type="number" id="setting-prayer-offset-isya" value="0" min="-30" max="30">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 1rem;">
+                <button class="btn btn-secondary" onclick="previewPrayerCalculation()">
+                  <span>🔍</span> Preview Jadwal Hari Ini
+                </button>
+                <button class="btn btn-primary" onclick="syncPrayerTimes()">
+                  <span>🔄</span> Sinkronkan ke Jadwal Manual
+                </button>
+              </div>
+
+              <div id="prayer-calc-preview" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--bg-glass); border-radius: var(--radius-lg);">
+                <h4 style="margin-bottom: 0.5rem;">Preview Jadwal Hari Ini:</h4>
+                <div id="prayer-calc-preview-content"></div>
               </div>
             </div>
           </div>

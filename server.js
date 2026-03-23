@@ -2,6 +2,7 @@ const express = require('express');
 const Database = require('better-sqlite3');
 const cors = require('cors');
 const path = require('path');
+const adhan = require('adhan');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -87,7 +88,18 @@ const defaultSettings = {
   imsak_enabled: 'false',
   syuruq_offset: 20,
   syuruq_label: 'Syuruq',
-  syuruq_enabled: 'false'
+  syuruq_enabled: 'false',
+  // Prayer calculation settings
+  prayer_calc_enabled: 'false',
+  prayer_calc_method: 'Singapore', // Singapore = Kemenag method
+  mosque_latitude: '-6.2088',
+  mosque_longitude: '106.8456',
+  // Individual prayer offsets (in minutes)
+  prayer_offset_subuh: 0,
+  prayer_offset_dzuhur: 0,
+  prayer_offset_ashar: 0,
+  prayer_offset_maghrib: 0,
+  prayer_offset_isya: 0
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
@@ -164,9 +176,135 @@ app.post('/api/settings', (req, res) => {
 });
 
 // ---------- PRAYER TIMES ----------
+// Prayer calculation methods mapping
+const calculationMethods = {
+  'Singapore': adhan.CalculationMethod.Singapore(),
+  'MuslimWorldLeague': adhan.CalculationMethod.MuslimWorldLeague(),
+  'Egyptian': adhan.CalculationMethod.Egyptian(),
+  'Karachi': adhan.CalculationMethod.Karachi(),
+  'UmmAlQura': adhan.CalculationMethod.UmmAlQura(),
+  'Dubai': adhan.CalculationMethod.Dubai(),
+  'MoonsightingCommittee': adhan.CalculationMethod.MoonsightingCommittee(),
+  'NorthAmerica': adhan.CalculationMethod.NorthAmerica(),
+  'Kuwait': adhan.CalculationMethod.Kuwait(),
+  'Qatar': adhan.CalculationMethod.Qatar()
+};
+
+// Function to calculate prayer times
+function calculatePrayerTimes(settings, date = new Date()) {
+  const latitude = parseFloat(settings.mosque_latitude) || -6.2088;
+  const longitude = parseFloat(settings.mosque_longitude) || 106.8456;
+  const methodName = settings.prayer_calc_method || 'Singapore';
+  const method = calculationMethods[methodName] || adhan.CalculationMethod.Singapore();
+
+  const coordinates = new adhan.Coordinates(latitude, longitude);
+  const prayerTimes = new adhan.PrayerTimes(coordinates, date, method);
+
+  // Get offsets from settings
+  const offsets = {
+    Subuh: parseInt(settings.prayer_offset_subuh) || 0,
+    Dzuhur: parseInt(settings.prayer_offset_dzuhur) || 0,
+    Ashar: parseInt(settings.prayer_offset_ashar) || 0,
+    Maghrib: parseInt(settings.prayer_offset_maghrib) || 0,
+    Isya: parseInt(settings.prayer_offset_isya) || 0
+  };
+
+  // Format times with offsets
+  const formatTime = (date, offsetMinutes = 0) => {
+    const adjusted = new Date(date.getTime() + offsetMinutes * 60000);
+    return adjusted.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Jakarta'
+    });
+  };
+
+  return {
+    Subuh: formatTime(prayerTimes.fajr, offsets.Subuh),
+    Dzuhur: formatTime(prayerTimes.dhuhr, offsets.Dzuhur),
+    Ashar: formatTime(prayerTimes.asr, offsets.Ashar),
+    Maghrib: formatTime(prayerTimes.maghrib, offsets.Maghrib),
+    Isya: formatTime(prayerTimes.isha, offsets.Isya),
+    Syuruq: formatTime(prayerTimes.sunrise, 0)
+  };
+}
+
 app.get('/api/prayers', (req, res) => {
   const prayers = db.prepare('SELECT * FROM prayer_times ORDER BY id').all();
-  res.json(prayers);
+
+  // Get settings to check if auto-calculation is enabled
+  const settingsRows = db.prepare('SELECT key, value FROM settings').all();
+  const settings = {};
+  for (const row of settingsRows) {
+    settings[row.key] = row.value;
+  }
+
+  // If auto-calculation is enabled, merge calculated times with stored iqomah durations
+  if (settings.prayer_calc_enabled === 'true') {
+    const calculated = calculatePrayerTimes(settings);
+    const prayerOrder = ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+
+    const mergedPrayers = prayerOrder.map((name, index) => {
+      const existing = prayers.find(p => p.name === name) || { id: index + 1, iqomah_duration: 10 };
+      return {
+        id: existing.id,
+        name: name,
+        time: calculated[name],
+        iqomah_duration: existing.iqomah_duration
+      };
+    });
+
+    res.json(mergedPrayers);
+  } else {
+    res.json(prayers);
+  }
+});
+
+// Calculate prayer times for a specific date (for testing/preview)
+app.get('/api/prayers/calculate', (req, res) => {
+  const settingsRows = db.prepare('SELECT key, value FROM settings').all();
+  const settings = {};
+  for (const row of settingsRows) {
+    settings[row.key] = row.value;
+  }
+
+  const date = req.query.date ? new Date(req.query.date) : new Date();
+  const calculated = calculatePrayerTimes(settings, date);
+
+  res.json({
+    date: date.toISOString().split('T')[0],
+    method: settings.prayer_calc_method || 'Singapore',
+    location: {
+      latitude: parseFloat(settings.mosque_latitude) || -6.2088,
+      longitude: parseFloat(settings.mosque_longitude) || 106.8456
+    },
+    times: calculated
+  });
+});
+
+// Sync calculated times to database (for manual override capability)
+app.post('/api/prayers/sync', (req, res) => {
+  const settingsRows = db.prepare('SELECT key, value FROM settings').all();
+  const settings = {};
+  for (const row of settingsRows) {
+    settings[row.key] = row.value;
+  }
+
+  if (settings.prayer_calc_enabled !== 'true') {
+    return res.status(400).json({ error: 'Auto-calculation is not enabled' });
+  }
+
+  const calculated = calculatePrayerTimes(settings);
+  const prayerOrder = ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+
+  const updatePrayer = db.prepare('UPDATE prayer_times SET time = ? WHERE name = ?');
+
+  for (const name of prayerOrder) {
+    updatePrayer.run(calculated[name], name);
+  }
+
+  res.json({ success: true, times: calculated });
 });
 
 app.put('/api/prayers/:id', (req, res) => {
