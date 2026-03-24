@@ -382,26 +382,26 @@ body {
 }
 
 .offset-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
 }
 
 .offset-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  display: grid;
+  grid-template-columns: 100px 100px;
+  align-items: center;
+  gap: 1rem;
 }
 
 .offset-item label {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
+  color: var(--color-text);
 }
 
 .offset-item input {
-  text-align: center;
+  text-align: left;
 }
 
 /* Info Banner */
@@ -501,16 +501,10 @@ body {
   #calculated-times-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  .offset-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 @media (max-width: 600px) {
   #calculated-times-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .offset-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
