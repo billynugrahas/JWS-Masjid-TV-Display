@@ -21,6 +21,7 @@ let settings = {};
 let hadiths = [];
 let runningTexts = [];
 let announcements = [];
+let donations = [];
 let countdownInterval = null;
 let iqomahInterval = null;
 let hadithInterval = null;
@@ -148,11 +149,14 @@ async function fetchData() {
     hadiths = data.hadiths && data.hadiths.length > 0 ? data.hadiths : defaultHadiths;
     runningTexts = data.runningTexts || [];
     announcements = data.announcements || [];
+    donations = data.donations || [];
 
     updateDisplayElements();
     renderPrayerGrid();
     renderOptionalTimes();
     renderMarquee();
+    renderAnnouncementsList();
+    renderDonationsList();
     startHadithRotation();
     checkPrayerState();
   } catch (error) {
@@ -494,6 +498,7 @@ function setCountdownToNextPrayer(prayerIndex) {
   document.getElementById('prayer-progress').style.display = 'none';
   document.getElementById('countdown-pill').style.display = 'flex';
   document.body.classList.remove('calm-mode');
+  document.body.classList.remove('adhan-mode');
 
   const prayer = prayerTimes[prayerIndex];
 
@@ -537,6 +542,8 @@ function setAdzanState(prayer) {
   document.getElementById('iqomah-section').style.display = 'none';
   document.getElementById('prayer-progress').style.display = 'none';
   document.getElementById('countdown-pill').style.display = 'flex';
+  document.body.classList.add('adhan-mode');
+  document.body.classList.remove('calm-mode');
 
   document.getElementById('countdown-label').textContent = `WAKTU ADZAN ${prayer.name.toUpperCase()}`;
   document.getElementById('countdown-time').textContent = prayer.time;
@@ -553,6 +560,7 @@ function setIqomahCountdown(remainingMinutes, prayer) {
   document.getElementById('countdown-pill').style.display = 'none';
   document.getElementById('prayer-progress').style.display = 'none';
   document.getElementById('iqomah-section').style.display = 'block';
+  document.body.classList.remove('adhan-mode');
   document.body.classList.remove('calm-mode');
 
   const now = new Date();
@@ -614,6 +622,55 @@ function formatCountdown(ms) {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+}
+
+function renderAnnouncementsList() {
+  const list = document.getElementById('announcements-list');
+  if (!list) return;
+
+  // announcements are already filtered by /api/state (published + not expired)
+  const items = announcements.slice(0, 3);
+
+  if (items.length === 0) {
+    list.innerHTML = '<li style="color: var(--color-text-muted);">Tidak ada pengumuman</li>';
+    return;
+  }
+
+  list.innerHTML = items.map(a => `<li>${a.title}</li>`).join('');
+}
+
+function renderDonationsList() {
+  const container = document.getElementById('donations-list');
+  if (!container) return;
+
+  if (donations.length === 0) {
+    container.innerHTML = '<span style="color: var(--color-text-muted); font-size: 0.8rem;">Tidak ada data donasi</span>';
+    return;
+  }
+
+  container.innerHTML = donations.map(d => {
+    const progress = d.target > 0 ? Math.min((d.amount / d.target) * 100, 100) : 0;
+    return `
+      <div class="donation-item">
+        <span class="donation-category">${d.category}:</span>
+        <span class="donation-amount">${formatCurrency(d.amount)}</span>
+        ${d.target > 0 ? `
+          <div class="donation-progress-bar">
+            <div class="donation-progress-fill" style="width: ${progress}%"></div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
 }
 
 function playBeep() {
