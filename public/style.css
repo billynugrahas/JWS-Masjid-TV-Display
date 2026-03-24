@@ -930,6 +930,16 @@ body.adhan-mode .info-block-section {
   border-radius: 20px;
 }
 
+/* ==================== STATE HANDLING ==================== */
+/* Adhan Mode - hide left column, expand center and right */
+body.adhan-mode .main-three-column {
+  grid-template-columns: 50% 50%;
+}
+
+body.adhan-mode .column-left {
+  display: none;
+}
+
 /* Hide main 3-column during adhan mode */
 body.adhan-mode .main-three-column {
   display: none;
@@ -1094,6 +1104,13 @@ body.calm-mode .prayer-progress-sub {
 
 body.calm-mode .prayer-progress-sub2 {
   color: rgba(255, 255, 255, 0.6);
+}
+
+/* Add to existing calm-mode section */
+body.calm-mode .column-left,
+body.calm-mode .column-right {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 /* ==================== RESPONSIVE DESIGN ==================== */
