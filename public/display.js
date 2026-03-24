@@ -694,12 +694,15 @@ function renderDonationsList() {
     return `
       <div class="donation-item">
         <span class="donation-category">${d.category}:</span>
-        <span class="donation-amount">${formatCurrency(d.amount)}</span>
-        ${d.target > 0 ? `
-          <div class="donation-progress-bar">
-            <div class="donation-progress-fill" style="width: ${progress}%"></div>
-          </div>
-        ` : ''}
+        <div class="donation-value-row">
+          <span class="donation-amount">${formatCurrency(d.amount)}</span>
+          ${d.target > 0 ? `
+            <div class="donation-progress-bar">
+              <div class="donation-progress-fill" style="width: ${progress}%"></div>
+            </div>
+            <span class="donation-percent">${progress.toFixed(0)}%</span>
+          ` : ''}
+        </div>
       </div>
     `;
   }).join('');

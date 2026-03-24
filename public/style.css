@@ -585,9 +585,8 @@ body {
 
 .donation-item {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25vw;
+  flex-direction: column;
+  gap: 0.2vh;
 }
 
 .donation-category {
@@ -596,15 +595,23 @@ body {
   color: var(--color-text-muted);
 }
 
+.donation-value-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+}
+
 .donation-amount {
   font-family: var(--font-display);
   font-size: clamp(0.7rem, 1.2vh, 0.95rem);
   font-weight: 700;
   color: #1E3A2B;
+  white-space: nowrap;
 }
 
 .donation-progress-bar {
-  width: 100%;
+  flex: 1;
+  min-width: 3vw;
   height: 4px;
   background: rgba(30, 58, 43, 0.2);
   border-radius: 2px;
@@ -616,6 +623,15 @@ body {
   background: linear-gradient(90deg, #1E3A2B, #2D6A4F);
   border-radius: 2px;
   transition: width 0.3s ease;
+}
+
+.donation-percent {
+  font-family: var(--font-body);
+  font-size: clamp(0.55rem, 0.9vh, 0.7rem);
+  font-weight: 600;
+  color: #1E3A2B;
+  min-width: 2.5vw;
+  text-align: right;
 }
 
 /* Hide info block during Adhan state */
