@@ -441,12 +441,14 @@ app.get('/api/state', (req, res) => {
   const hadiths = db.prepare('SELECT * FROM hadiths WHERE is_active = 1').all();
   const announcements = db.prepare("SELECT * FROM announcements WHERE status = 'published' AND (expiry_date IS NULL OR expiry_date > date('now'))").all();
   const runningTexts = db.prepare('SELECT * FROM running_texts WHERE is_active = 1 ORDER BY priority DESC').all();
+  const donations = db.prepare('SELECT * FROM donations ORDER BY updated_at DESC').all();
 
   res.json({
     settings,
     prayers,
     hadiths,
     announcements,
+    donations,
     runningTexts,
     serverTime: new Date().toISOString()
   });
