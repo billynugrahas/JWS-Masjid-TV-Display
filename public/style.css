@@ -279,19 +279,21 @@ body {
   50% { transform: scale(1.02); }
 }
 
-.countdown-label {
+.countdown-pill .countdown-label {
   font-size: clamp(0.7rem, 1.2vh, 0.9rem);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   opacity: 0.9;
+  color: var(--color-white);
 }
 
-.countdown-time {
+.countdown-pill .countdown-time {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vh, 2.5rem);
   font-weight: 700;
   letter-spacing: 0.05em;
+  color: var(--color-white);
 }
 
 /* ==================== IQOMAH SECTION ==================== */
