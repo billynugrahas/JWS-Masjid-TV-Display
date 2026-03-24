@@ -654,7 +654,7 @@ body.adhan-mode .info-block-section {
 }
 
 /* Left Column - Announcements & Donations */
-.main-left-column {
+.column-left {
   display: grid;
   grid-template-rows: 1fr 1fr;
   gap: 1.5vh;
@@ -779,7 +779,7 @@ body.adhan-mode .info-block-section {
 }
 
 /* Center Column - Clock & Countdown */
-.main-center-column {
+.column-center {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -841,7 +841,7 @@ body.adhan-mode .info-block-section {
 }
 
 /* Right Column - Video Placeholder */
-.main-right-column {
+.column-right {
   display: flex;
   align-items: center;
   justify-content: center;
