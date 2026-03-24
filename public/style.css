@@ -1122,7 +1122,12 @@ body.calm-mode .column-right {
 }
 
 /* For very short screens or when horizontal space is limited */
+/* Tablet landscape (900px - 1200px) */
 @media (max-width: 1200px) {
+  .main-three-column {
+    gap: 16px;
+  }
+
   .prayer-grid {
     grid-template-columns: repeat(5, 1fr);
     gap: 0.5vw;
@@ -1143,6 +1148,22 @@ body.calm-mode .column-right {
   .prayer-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  /* NEW rules to add - do not duplicate existing .header/.prayer-grid rules */
+  .main-three-column {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+  }
+
+  .column-left {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .column-left .info-card {
+    flex: 1;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1153,5 +1174,10 @@ body.calm-mode .column-right {
 
   .prayer-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* NEW rule to add - hide video placeholder on mobile */
+  .column-right {
+    display: none;
   }
 }
