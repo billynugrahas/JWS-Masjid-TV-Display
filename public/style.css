@@ -595,10 +595,24 @@ body {
 }
 
 /* Donations container */
+.donations-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1vh;
+}
+
+.donations-wrapper.has-qr {
+  grid-template-columns: 1fr auto;
+}
+
 .donations-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.8vh 1vw;
+}
+
+.donations-wrapper.has-qr .donations-container {
+  grid-template-columns: 1fr;
 }
 
 .donation-item {
@@ -650,6 +664,34 @@ body {
   color: #1E3A2B;
   min-width: 2.5vw;
   text-align: right;
+}
+
+/* Donation QR Code Section */
+.donation-qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 1vw;
+  border-left: 1px solid rgba(30, 58, 43, 0.15);
+}
+
+.donation-qr-label {
+  font-family: var(--font-body);
+  font-size: clamp(0.55rem, 0.9vh, 0.7rem);
+  color: var(--color-text-muted);
+  margin-bottom: 0.5vh;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.donation-qr-image {
+  width: clamp(80px, 10vh, 120px);
+  height: clamp(80px, 10vh, 120px);
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: white;
+  padding: 4px;
 }
 
 

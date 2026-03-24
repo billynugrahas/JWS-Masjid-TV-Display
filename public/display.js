@@ -294,6 +294,23 @@ function updateDisplayElements() {
     // Hide entire section if both are disabled
     infoBlockSection.style.display = (announcementsEnabled || donationsEnabled) ? 'block' : 'none';
   }
+
+  // Update donation QR code visibility
+  const donationQRSection = document.getElementById('donation-qr-section');
+  const donationQRImage = document.getElementById('donation-qr-image');
+  const donationsWrapper = document.getElementById('donations-wrapper');
+  const qrEnabled = settings.donation_qr_enabled === 'true';
+
+  if (donationQRSection && donationQRImage && donationsWrapper) {
+    if (qrEnabled && settings.donation_qr_image) {
+      donationQRImage.src = settings.donation_qr_image;
+      donationQRSection.style.display = 'flex';
+      donationsWrapper.classList.add('has-qr');
+    } else {
+      donationQRSection.style.display = 'none';
+      donationsWrapper.classList.remove('has-qr');
+    }
+  }
 }
 
 // ==================== PRAYER GRID RENDERING ====================
@@ -789,7 +806,13 @@ function renderDonationsList() {
   }
 
   // Get limit from settings (default: 6)
-  const perPage = parseInt(settings.donations_limit) || DONATIONS_PER_PAGE;
+  let perPage = parseInt(settings.donations_limit) || DONATIONS_PER_PAGE;
+
+  // If QR is enabled, show only half the items (single column layout)
+  const qrEnabled = settings.donation_qr_enabled === 'true' && settings.donation_qr_image;
+  if (qrEnabled) {
+    perPage = Math.ceil(perPage / 2);
+  }
 
   // Calculate which donations to show based on current page
   const startIndex = currentDonationPage * perPage;
@@ -822,7 +845,13 @@ function startDonationRotation() {
   }
 
   // Get limit from settings
-  const perPage = parseInt(settings.donations_limit) || DONATIONS_PER_PAGE;
+  let perPage = parseInt(settings.donations_limit) || DONATIONS_PER_PAGE;
+
+  // If QR is enabled, show only half the items (single column layout)
+  const qrEnabled = settings.donation_qr_enabled === 'true' && settings.donation_qr_image;
+  if (qrEnabled) {
+    perPage = Math.ceil(perPage / 2);
+  }
 
   // Only rotate if we have more donations than can fit on one page
   if (donations.length <= perPage) {

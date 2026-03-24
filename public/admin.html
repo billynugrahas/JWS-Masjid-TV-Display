@@ -463,12 +463,34 @@
                     <option value="6" selected>6 Donasi</option>
                     <option value="8">8 Donasi</option>
                   </select>
+                  <small style="color: var(--color-text-muted);">Jika QR aktif, tampilan menjadi 1 kolom sehingga hanya menampilkan setengahnya</small>
                 </div>
                 <div class="form-group">
                   <label>Rotasi (detik)</label>
                   <input type="number" id="setting-donations-rotation" value="10" min="5" max="30">
                   <small style="color: var(--color-text-muted);">Interval rotasi jika donasi melebihi batas</small>
                 </div>
+              </div>
+              <hr style="border-color: var(--color-text-light); margin: 1rem 0;">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-donation-qr-enabled">
+                  <span>Tampilkan QR Code Donasi</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Tampilkan QR code untuk scan donasi di display</small>
+              </div>
+              <div class="form-group">
+                <label>QR Code Image</label>
+                <div class="file-upload" style="padding: 0.75rem;">
+                  <input type="file" id="setting-donation-qr-image" accept="image/*" onchange="handleDonationQRUpload(event)">
+                  <div class="file-upload-label" id="donation-qr-upload-label" style="padding: 0.75rem; font-size: 0.85rem;">
+                    <span>📷</span> Upload QR Code
+                  </div>
+                </div>
+                <img id="donation-qr-preview" class="image-preview" style="display: none; max-width: 150px; margin-top: 0.5rem;">
+                <button class="btn btn-danger btn-sm" onclick="clearDonationQR()" id="clear-donation-qr-btn" style="display: none; margin-top: 0.5rem;">
+                  Hapus QR Code
+                </button>
               </div>
             </div>
           </div>

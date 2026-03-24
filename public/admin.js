@@ -16,6 +16,7 @@ let appData = {
 
 let backgroundImageData = '';
 let logoImageData = '';
+let donationQRImageData = '';
 let indonesiaCitiesData = null;
 
 // ==================== INITIALIZATION ====================
@@ -903,6 +904,21 @@ function populateSettings() {
   document.getElementById('setting-donations-limit').value = appData.settings.donations_limit || '6';
   document.getElementById('setting-donations-rotation').value = parseInt(appData.settings.donations_rotation) || 10;
 
+  // Donation QR Code settings
+  document.getElementById('setting-donation-qr-enabled').checked = appData.settings.donation_qr_enabled === 'true';
+  if (appData.settings.donation_qr_image) {
+    donationQRImageData = appData.settings.donation_qr_image;
+    document.getElementById('donation-qr-preview').src = appData.settings.donation_qr_image;
+    document.getElementById('donation-qr-preview').style.display = 'block';
+    document.getElementById('clear-donation-qr-btn').style.display = 'inline-flex';
+    document.getElementById('donation-qr-upload-label').innerHTML = '<span>📷</span> Ganti QR Code';
+  } else {
+    donationQRImageData = '';
+    document.getElementById('donation-qr-preview').style.display = 'none';
+    document.getElementById('clear-donation-qr-btn').style.display = 'none';
+    document.getElementById('donation-qr-upload-label').innerHTML = '<span>📷</span> Upload QR Code';
+  }
+
   // Marquee settings
   document.getElementById('setting-marquee-loop').checked = appData.settings.marquee_loop !== 'false';
   document.getElementById('setting-marquee-speed').value = appData.settings.marquee_speed || 30;
@@ -1010,6 +1026,30 @@ function clearLogoImage() {
   document.getElementById('setting-mosque-logo-image').value = '';
 }
 
+// Donation QR Code handlers
+function handleDonationQRUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    donationQRImageData = e.target.result;
+    document.getElementById('donation-qr-preview').src = donationQRImageData;
+    document.getElementById('donation-qr-preview').style.display = 'block';
+    document.getElementById('clear-donation-qr-btn').style.display = 'inline-flex';
+    document.getElementById('donation-qr-upload-label').innerHTML = `<span>📷</span> ${file.name}`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearDonationQR() {
+  donationQRImageData = '';
+  document.getElementById('donation-qr-preview').style.display = 'none';
+  document.getElementById('clear-donation-qr-btn').style.display = 'none';
+  document.getElementById('donation-qr-upload-label').innerHTML = '<span>📷</span> Upload QR Code';
+  document.getElementById('setting-donation-qr-image').value = '';
+}
+
 // ==================== SAVE ALL ====================
 document.getElementById('save-all-btn').addEventListener('click', async () => {
   const btn = document.getElementById('save-all-btn');
@@ -1053,6 +1093,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       donations_enabled: document.getElementById('setting-donations-enabled').checked ? 'true' : 'false',
       donations_limit: document.getElementById('setting-donations-limit').value,
       donations_rotation: document.getElementById('setting-donations-rotation').value,
+      donation_qr_enabled: document.getElementById('setting-donation-qr-enabled').checked ? 'true' : 'false',
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,
@@ -1065,6 +1106,10 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
 
     if (logoImageData !== appData.settings.mosque_logo_image) {
       settings.mosque_logo_image = logoImageData;
+    }
+
+    if (donationQRImageData !== appData.settings.donation_qr_image) {
+      settings.donation_qr_image = donationQRImageData;
     }
 
     await fetch('/api/settings', {
