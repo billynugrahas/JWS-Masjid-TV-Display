@@ -50,42 +50,12 @@
       </div>
     </header>
 
-    <!-- ==================== HERO SECTION ==================== -->
-    <section class="hero-section">
+    <!-- ==================== 3-COLUMN MAIN SECTION ==================== -->
+    <section class="main-three-column">
 
-      <!-- Main Clock -->
-      <div class="clock-container">
-        <div class="clock-time" id="current-time">00:00</div>
-        <div class="clock-seconds" id="current-seconds">:00</div>
-      </div>
-
-      <!-- Countdown Pill -->
-      <div class="countdown-pill" id="countdown-pill">
-        <span class="countdown-label" id="countdown-label">Menuju Adzan Subuh</span>
-        <span class="countdown-time" id="countdown-time">07:45:10</span>
-      </div>
-
-      <!-- Iqomah Section (Hidden by default) -->
-      <div class="iqomah-section" id="iqomah-section" style="display: none;">
-        <div class="iqomah-title">IQOMAH</div>
-        <div class="iqomah-time" id="iqomah-time">10:00</div>
-      </div>
-
-      <!-- Prayer Progress Section (Hidden by default) -->
-      <div class="prayer-progress" id="prayer-progress" style="display: none;">
-        <div class="prayer-progress-icon">🕌</div>
-        <div class="prayer-progress-text">SHOLAT <span id="current-prayer-name">SUBUH</span></div>
-        <div class="prayer-progress-sub" id="prayer-subtext">Luruskan dan Rapatkan Shaf</div>
-        <div class="prayer-progress-sub2" id="prayer-subtext-2"></div>
-      </div>
-
-    </section>
-
-    <!-- ==================== MID-TIER INFO BLOCK ==================== -->
-    <section class="info-block-section" id="info-block-section">
-      <div class="info-block-grid">
-        <!-- Announcements Card -->
-        <div class="info-card info-card-announcements">
+      <!-- Left Column: Announcements + Donations -->
+      <div class="column-left">
+        <div class="info-card card-announcements">
           <div class="info-card-header">
             <span class="info-card-icon">📢</span>
             <h3 class="info-card-title">PENGUMUMAN</h3>
@@ -95,8 +65,7 @@
           </div>
         </div>
 
-        <!-- Donations Card -->
-        <div class="info-card info-card-donations">
+        <div class="info-card card-donations">
           <div class="info-card-header">
             <span class="info-card-icon">❤️</span>
             <h3 class="info-card-title">DONASI</h3>
@@ -106,6 +75,51 @@
           </div>
         </div>
       </div>
+
+      <!-- Center Column: Clock + Countdown -->
+      <div class="column-center">
+
+        <!-- Main Clock -->
+        <div class="clock-container">
+          <div class="clock-time" id="current-time">00:00</div>
+          <div class="clock-seconds" id="current-seconds">:00</div>
+        </div>
+
+        <!-- Countdown Pill -->
+        <div class="countdown-pill" id="countdown-pill">
+          <span class="countdown-label" id="countdown-label">Menuju Adzan Subuh</span>
+          <span class="countdown-time" id="countdown-time">07:45:10</span>
+        </div>
+
+        <!-- Iqomah Section (Hidden by default) -->
+        <div class="iqomah-section" id="iqomah-section" style="display: none;">
+          <div class="iqomah-title">IQOMAH</div>
+          <div class="iqomah-time" id="iqomah-time">10:00</div>
+        </div>
+
+        <!-- Prayer Progress Section (Hidden by default) -->
+        <div class="prayer-progress" id="prayer-progress" style="display: none;">
+          <div class="prayer-progress-icon">🕌</div>
+          <div class="prayer-progress-text">SHOLAT <span id="current-prayer-name">SUBUH</span></div>
+          <div class="prayer-progress-sub" id="prayer-subtext">Luruskan dan Rapatkan Shaf</div>
+          <div class="prayer-progress-sub2" id="prayer-subtext-2"></div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Ka'bah Video -->
+      <div class="column-right">
+        <div class="video-container" id="video-container">
+          <div class="video-placeholder" id="video-placeholder">
+            <div class="video-placeholder-icon">🕋</div>
+            <div class="video-placeholder-text">
+              VIDEO LIVE KA'BAH<br>
+              <span style="opacity: 0.6">(OFF)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ==================== OPTIONAL TIMES SECTION ==================== -->
