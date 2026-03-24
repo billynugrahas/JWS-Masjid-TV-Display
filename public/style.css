@@ -92,7 +92,7 @@ body {
 /* ==================== MAIN CONTAINER ==================== */
 .main-container {
   display: grid;
-  grid-template-rows: auto 1fr auto auto auto;
+  grid-template-rows: auto 1fr auto auto auto auto;
   height: 100vh;
   padding: 1.5vh 2vw;
   gap: 1.5vh;
@@ -641,6 +641,245 @@ body {
 
 /* Hide info block during Adhan state */
 body.adhan-mode .info-block-section {
+  display: none;
+}
+
+/* ==================== MAIN 3-COLUMN SECTION ==================== */
+.main-three-column {
+  display: grid;
+  grid-template-columns: 30% 40% 30%;
+  gap: 1.5vh;
+  min-height: 45vh;
+  height: 45vh;
+}
+
+/* Left Column - Announcements & Donations */
+.main-left-column {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5vh;
+}
+
+.announcements-block {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.announcements-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(0.5rem, 1vh, 0.75rem);
+}
+
+.announcements-title {
+  font-size: clamp(0.75rem, 1.3vh, 0.9rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.announcement-item {
+  margin-bottom: clamp(0.5rem, 1vh, 0.75rem);
+  opacity: 0;
+  animation: slideIn 0.5s forwards;
+}
+
+.announcement-title {
+  font-size: clamp(0.7rem, 1.2vh, 0.85rem);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.25vh;
+  line-height: 1.3;
+}
+
+.announcement-content {
+  font-size: clamp(0.6rem, 1vh, 0.75rem);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.announcement-date {
+  font-size: clamp(0.55rem, 0.9vh, 0.7rem);
+  color: var(--color-text-muted);
+  margin-top: 0.25vh;
+}
+
+.donations-block {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.donations-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(0.5rem, 1vh, 0.75rem);
+}
+
+.donations-title {
+  font-size: clamp(0.75rem, 1.3vh, 0.9rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.donation-item {
+  margin-bottom: clamp(0.75rem, 1.5vh, 1rem);
+}
+
+.donation-category {
+  font-size: clamp(0.65rem, 1vh, 0.8rem);
+  color: var(--color-text-muted);
+  margin-bottom: 0.25vh;
+}
+
+.donation-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5vh;
+}
+
+.donation-bar-container {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  height: clamp(0.3rem, 0.6vh, 0.8rem);
+  overflow: hidden;
+  position: relative;
+}
+
+.donation-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+  border-radius: var(--radius-md);
+  transition: width 0.3s ease;
+}
+
+.donation-percentage {
+  font-size: clamp(0.65rem, 1vh, 0.8rem);
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-left: 0.5vh;
+}
+
+.donation-target {
+  font-size: clamp(0.6rem, 1vh, 0.75rem);
+  color: var(--color-text-muted);
+}
+
+/* Center Column - Clock & Countdown */
+.main-center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: clamp(1rem, 2vh, 2rem) clamp(1.5rem, 3vw, 3rem);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  overflow: hidden;
+}
+
+.clock-container {
+  margin-bottom: clamp(1.5rem, 3vh, 3rem);
+}
+
+.clock {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vh, 5rem);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.date-display {
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 1.8vh, 1.2rem);
+  color: var(--color-text-muted);
+  margin-top: 0.5vh;
+}
+
+.prayer-countdown {
+  text-align: center;
+}
+
+.countdown-label {
+  font-size: clamp(0.8rem, 1.5vh, 1rem);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5vh;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.countdown-time {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vh, 3.5rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.countdown-target {
+  font-size: clamp(0.75rem, 1.3vh, 0.9rem);
+  color: var(--color-text-muted);
+  margin-top: 0.5vh;
+}
+
+/* Right Column - Video Placeholder */
+.main-right-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: clamp(1rem, 2vh, 2rem);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.video-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1vh;
+}
+
+.video-icon {
+  font-size: clamp(2rem, 4vh, 4rem);
+  color: var(--color-text-muted);
+}
+
+.video-label {
+  font-size: clamp(0.75rem, 1.3vh, 0.9rem);
+  color: var(--color-text-muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Hide main 3-column during adhan mode */
+body.adhan-mode .main-three-column {
   display: none;
 }
 
