@@ -76,8 +76,8 @@ Redesign the main content area of the display page from a vertical grid layout t
 ### Typography
 | Element | Font | Weight | Size |
 |---------|------|--------|------|
-| Clock Time | Poppins | 800 (ExtraBold) | clamp(4rem, 12vw, 8rem) |
-| Clock Seconds | Poppins | 600 | clamp(1.5rem, 4vw, 3rem) |
+| Clock Time | Poppins | 800 (ExtraBold) | clamp(4rem, 15vh, 12rem) |
+| Clock Seconds | Poppins | 600 | clamp(1.5rem, 6vh, 4rem) |
 | Card Titles | Poppins | 700 | 0.85rem |
 | Body Text | Inter | 400-500 | 0.8rem |
 | Countdown Time | Poppins | 700 | 1.1rem |
@@ -265,6 +265,176 @@ Two glassmorphism cards stacked vertically with equal flex distribution.
 
 ---
 
+## State Handling
+
+### Adhan Mode
+When `body.adhan-mode` is active:
+- Left column (Announcements + Donations): **Hidden** (`display: none`)
+- Center column: Clock + Countdown remain visible, countdown shows "WAKTU ADZAN [PRAYER]"
+- Right column: Video placeholder remains visible
+- Layout adjusts: Grid becomes 50% center / 50% right (left column hidden)
+
+```css
+body.adhan-mode .main-three-column {
+  grid-template-columns: 50% 50%;
+}
+
+body.adhan-mode .column-left {
+  display: none;
+}
+```
+
+### Calm Mode (During Prayer)
+When `body.calm-mode` is active:
+- Left column: Cards dimmed with reduced opacity (`opacity: 0.3`)
+- Center column: Shows prayer progress section
+- Right column: Video placeholder dimmed (`opacity: 0.3`)
+- Overall UI takes subdued appearance
+
+```css
+body.calm-mode .column-left,
+body.calm-mode .column-right {
+  opacity: 0.3;
+  pointer-events: none;
+}
+```
+
+### Iqomah Mode
+- Center column shows iqomah countdown
+- Left and right columns remain visible but static
+
+---
+
+## Responsive Design
+
+### Breakpoints (matching existing `style.css`)
+
+| Breakpoint | Behavior |
+|------------|----------|
+| **> 1200px** | Full 3-column layout (30% / 40% / 30%) |
+| **900px - 1200px** | 3-column maintained, gaps reduced to 16px |
+| **600px - 900px** | Stack columns vertically: Clock → Announcements/Donations → Video |
+| **< 600px** | Single column, video placeholder hidden |
+
+### CSS Media Queries
+```css
+/* Tablet landscape (900px - 1200px) */
+@media (max-width: 1200px) {
+  .main-three-column {
+    gap: 16px;
+  }
+}
+
+/* Tablet portrait (600px - 900px) */
+@media (max-width: 900px) {
+  .main-three-column {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+  }
+
+  .column-left {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .column-left .info-card {
+    flex: 1;
+  }
+}
+
+/* Mobile (< 600px) */
+@media (max-width: 600px) {
+  .column-right {
+    display: none;
+  }
+}
+```
+
+---
+
+## Complete Video Container CSS
+
+```css
+/* Video Container */
+.video-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(30, 58, 43, 0.08);
+}
+
+/* Placeholder State */
+.video-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(30, 58, 43, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px dashed rgba(30, 58, 43, 0.25);
+  border-radius: 20px;
+}
+
+.video-placeholder-icon {
+  font-size: clamp(2rem, 5vw, 4rem);
+  opacity: 0.7;
+}
+
+.video-placeholder-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  color: #1E3A2B;
+  text-align: center;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+/* Active Video State (future) */
+.video-container.active {
+  border: none;
+  background: transparent;
+}
+
+.video-container.active video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+```
+
+---
+
+## JavaScript Updates
+
+### Video Placeholder Logic
+The video placeholder is **static for now**. No JavaScript changes required for the initial implementation.
+
+Future implementation will add:
+1. Setting `kabah_video_url` in server settings
+2. Setting `kabah_video_enabled` (true/false)
+3. JavaScript to check settings and toggle between placeholder and active video
+
+### Selectors to Update
+The existing selectors in `display.js` should continue to work:
+- `#current-time` - Clock time
+- `#current-seconds` - Clock seconds
+- `#countdown-pill` - Countdown container
+- `#countdown-label` - Countdown label text
+- `#countdown-time` - Countdown time display
+
+No selector changes needed - just HTML structure reorganization.
+
+---
+
 ## Future Enhancements
 
 1. **Video URL Configuration** - Add setting in admin panel for Ka'bah live stream URL
@@ -289,14 +459,34 @@ Two glassmorphism cards stacked vertically with equal flex distribution.
 
 ## Acceptance Criteria
 
+### Layout
 - [ ] Header remains unchanged
 - [ ] Left column displays Announcements and Donations stacked vertically
 - [ ] Center column displays large clock with smaller seconds
 - [ ] Center column displays countdown pill below clock
-- [ ] Right column displays Ka'bah video placeholder (16:9)
-- [ ] Glassmorphism styling applied to all cards
-- [ ] Emerald green theme consistent throughout
+- [ ] Right column displays Ka'bah video placeholder (16:9 aspect ratio)
 - [ ] Prayer cards row remains unchanged below 3-column section
 - [ ] Hadith section remains unchanged
 - [ ] Footer marquee remains unchanged
+
+### Styling
+- [ ] Glassmorphism styling applied to all cards
+- [ ] Emerald green theme consistent throughout
+- [ ] Clock uses vh-based sizing (matching existing pattern)
+- [ ] Video placeholder has dashed border, Ka'bah icon, and "OFF" text
+
+### State Handling
+- [ ] Adhan mode: Left column hidden, layout adjusts to 50/50
+- [ ] Calm mode: Left and right columns dimmed (opacity: 0.3)
+- [ ] Iqomah mode: Center column shows iqomah countdown
+
+### Responsive
+- [ ] Desktop (>1200px): Full 3-column 30/40/30 layout
+- [ ] Tablet (900-1200px): 3-column with reduced gaps
+- [ ] Tablet portrait (600-900px): Stacked vertically
+- [ ] Mobile (<600px): Video placeholder hidden
+
+### Performance
 - [ ] Layout optimized for 1920x1080 landscape TV display
+- [ ] No layout shift during state transitions
+- [ ] Smooth transitions between prayer states
