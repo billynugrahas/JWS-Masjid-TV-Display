@@ -570,15 +570,22 @@ function renderDonations() {
   }
 
   container.innerHTML = appData.donations.map(donation => {
-    const progress = donation.target > 0 ? Math.min((donation.amount / donation.target) * 100, 100) : 0;
+    const hasTarget = donation.target > 0;
+    const progress = hasTarget ? Math.min((donation.amount / donation.target) * 100, 100) : 0;
+    const typeLabel = hasTarget ? 'Penggalangan' : 'Infaq Rutin';
+    const typeClass = hasTarget ? 'badge-primary' : 'badge-secondary';
+
     return `
       <div class="donation-item">
         <div class="donation-header">
-          <span class="donation-category">${donation.category}</span>
+          <div>
+            <span class="donation-category">${donation.category}</span>
+            <span class="badge ${typeClass}" style="font-size: 0.7rem; margin-left: 0.5rem;">${typeLabel}</span>
+          </div>
           <button class="btn btn-sm btn-secondary" onclick="editDonation(${donation.id})">✏️ Edit</button>
         </div>
         <div class="donation-amount">${formatCurrency(donation.amount)}</div>
-        ${donation.target > 0 ? `
+        ${hasTarget ? `
           <div class="donation-progress">
             <div class="progress-bar">
               <div class="progress-fill" style="width: ${progress}%"></div>
@@ -598,25 +605,47 @@ function renderDonations() {
 function openDonationModal(id = null) {
   const modal = document.getElementById('donation-modal');
   const title = document.getElementById('donation-modal-title');
+  const hasTargetCheckbox = document.getElementById('donation-has-target');
+  const targetGroup = document.getElementById('donation-target-group');
 
   if (id) {
     const donation = appData.donations.find(d => d.id === id);
     title.textContent = 'Edit Donasi';
     document.getElementById('donation-id').value = id;
     document.getElementById('donation-category').value = donation.category;
-    document.getElementById('donation-amount').value = donation.amount;
-    document.getElementById('donation-target').value = donation.target;
+    document.getElementById('donation-amount').value = formatNumberForInput(donation.amount);
+    document.getElementById('donation-target').value = formatNumberForInput(donation.target || 0);
     document.getElementById('donation-description').value = donation.description || '';
+
+    // Set checkbox based on whether target > 0
+    const hasTarget = donation.target > 0;
+    hasTargetCheckbox.checked = hasTarget;
+    targetGroup.style.display = hasTarget ? 'block' : 'none';
   } else {
     title.textContent = 'Tambah Kategori Donasi';
     document.getElementById('donation-id').value = '';
     document.getElementById('donation-category').value = '';
-    document.getElementById('donation-amount').value = 0;
-    document.getElementById('donation-target').value = 0;
+    document.getElementById('donation-amount').value = '';
+    document.getElementById('donation-target').value = '';
     document.getElementById('donation-description').value = '';
+
+    // Default: no target (for infaq/recurring)
+    hasTargetCheckbox.checked = false;
+    targetGroup.style.display = 'none';
   }
 
   modal.classList.add('active');
+}
+
+function toggleDonationTarget() {
+  const hasTarget = document.getElementById('donation-has-target').checked;
+  const targetGroup = document.getElementById('donation-target-group');
+  targetGroup.style.display = hasTarget ? 'block' : 'none';
+
+  // Clear target value if unchecked
+  if (!hasTarget) {
+    document.getElementById('donation-target').value = '';
+  }
 }
 
 function editDonation(id) {
@@ -626,8 +655,9 @@ function editDonation(id) {
 async function saveDonation() {
   const id = document.getElementById('donation-id').value;
   const category = document.getElementById('donation-category').value.trim();
-  const amount = parseFloat(document.getElementById('donation-amount').value) || 0;
-  const target = parseFloat(document.getElementById('donation-target').value) || 0;
+  const amount = parseFormattedNumber(document.getElementById('donation-amount').value) || 0;
+  const hasTarget = document.getElementById('donation-has-target').checked;
+  const target = hasTarget ? (parseFormattedNumber(document.getElementById('donation-target').value) || 0) : 0;
   const description = document.getElementById('donation-description').value.trim();
 
   if (!category) {
@@ -865,6 +895,10 @@ function populateSettings() {
   document.getElementById('setting-syuruq-label').value = appData.settings.syuruq_label || 'Syuruq';
   document.getElementById('setting-syuruq-offset').value = appData.settings.syuruq_offset || 20;
 
+  // Info block settings (Announcements & Donations)
+  document.getElementById('setting-announcements-enabled').checked = appData.settings.announcements_enabled !== 'false'; // Default true
+  document.getElementById('setting-donations-enabled').checked = appData.settings.donations_enabled !== 'false'; // Default true
+
   // Marquee settings
   document.getElementById('setting-marquee-loop').checked = appData.settings.marquee_loop !== 'false';
   document.getElementById('setting-marquee-speed').value = appData.settings.marquee_speed || 30;
@@ -1008,6 +1042,9 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       syuruq_enabled: document.getElementById('setting-syuruq-enabled').checked ? 'true' : 'false',
       syuruq_label: document.getElementById('setting-syuruq-label').value,
       syuruq_offset: document.getElementById('setting-syuruq-offset').value,
+      // Info block settings
+      announcements_enabled: document.getElementById('setting-announcements-enabled').checked ? 'true' : 'false',
+      donations_enabled: document.getElementById('setting-donations-enabled').checked ? 'true' : 'false',
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,
@@ -1085,6 +1122,42 @@ function formatDate(dateStr) {
     month: 'short',
     year: 'numeric'
   });
+}
+
+// Format number input with thousand separators (Indonesian style: dots)
+function formatCurrencyInput(input) {
+  // Get cursor position
+  const cursorPos = input.selectionStart;
+  const oldLength = input.value.length;
+
+  // Remove all non-digit characters
+  let value = input.value.replace(/\D/g, '');
+
+  // Parse to number and format with dots
+  if (value) {
+    const num = parseInt(value, 10);
+    input.value = num.toLocaleString('id-ID');
+  } else {
+    input.value = '';
+  }
+
+  // Adjust cursor position
+  const newLength = input.value.length;
+  const diff = newLength - oldLength;
+  input.setSelectionRange(cursorPos + diff, cursorPos + diff);
+}
+
+// Format number for input field display
+function formatNumberForInput(num) {
+  if (!num || num === 0) return '';
+  return num.toLocaleString('id-ID');
+}
+
+// Parse formatted number string back to number
+function parseFormattedNumber(str) {
+  if (!str) return 0;
+  // Remove thousand separators (dots in Indonesian format) and parse
+  return parseInt(str.replace(/\./g, ''), 10) || 0;
 }
 
 // Close modal on outside click

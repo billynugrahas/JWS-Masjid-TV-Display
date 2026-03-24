@@ -423,6 +423,29 @@
 
           <div class="card">
             <div class="card-header">
+              <h2>Blok Info (Pengumuman & Donasi)</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-announcements-enabled">
+                  <span>Tampilkan Pengumuman</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Tampilkan kartu pengumuman di display</small>
+              </div>
+              <hr style="border-color: var(--color-text-light); margin: 1rem 0;">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-donations-enabled">
+                  <span>Tampilkan Donasi</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Tampilkan kartu donasi/infaq di display</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
               <h2>Waktu Tambahan (Imsak & Syuruq)</h2>
             </div>
             <div class="card-body">
@@ -586,15 +609,20 @@
           <label>Kategori</label>
           <input type="text" id="donation-category" placeholder="Infaq Jumat, Dana Renovasi, dll">
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Jumlah Terkumpul (Rp)</label>
-            <input type="number" id="donation-amount" placeholder="0">
-          </div>
-          <div class="form-group">
-            <label>Target (Rp)</label>
-            <input type="number" id="donation-target" placeholder="0">
-          </div>
+        <div class="form-group">
+          <label>Jumlah Terkumpul (Rp)</label>
+          <input type="text" id="donation-amount" placeholder="0" oninput="formatCurrencyInput(this)">
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="donation-has-target" onchange="toggleDonationTarget()">
+            <span>Punya target penggalangan</span>
+          </label>
+          <small style="color: var(--color-text-muted);">Contoh: Dana Renovasi, Pembelian Karpet, dll. Jika tidak dicentang, cocok untuk infaq rutin (Infaq Jumat, Kotak Amal).</small>
+        </div>
+        <div class="form-group" id="donation-target-group" style="display: none;">
+          <label>Target (Rp)</label>
+          <input type="text" id="donation-target" placeholder="0" oninput="formatCurrencyInput(this)">
         </div>
         <div class="form-group">
           <label>Keterangan</label>

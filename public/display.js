@@ -231,6 +231,16 @@ function updateDisplayElements() {
   if (prayerSubtext2) {
     prayerSubtext2.textContent = settings.prayer_subtext_2 || '';
   }
+
+  // Update info block section visibility
+  const infoBlockSection = document.getElementById('info-block-section');
+  const announcementsEnabled = settings.announcements_enabled !== 'false';
+  const donationsEnabled = settings.donations_enabled !== 'false';
+
+  if (infoBlockSection) {
+    // Hide entire section if both are disabled
+    infoBlockSection.style.display = (announcementsEnabled || donationsEnabled) ? 'block' : 'none';
+  }
 }
 
 // ==================== PRAYER GRID RENDERING ====================
@@ -635,7 +645,18 @@ function formatCurrency(amount) {
 
 function renderAnnouncementsList() {
   const list = document.getElementById('announcements-list');
+  const card = document.querySelector('.info-card-announcements');
   if (!list) return;
+
+  // Check if announcements are enabled (default: true)
+  const isEnabled = settings.announcements_enabled !== 'false';
+
+  if (!isEnabled) {
+    if (card) card.style.display = 'none';
+    return;
+  }
+
+  if (card) card.style.display = 'block';
 
   // announcements are already filtered by /api/state (published + not expired)
   const items = announcements.slice(0, 3);
@@ -650,7 +671,18 @@ function renderAnnouncementsList() {
 
 function renderDonationsList() {
   const container = document.getElementById('donations-list');
+  const card = document.querySelector('.info-card-donations');
   if (!container) return;
+
+  // Check if donations are enabled (default: true)
+  const isEnabled = settings.donations_enabled !== 'false';
+
+  if (!isEnabled) {
+    if (card) card.style.display = 'none';
+    return;
+  }
+
+  if (card) card.style.display = 'block';
 
   if (donations.length === 0) {
     container.innerHTML = '<span style="color: var(--color-text-muted); font-size: 0.8rem;">Tidak ada data donasi</span>';
