@@ -639,10 +639,6 @@ body {
   text-align: right;
 }
 
-/* Hide info block during Adhan state */
-body.adhan-mode .info-block-section {
-  display: none;
-}
 
 /* ==================== MAIN 3-COLUMN SECTION ==================== */
 .main-three-column {
