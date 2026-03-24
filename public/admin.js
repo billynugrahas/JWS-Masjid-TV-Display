@@ -897,7 +897,11 @@ function populateSettings() {
 
   // Info block settings (Announcements & Donations)
   document.getElementById('setting-announcements-enabled').checked = appData.settings.announcements_enabled !== 'false'; // Default true
+  document.getElementById('setting-announcements-limit').value = appData.settings.announcements_limit || '3';
+  document.getElementById('setting-announcements-rotation').value = parseInt(appData.settings.announcements_rotation) || 10;
   document.getElementById('setting-donations-enabled').checked = appData.settings.donations_enabled !== 'false'; // Default true
+  document.getElementById('setting-donations-limit').value = appData.settings.donations_limit || '6';
+  document.getElementById('setting-donations-rotation').value = parseInt(appData.settings.donations_rotation) || 10;
 
   // Marquee settings
   document.getElementById('setting-marquee-loop').checked = appData.settings.marquee_loop !== 'false';
@@ -1044,7 +1048,11 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       syuruq_offset: document.getElementById('setting-syuruq-offset').value,
       // Info block settings
       announcements_enabled: document.getElementById('setting-announcements-enabled').checked ? 'true' : 'false',
+      announcements_limit: document.getElementById('setting-announcements-limit').value,
+      announcements_rotation: document.getElementById('setting-announcements-rotation').value,
       donations_enabled: document.getElementById('setting-donations-enabled').checked ? 'true' : 'false',
+      donations_limit: document.getElementById('setting-donations-limit').value,
+      donations_rotation: document.getElementById('setting-donations-rotation').value,
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,

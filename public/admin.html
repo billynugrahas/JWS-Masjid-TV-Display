@@ -433,6 +433,20 @@
                 </label>
                 <small style="color: var(--color-text-muted);">Tampilkan kartu pengumuman di display</small>
               </div>
+              <div class="form-group">
+                <label>Jumlah Pengumuman</label>
+                <select id="setting-announcements-limit">
+                  <option value="3">3 Pengumuman</option>
+                  <option value="4">4 Pengumuman</option>
+                  <option value="5">5 Pengumuman</option>
+                </select>
+                <small style="color: var(--color-text-muted);">Jumlah pengumuman yang ditampilkan sekaligus</small>
+              </div>
+              <div class="form-group">
+                <label>Rotasi Pengumuman (detik)</label>
+                <input type="number" id="setting-announcements-rotation" value="10" min="5" max="30">
+                <small style="color: var(--color-text-muted);">Interval rotasi jika pengumuman melebihi batas</small>
+              </div>
               <hr style="border-color: var(--color-text-light); margin: 1rem 0;">
               <div class="form-group">
                 <label class="checkbox-label">
@@ -440,6 +454,21 @@
                   <span>Tampilkan Donasi</span>
                 </label>
                 <small style="color: var(--color-text-muted);">Tampilkan kartu donasi/infaq di display</small>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Jumlah Donasi per Halaman</label>
+                  <select id="setting-donations-limit">
+                    <option value="4">4 Donasi</option>
+                    <option value="6" selected>6 Donasi</option>
+                    <option value="8">8 Donasi</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Rotasi (detik)</label>
+                  <input type="number" id="setting-donations-rotation" value="10" min="5" max="30">
+                  <small style="color: var(--color-text-muted);">Interval rotasi jika donasi melebihi batas</small>
+                </div>
               </div>
             </div>
           </div>

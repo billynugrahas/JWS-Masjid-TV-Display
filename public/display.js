@@ -25,9 +25,16 @@ let donations = [];
 let countdownInterval = null;
 let iqomahInterval = null;
 let hadithInterval = null;
+let donationInterval = null;
+let announcementInterval = null;
 let currentPrayerIndex = -1;
 let nextPrayerIndex = -1;
 let currentHadithIndex = 0;
+let currentDonationPage = 0;
+let currentAnnouncementPage = 0;
+
+const DONATIONS_PER_PAGE = 6;
+const ANNOUNCEMENTS_PER_PAGE = 3;
 
 // Prayer icons mapping
 const prayerIcons = {
@@ -156,7 +163,9 @@ async function fetchData() {
     renderOptionalTimes();
     renderMarquee();
     renderAnnouncementsList();
+    startAnnouncementRotation();
     renderDonationsList();
+    startDonationRotation();
     startHadithRotation();
     checkPrayerState();
   } catch (error) {
@@ -644,9 +653,9 @@ function formatCurrency(amount) {
 }
 
 function renderAnnouncementsList() {
-  const list = document.getElementById('announcements-list');
+  const container = document.getElementById('announcements-list');
   const card = document.querySelector('.info-card-announcements');
-  if (!list) return;
+  if (!container) return;
 
   // Check if announcements are enabled (default: true)
   const isEnabled = settings.announcements_enabled !== 'false';
@@ -658,15 +667,56 @@ function renderAnnouncementsList() {
 
   if (card) card.style.display = 'block';
 
-  // announcements are already filtered by /api/state (published + not expired)
-  const items = announcements.slice(0, 3);
-
-  if (items.length === 0) {
-    list.innerHTML = '<li style="color: var(--color-text-muted);">Tidak ada pengumuman</li>';
+  if (announcements.length === 0) {
+    container.innerHTML = '<span style="color: var(--color-text-muted); font-size: 0.8rem;">Tidak ada pengumuman</span>';
     return;
   }
 
-  list.innerHTML = items.map(a => `<li>${a.title}</li>`).join('');
+  // Get limit from settings (default: 3)
+  const perPage = parseInt(settings.announcements_limit) || ANNOUNCEMENTS_PER_PAGE;
+
+  // Calculate which announcements to show based on current page
+  const startIndex = currentAnnouncementPage * perPage;
+  const endIndex = startIndex + perPage;
+  const visibleAnnouncements = announcements.slice(startIndex, endIndex);
+
+  container.innerHTML = visibleAnnouncements.map(a => {
+    const hasContent = a.content && a.content.trim() !== '';
+    return `
+      <div class="announcement-item">
+        <div class="announcement-title">${a.title}</div>
+        ${hasContent ? `<div class="announcement-content">${a.content}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function startAnnouncementRotation() {
+  // Clear existing interval
+  if (announcementInterval) {
+    clearInterval(announcementInterval);
+  }
+
+  // Get limit from settings
+  const perPage = parseInt(settings.announcements_limit) || ANNOUNCEMENTS_PER_PAGE;
+
+  // Only rotate if we have more announcements than can fit on one page
+  if (announcements.length <= perPage) {
+    currentAnnouncementPage = 0;
+    return;
+  }
+
+  // Calculate total pages
+  const totalPages = Math.ceil(announcements.length / perPage);
+
+  // Get rotation interval from settings (default: 10 seconds)
+  const rotationInterval = (parseInt(settings.announcements_rotation) || 10) * 1000;
+
+  // Rotate
+  announcementInterval = setInterval(() => {
+    currentAnnouncementPage = (currentAnnouncementPage + 1) % totalPages;
+    renderAnnouncementsList();
+  }, rotationInterval);
 }
 
 function renderDonationsList() {
@@ -689,7 +739,15 @@ function renderDonationsList() {
     return;
   }
 
-  container.innerHTML = donations.map(d => {
+  // Get limit from settings (default: 6)
+  const perPage = parseInt(settings.donations_limit) || DONATIONS_PER_PAGE;
+
+  // Calculate which donations to show based on current page
+  const startIndex = currentDonationPage * perPage;
+  const endIndex = startIndex + perPage;
+  const visibleDonations = donations.slice(startIndex, endIndex);
+
+  container.innerHTML = visibleDonations.map(d => {
     const progress = d.target > 0 ? Math.min((d.amount / d.target) * 100, 100) : 0;
     return `
       <div class="donation-item">
@@ -706,6 +764,34 @@ function renderDonationsList() {
       </div>
     `;
   }).join('');
+}
+
+function startDonationRotation() {
+  // Clear existing interval
+  if (donationInterval) {
+    clearInterval(donationInterval);
+  }
+
+  // Get limit from settings
+  const perPage = parseInt(settings.donations_limit) || DONATIONS_PER_PAGE;
+
+  // Only rotate if we have more donations than can fit on one page
+  if (donations.length <= perPage) {
+    currentDonationPage = 0;
+    return;
+  }
+
+  // Calculate total pages
+  const totalPages = Math.ceil(donations.length / perPage);
+
+  // Get rotation interval from settings (default: 10 seconds)
+  const rotationInterval = (parseInt(settings.donations_rotation) || 10) * 1000;
+
+  // Rotate
+  donationInterval = setInterval(() => {
+    currentDonationPage = (currentDonationPage + 1) % totalPages;
+    renderDonationsList();
+  }, rotationInterval);
 }
 
 function playBeep() {

@@ -89,6 +89,13 @@ const defaultSettings = {
   syuruq_offset: 20,
   syuruq_label: 'Syuruq',
   syuruq_enabled: 'false',
+  // Info block settings (Announcements & Donations)
+  announcements_enabled: 'true',
+  announcements_limit: '3',
+  announcements_rotation: '10',
+  donations_enabled: 'true',
+  donations_limit: '6',
+  donations_rotation: '10',
   // Prayer calculation settings
   prayer_calc_enabled: 'false',
   prayer_calc_method: 'Singapore', // Singapore = Kemenag method
