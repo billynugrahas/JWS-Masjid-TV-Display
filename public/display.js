@@ -146,26 +146,70 @@ function calculateHijriDate(gregorianDate) {
 }
 
 // ==================== DATA FETCHING ====================
+let previousAnnouncements = [];
+let previousDonations = [];
+let previousRunningTexts = [];
+
 async function fetchData() {
   try {
     const response = await fetch('/api/state');
     const data = await response.json();
 
-    settings = data.settings || {};
-    prayerTimes = data.prayers || [];
-    hadiths = data.hadiths && data.hadiths.length > 0 ? data.hadiths : defaultHadiths;
-    runningTexts = data.runningTexts || [];
-    announcements = data.announcements || [];
-    donations = data.donations || [];
+    const newSettings = data.settings || {};
+    const newPrayerTimes = data.prayers || [];
+    const newHadiths = data.hadiths && data.hadiths.length > 0 ? data.hadiths : defaultHadiths;
+    const newRunningTexts = data.runningTexts || [];
+    const newAnnouncements = data.announcements || [];
+    const newDonations = data.donations || [];
 
-    updateDisplayElements();
+    // Check if announcements changed
+    const announcementsChanged = JSON.stringify(newAnnouncements) !== JSON.stringify(previousAnnouncements);
+
+    // Check if donations changed
+    const donationsChanged = JSON.stringify(newDonations) !== JSON.stringify(previousDonations);
+
+    // Check if settings changed
+    const settingsChanged = JSON.stringify(newSettings) !== JSON.stringify(settings);
+
+    // Update state
+    settings = newSettings;
+    prayerTimes = newPrayerTimes;
+    hadiths = newHadiths;
+    runningTexts = newRunningTexts;
+    announcements = newAnnouncements;
+    donations = newDonations;
+
+    // Store previous values for comparison
+    previousAnnouncements = [...newAnnouncements];
+    previousDonations = [...newDonations];
+    previousRunningTexts = [...newRunningTexts];
+
+    // Only re-render if data changed
+    if (settingsChanged) {
+      updateDisplayElements();
+    }
+
     renderPrayerGrid();
     renderOptionalTimes();
-    renderMarquee();
-    renderAnnouncementsList();
-    startAnnouncementRotation();
-    renderDonationsList();
-    startDonationRotation();
+
+    if (settingsChanged || JSON.stringify(runningTexts) !== JSON.stringify(previousRunningTexts)) {
+      renderMarquee();
+    }
+
+    // Only re-render announcements if data changed
+    if (announcementsChanged || settingsChanged) {
+      currentAnnouncementPage = 0; // Reset to first page
+      renderAnnouncementsList();
+      startAnnouncementRotation();
+    }
+
+    // Only re-render donations if data changed
+    if (donationsChanged || settingsChanged) {
+      currentDonationPage = 0; // Reset to first page
+      renderDonationsList();
+      startDonationRotation();
+    }
+
     startHadithRotation();
     checkPrayerState();
   } catch (error) {
@@ -654,7 +698,8 @@ function formatCurrency(amount) {
 
 function renderAnnouncementsList() {
   const container = document.getElementById('announcements-list');
-  const card = document.querySelector('.info-card-announcements');
+  const card = document.querySelector('.card-announcements');
+
   if (!container) return;
 
   // Check if announcements are enabled (default: true)
@@ -665,7 +710,8 @@ function renderAnnouncementsList() {
     return;
   }
 
-  if (card) card.style.display = 'block';
+  // Reset display to CSS default
+  if (card) card.style.display = '';
 
   if (announcements.length === 0) {
     container.innerHTML = '<span style="color: var(--color-text-muted); font-size: 0.8rem;">Tidak ada pengumuman</span>';
@@ -680,7 +726,7 @@ function renderAnnouncementsList() {
   const endIndex = startIndex + perPage;
   const visibleAnnouncements = announcements.slice(startIndex, endIndex);
 
-  container.innerHTML = visibleAnnouncements.map(a => {
+  const html = visibleAnnouncements.map(a => {
     const hasContent = a.content && a.content.trim() !== '';
     return `
       <div class="announcement-item">
@@ -689,6 +735,8 @@ function renderAnnouncementsList() {
       </div>
     `;
   }).join('');
+
+  container.innerHTML = html;
 }
 
 function startAnnouncementRotation() {
@@ -721,7 +769,7 @@ function startAnnouncementRotation() {
 
 function renderDonationsList() {
   const container = document.getElementById('donations-list');
-  const card = document.querySelector('.info-card-donations');
+  const card = document.querySelector('.card-donations');
   if (!container) return;
 
   // Check if donations are enabled (default: true)
@@ -732,7 +780,8 @@ function renderDonationsList() {
     return;
   }
 
-  if (card) card.style.display = 'block';
+  // Reset display to CSS default
+  if (card) card.style.display = '';
 
   if (donations.length === 0) {
     container.innerHTML = '<span style="color: var(--color-text-muted); font-size: 0.8rem;">Tidak ada data donasi</span>';
