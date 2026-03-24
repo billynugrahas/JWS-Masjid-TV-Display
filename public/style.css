@@ -506,6 +506,123 @@ body {
   color: rgba(255, 255, 255, 0.8);
 }
 
+/* ==================== MID-TIER INFO BLOCK ==================== */
+.info-block-section {
+  padding: 0 1vw;
+  flex-shrink: 0;
+}
+
+.info-block-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+.info-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  padding: clamp(0.5rem, 1vh, 1rem) clamp(0.75rem, 1.5vw, 1.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+  margin-bottom: 0.5vh;
+}
+
+.info-card-icon {
+  font-size: clamp(1rem, 1.5vh, 1.25rem);
+}
+
+.info-card-title {
+  font-family: var(--font-display);
+  font-size: clamp(0.7rem, 1.2vh, 0.9rem);
+  font-weight: 700;
+  color: #1E3A2B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* Announcements list */
+.info-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-card-list li {
+  font-family: var(--font-body);
+  font-size: clamp(0.65rem, 1.1vh, 0.8rem);
+  color: var(--color-text);
+  padding: 0.25vh 0;
+  padding-left: 1rem;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.info-card-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #1E3A2B;
+  font-weight: bold;
+}
+
+/* Donations container */
+.donations-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5vh;
+}
+
+.donation-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25vw;
+}
+
+.donation-category {
+  font-family: var(--font-body);
+  font-size: clamp(0.6rem, 1vh, 0.75rem);
+  color: var(--color-text-muted);
+}
+
+.donation-amount {
+  font-family: var(--font-display);
+  font-size: clamp(0.7rem, 1.2vh, 0.95rem);
+  font-weight: 700;
+  color: #1E3A2B;
+}
+
+.donation-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(30, 58, 43, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.donation-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1E3A2B, #2D6A4F);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Hide info block during Adhan state */
+body.adhan-mode .info-block-section {
+  display: none;
+}
+
 /* ==================== INFO / HADITH SECTION ==================== */
 .info-section {
   padding: 1vh 1vw;
