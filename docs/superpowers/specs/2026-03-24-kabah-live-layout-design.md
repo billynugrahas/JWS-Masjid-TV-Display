@@ -516,33 +516,33 @@ No selector changes needed - just HTML structure reorganization.
 ## Acceptance Criteria
 
 ### Layout
-- [ ] Header remains unchanged
-- [ ] Left column displays Announcements and Donations stacked vertically
-- [ ] Center column displays large clock with smaller seconds
-- [ ] Center column displays countdown pill below clock
-- [ ] Right column displays Ka'bah video placeholder (16:9 aspect ratio)
-- [ ] Prayer cards row remains unchanged below 3-column section
-- [ ] Hadith section remains unchanged
-- [ ] Footer marquee remains unchanged
+- [x] Header remains unchanged
+- [x] Left column displays Announcements and Donations stacked vertically
+- [x] Center column displays large clock with smaller seconds
+- [x] Center column displays countdown pill below clock
+- [x] Right column displays Ka'bah video placeholder (16:9 aspect ratio)
+- [x] Prayer cards row remains unchanged below 3-column section
+- [x] Hadith section remains unchanged
+- [x] Footer marquee remains unchanged
 
 ### Styling
-- [ ] Glassmorphism styling applied to all cards
-- [ ] Emerald green theme consistent throughout
-- [ ] Clock uses vh-based sizing (matching existing pattern)
-- [ ] Video placeholder has dashed border, Ka'bah icon, and "OFF" text
+- [x] Glassmorphism styling applied to all cards
+- [x] Emerald green theme consistent throughout
+- [x] Clock uses vh-based sizing (matching existing pattern)
+- [x] Video placeholder has dashed border, Ka'bah icon, and "OFF" text
 
 ### State Handling
-- [ ] Adhan mode: Left column hidden, layout adjusts to 50/50
-- [ ] Calm mode: Left and right columns dimmed (opacity: 0.3)
-- [ ] Iqomah mode: Center column shows iqomah countdown
+- [x] Adhan mode: Left column hidden, layout adjusts to 50/50
+- [x] Calm mode: Left and right columns dimmed (opacity: 0.3)
+- [x] Iqomah mode: Center column shows iqomah countdown
 
 ### Responsive
-- [ ] Desktop (>1200px): Full 3-column 30/40/30 layout
-- [ ] Tablet (900-1200px): 3-column with reduced gaps
-- [ ] Tablet portrait (600-900px): Stacked vertically
-- [ ] Mobile (<600px): Video placeholder hidden
+- [x] Desktop (>1200px): Full 3-column 30/40/30 layout
+- [x] Tablet (900-1200px): 3-column with reduced gaps
+- [x] Tablet portrait (600-900px): Stacked vertically
+- [x] Mobile (<600px): Video placeholder hidden
 
 ### Performance
-- [ ] Layout optimized for 1920x1080 landscape TV display
-- [ ] No layout shift during state transitions
-- [ ] Smooth transitions between prayer states
+- [x] Layout optimized for 1920x1080 landscape TV display
+- [x] No layout shift during state transitions
+- [x] Smooth transitions between prayer states
