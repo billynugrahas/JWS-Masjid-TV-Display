@@ -64,14 +64,18 @@ Redesign the main content area of the display page from a vertical grid layout t
 ## Design Specifications
 
 ### Colors
-| Token | Value | Usage |
-|-------|-------|-------|
-| Primary Green | `#1E3A2B` | Deep Emerald - text, active states |
-| Accent Green | `#74D5A8` | Mint - countdown time accent |
-| Background | `#F8F9FA` | Off-white page background |
-| Glass Surface | `rgba(255, 255, 255, 0.80)` | Card backgrounds |
-| Text | `#212529` | Dark charcoal body text |
-| Text Muted | `#6C757D` | Secondary text |
+| Token | CSS Variable | Value | Usage |
+|-------|--------------|-------|-------|
+| Primary Green | `var(--color-primary)` | `#1B4332` | Deep Emerald - text, active states |
+| Primary Light | `var(--color-primary-light)` | `#2D6A4F` | Lighter emerald |
+| Accent Green | `var(--color-accent)` | `#D4AF37` | Gold accent |
+| Mint Accent | - | `#74D5A8` | Countdown time accent |
+| Background | `var(--bg-primary)` | `#F8F9FA` | Off-white page background |
+| Glass Surface | - | `rgba(255, 255, 255, 0.80)` | Card backgrounds |
+| Text | `var(--color-text)` | `#212529` | Dark charcoal body text |
+| Text Muted | `var(--color-text-muted)` | `#6C757D` | Secondary text |
+
+> **Note:** Use existing CSS variables from `:root` in `style.css` for consistency.
 
 ### Typography
 | Element | Font | Weight | Size |
@@ -153,6 +157,58 @@ Two glassmorphism cards stacked vertically with equal flex distribution.
 **Configuration:**
 - Video URL will be configurable via admin settings
 - Default state is OFF/placeholder
+
+---
+
+## Migration Guide
+
+### Row-to-Section Mapping
+
+The new grid structure maps as follows:
+
+| Row | Section | Notes |
+|-----|---------|-------|
+| 1 | `header` | Unchanged |
+| 2 | `main-three-column` | **NEW** - Replaces old hero + info-block |
+| 3 | `optional-times-section` | Unchanged (Imsak/Syuruq) |
+| 4 | `prayer-section` | Unchanged |
+| 5 | `info-section` | Unchanged (Hadith) |
+| 6 | `footer` | Unchanged |
+
+### What Gets Removed
+- `.hero-section` - Content moves to center column of `.main-three-column`
+- `.info-block-section` - Content moves to left column of `.main-three-column`
+
+### CSS to Remove/Update
+```css
+/* REMOVE these selectors after migration: */
+.hero-section { ... }
+.info-block-section { ... }
+body.adhan-mode .info-block-section { ... }
+body.calm-mode .info-block-section { ... }
+
+/* ADD these new selectors: */
+.main-three-column { ... }
+.column-left { ... }
+.column-center { ... }
+.column-right { ... }
+body.adhan-mode .column-left { ... }
+body.calm-mode .column-left { ... }
+body.calm-mode .column-right { ... }
+```
+
+### Main Container Grid Update
+```css
+/* OLD */
+.main-container {
+  grid-template-rows: auto 1fr auto auto auto;
+}
+
+/* NEW */
+.main-container {
+  grid-template-rows: auto 1fr auto auto auto auto;
+}
+```
 
 ---
 
