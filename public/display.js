@@ -300,9 +300,12 @@ function updateDisplayElements() {
   }
 
   // Update live indicator visibility
+  // Shows only when: manual toggle is ON AND Ka'bah video is active
   const liveIndicator = document.querySelector('.live-indicator');
   if (liveIndicator) {
-    liveIndicator.style.display = settings.show_live_indicator === 'true' ? 'flex' : 'none';
+    const toggleEnabled = settings.show_live_indicator === 'true';
+    const videoActive = settings.kabah_video_enabled === 'true' && settings.kabah_video_url && settings.kabah_video_url.trim() !== '';
+    liveIndicator.style.display = (toggleEnabled && videoActive) ? 'flex' : 'none';
   }
 
   // Update background image
