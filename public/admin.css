@@ -375,6 +375,13 @@ body {
   border-color: var(--color-primary);
 }
 
+.form-group .hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
