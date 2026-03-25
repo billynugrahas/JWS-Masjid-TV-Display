@@ -1041,6 +1041,11 @@ function populateSettings() {
     document.getElementById('clear-bg-btn').style.display = 'inline-flex';
     document.getElementById('bg-upload-label').innerHTML = '<span>📷</span> Ganti gambar';
   }
+
+  // Background opacity
+  const bgOpacity = parseFloat(appData.settings.background_opacity) || 0.15;
+  document.getElementById('setting-background-opacity').value = bgOpacity;
+  updateBackgroundOpacityPreview(bgOpacity);
 }
 
 // Preview prayer calculation
@@ -1164,6 +1169,11 @@ function updateFontScalePreview(value) {
   document.getElementById('font-scale-value').textContent = parseFloat(value).toFixed(1) + 'x';
 }
 
+// Background opacity preview
+function updateBackgroundOpacityPreview(value) {
+  document.getElementById('background-opacity-value').textContent = Math.round(parseFloat(value) * 100) + '%';
+}
+
 // ==================== SAVE ALL ====================
 document.getElementById('save-all-btn').addEventListener('click', async () => {
   const btn = document.getElementById('save-all-btn');
@@ -1231,6 +1241,9 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
     if (donationQRImageData !== appData.settings.donation_qr_image) {
       settings.donation_qr_image = donationQRImageData;
     }
+
+    // Background opacity
+    settings.background_opacity = document.getElementById('setting-background-opacity').value;
 
     await fetch('/api/settings', {
       method: 'POST',

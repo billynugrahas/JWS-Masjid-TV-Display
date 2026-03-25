@@ -316,6 +316,13 @@ function updateDisplayElements() {
     }
   }
 
+  // Update background overlay opacity
+  const bgOverlayAfter = document.getElementById('bg-overlay');
+  if (bgOverlayAfter) {
+    const opacity = parseFloat(settings.background_opacity) || 0.15;
+    bgOverlayAfter.style.setProperty('--bg-overlay-opacity', opacity);
+  }
+
   // Update prayer subtext
   const prayerSubtext = document.getElementById('prayer-subtext');
   if (prayerSubtext) {

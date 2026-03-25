@@ -75,6 +75,7 @@ const defaultSettings = {
   mosque_phone: '',
   running_text: 'Selamat datang di Masjid Al-Muhajirin',
   background_image: '',
+  background_opacity: 0.15,
   hadith_rotation_interval: 30,
   show_live_indicator: 'true',
   font_scale: '1', // Font size multiplier for different screen resolutions
