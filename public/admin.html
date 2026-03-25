@@ -562,6 +562,42 @@
               </div>
             </div>
           </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Video Ka'bah</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-kabah-video-enabled">
+                  <span>Tampilkan Video Ka'bah</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Jika tidak aktif, kolom video akan disembunyikan dan layout menjadi 2 kolom</small>
+              </div>
+              <div class="form-group">
+                <label>Sumber Video</label>
+                <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="radio" name="kabah-video-type" value="youtube" id="kabah-video-type-youtube" checked>
+                    <span>YouTube</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="radio" name="kabah-video-type" value="offline" id="kabah-video-type-offline">
+                    <span>Video Offline</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>URL Video</label>
+                <input type="text" id="setting-kabah-video-url" placeholder="https://www.youtube.com/watch?v=xxx atau /videos/kabah.mp4">
+                <small style="color: var(--color-text-muted);">
+                  YouTube: paste link lengkap (youtube.com/watch?v=xxx atau youtu.be/xxx)<br>
+                  Offline: path file di folder public (contoh: /videos/kabah.mp4)
+                </small>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

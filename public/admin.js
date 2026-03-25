@@ -924,6 +924,12 @@ function populateSettings() {
   document.getElementById('setting-marquee-speed').value = appData.settings.marquee_speed || 30;
   document.getElementById('setting-marquee-gap').value = appData.settings.marquee_gap || 4;
 
+  // Ka'bah Video settings
+  document.getElementById('setting-kabah-video-enabled').checked = appData.settings.kabah_video_enabled === 'true';
+  document.getElementById('kabah-video-type-youtube').checked = appData.settings.kabah_video_type !== 'offline';
+  document.getElementById('kabah-video-type-offline').checked = appData.settings.kabah_video_type === 'offline';
+  document.getElementById('setting-kabah-video-url').value = appData.settings.kabah_video_url || '';
+
   // Background image
   if (appData.settings.background_image) {
     backgroundImageData = appData.settings.background_image;
@@ -1097,7 +1103,11 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,
-      marquee_gap: document.getElementById('setting-marquee-gap').value
+      marquee_gap: document.getElementById('setting-marquee-gap').value,
+      // Ka'bah video settings
+      kabah_video_enabled: document.getElementById('setting-kabah-video-enabled').checked ? 'true' : 'false',
+      kabah_video_type: document.querySelector('input[name="kabah-video-type"]:checked').value,
+      kabah_video_url: document.getElementById('setting-kabah-video-url').value
     };
 
     if (backgroundImageData !== appData.settings.background_image) {

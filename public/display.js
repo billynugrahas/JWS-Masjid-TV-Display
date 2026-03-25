@@ -311,6 +311,9 @@ function updateDisplayElements() {
       donationsWrapper.classList.remove('has-qr');
     }
   }
+
+  // Update Ka'bah video display
+  updateKabahVideoDisplay();
 }
 
 // ==================== PRAYER GRID RENDERING ====================
@@ -872,24 +875,51 @@ function startDonationRotation() {
   }, rotationInterval);
 }
 
-function playBeep() {
-  try {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
 
-    oscillator.frequency.value = 800;
-    oscillator.type = 'sine';
+// ==================== KA'bah Video Functions ====================
 
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+function updateKabahVideoDisplay() {
+  const videoContainer = document.getElementById('video-container');
+  const videoPlaceholder = document.getElementById('video-placeholder');
 
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.5);
-  } catch (e) {
-    console.log('Audio not available');
+  if (!videoContainer || !videoPlaceholder) return;
+
+  const isEnabled = settings.kabah_video_enabled === 'true';
+  const hasUrl = settings.kabah_video_url && settings.kabah_video_url.trim() !== '';
+
+  // Toggle body class to show/hide the entire right column
+  if (isEnabled && hasUrl) {
+    // Show video: remove no-kabah-video class
+    document.body.classList.remove('no-kabah-video');
+
+    videoPlaceholder.style.display = 'none';
+    videoContainer.style.display = 'block';
+    videoContainer.classList.add('active');
+
+    // Handle YouTube vs offline video
+    if (settings.kabah_video_type === 'offline') {
+      videoContainer.innerHTML = `<video src="${settings.kabah_video_url}" autoplay muted loop playsinline></video>`;
+    } else {
+      // YouTube embed - convert watch URL to embed URL if needed
+      let embedUrl = settings.kabah_video_url;
+      if (embedUrl.includes('watch?v=')) {
+        embedUrl = embedUrl.replace('watch?v=', 'embed/');
+      }
+      // Add autoplay parameters (YouTube requires muted for autoplay)
+      const separator = embedUrl.includes('?') ? '&' : '?';
+      embedUrl = `${embedUrl}${separator}autoplay=1&mute=1&loop=1&playlist=${getYouTubeVideoId(embedUrl)}`;
+      videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    }
+  } else {
+    // Hide video section: add no-kabah-video class
+    document.body.classList.add('no-kabah-video');
+    videoContainer.classList.remove('active');
   }
+}
+
+// Extract YouTube video ID from URL
+function getYouTubeVideoId(url) {
+  const match = url.match(/(?:embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : '';
 }

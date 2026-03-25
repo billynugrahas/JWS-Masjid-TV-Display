@@ -889,11 +889,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-glass);
-  backdrop-filter: blur(10px);
+  background: transparent;
   border-radius: var(--radius-xl);
-  padding: clamp(1rem, 2vh, 2rem);
-  box-shadow: var(--shadow-md);
   overflow: hidden;
   margin-right: 1.5vw;
 }
@@ -973,6 +970,64 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 20px;
+}
+
+.video-container.active iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 20px;
+}
+
+/* Video Live Indicator */
+.video-live-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.video-live-dot {
+  width: 10px;
+  height: 10px;
+  background: #40916C;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.video-live-dot.active {
+  background: #40916C;
+  animation: pulse-green 1.5s ease-in-out infinite;
+}
+
+.video-live-dot.paused {
+  background: #6C7577;
+  animation: none;
+  transform: scale(0.9);
+}
+
+.video-live-status {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #1E3A2B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: 6px;
+}
+
+.video-live-indicator.hidden {
+  display: none;
+}
+
+/* Hide right column when Ka'bah video is disabled - keep layout centered */
+body.no-kabah-video .column-right {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* ==================== STATE HANDLING ==================== */

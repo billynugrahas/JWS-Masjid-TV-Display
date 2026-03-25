@@ -101,12 +101,10 @@ const defaultSettings = {
   prayer_calc_method: 'Singapore', // Singapore = Kemenag method
   mosque_latitude: '-6.2088',
   mosque_longitude: '106.8456',
-  // Individual prayer offsets (in minutes)
-  prayer_offset_subuh: 0,
-  prayer_offset_dzuhur: 0,
-  prayer_offset_ashar: 0,
-  prayer_offset_maghrib: 0,
-  prayer_offset_isya: 0
+  // Ka'bah Video settings
+  kabah_video_enabled: 'false',
+  kabah_video_type: 'youtube',
+  kabah_video_url: ''
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
