@@ -145,10 +145,30 @@ body {
 }
 
 .mosque-tagline {
-  font-size: calc(clamp(0.6rem, 1vh, 0.75rem) * var(--font-scale));
+  font-size: calc(clamp(0.7rem, 1.2vh, 0.9rem) * var(--font-scale));
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
+}
+
+.mosque-address {
+  font-size: calc(clamp(0.65rem, 1.1vh, 0.85rem) * var(--font-scale));
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.mosque-address::before {
+  content: " • ";
+}
+
+.mosque-phone {
+  font-size: calc(clamp(0.65rem, 1.1vh, 0.85rem) * var(--font-scale));
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.mosque-phone::before {
+  content: " • ";
 }
 
 .header-center {

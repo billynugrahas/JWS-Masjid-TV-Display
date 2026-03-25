@@ -266,10 +266,37 @@ function updateDisplayElements() {
     }
   }
 
-  // Update mosque tagline
+  // Update mosque tagline (optional)
   const mosqueTagline = document.getElementById('mosque-tagline');
   if (mosqueTagline) {
-    mosqueTagline.textContent = settings.mosque_tagline || '';
+    if (settings.mosque_tagline && settings.mosque_tagline.trim() !== '') {
+      mosqueTagline.textContent = settings.mosque_tagline;
+      mosqueTagline.style.display = '';
+    } else {
+      mosqueTagline.style.display = 'none';
+    }
+  }
+
+  // Update mosque address (optional)
+  const mosqueAddress = document.getElementById('mosque-address');
+  if (mosqueAddress) {
+    if (settings.mosque_address && settings.mosque_address.trim() !== '') {
+      mosqueAddress.textContent = settings.mosque_address;
+      mosqueAddress.style.display = '';
+    } else {
+      mosqueAddress.style.display = 'none';
+    }
+  }
+
+  // Update mosque phone (optional)
+  const mosquePhone = document.getElementById('mosque-phone');
+  if (mosquePhone) {
+    if (settings.mosque_phone && settings.mosque_phone.trim() !== '') {
+      mosquePhone.textContent = settings.mosque_phone;
+      mosquePhone.style.display = '';
+    } else {
+      mosquePhone.style.display = 'none';
+    }
   }
 
   // Update live indicator visibility
