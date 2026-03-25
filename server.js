@@ -105,7 +105,9 @@ const defaultSettings = {
   // Ka'bah Video settings
   kabah_video_enabled: 'false',
   kabah_video_type: 'youtube',
-  kabah_video_url: ''
+  kabah_video_url: '',
+  // Time format setting
+  time_format: '24h' // '24h' or '12h'
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');

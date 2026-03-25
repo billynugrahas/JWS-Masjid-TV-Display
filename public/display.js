@@ -52,6 +52,22 @@ const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 
 // Hijri month names
 const hijriMonths = ['Muharram', 'Safar', 'Rabiul Awal', 'Rabiul Akhir', 'Jumadil Awal', 'Jumadil Akhir', 'Rajab', 'Syaban', 'Ramadhan', 'Syawal', 'Dzulqaidah', 'Dzulhijjah'];
 
+// Time formatting function
+function formatTime(timeStr) {
+  if (!timeStr) return '';
+
+  // If setting is 24h or not set, return as-is
+  if (settings.time_format !== '12h') {
+    return timeStr;
+  }
+
+  // Convert to 12-hour format
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const hours12 = hours % 12 || 12; // Convert 0 to 12 for midnight
+  return `${hours12}:${String(minutes).padStart(2, '0')} ${period}`;
+}
+
 // Default hadiths (fallback if API returns empty)
 const defaultHadiths = [
   { text: "Barangsiapa yang menghidupkan bulan Ramadhan dengan iman dan mengharap pahala, maka diampunilah dosa-dosanya yang telah lalu.", source: "HR. Bukhari & Muslim" },
@@ -329,7 +345,7 @@ function renderPrayerGrid() {
     <div class="prayer-card ${index === nextPrayerIndex ? 'active' : ''}" data-index="${index}">
       <div class="icon">${prayerIcons[prayer.name] || '🕌'}</div>
       <div class="name">${prayer.name}</div>
-      <div class="time">${prayer.time}</div>
+      <div class="time">${formatTime(prayer.time)}</div>
       <div class="iqomah">Iqomah: ${prayer.iqomah_duration} menit</div>
     </div>
   `).join('');
@@ -397,7 +413,7 @@ function renderOptionalTimes() {
     <div class="optional-time-card">
       <div class="icon">${item.icon}</div>
       <div class="name">${item.name}</div>
-      <div class="time">${item.time}</div>
+      <div class="time">${formatTime(item.time)}</div>
     </div>
   `).join('');
 }
@@ -633,7 +649,7 @@ function setAdzanState(prayer) {
   document.body.classList.remove('calm-mode');
 
   document.getElementById('countdown-label').textContent = `WAKTU ADZAN ${prayer.name.toUpperCase()}`;
-  document.getElementById('countdown-time').textContent = prayer.time;
+  document.getElementById('countdown-time').textContent = formatTime(prayer.time);
 
   updatePrayerHighlight(currentPrayerIndex);
   playBeep();

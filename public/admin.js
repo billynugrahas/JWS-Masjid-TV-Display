@@ -19,6 +19,18 @@ let logoImageData = '';
 let donationQRImageData = '';
 let indonesiaCitiesData = null;
 
+// Time formatting function
+function formatTime(timeStr) {
+  if (!timeStr) return '';
+  const timeFormat = document.getElementById('setting-time-format')?.value || '24h';
+  if (timeFormat !== '12h') return timeStr;
+
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const hours12 = hours % 12 || 12;
+  return `${hours12}:${String(minutes).padStart(2, '0')} ${period}`;
+}
+
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
@@ -229,23 +241,106 @@ function renderPrayers() {
     calculatedDisplay.style.display = 'none';
     container.style.display = 'block';
 
-    container.innerHTML = appData.prayers.map(prayer => `
-      <div class="prayer-item" data-id="${prayer.id}">
-        <span class="prayer-name">${prayer.name}</span>
-        <div class="prayer-inputs">
-          <div>
-            <label>Waktu</label>
-            <input type="time" value="${prayer.time}" onchange="updatePrayer(${prayer.id}, 'time', this.value)">
-          </div>
-          <div>
-            <label>Iqomah (menit)</label>
-            <input type="number" value="${prayer.iqomah_duration}" min="1" max="30"
-                   onchange="updatePrayer(${prayer.id}, 'iqomah_duration', this.value)">
+    container.innerHTML = appData.prayers.map(prayer => {
+      const timeFormat = document.getElementById('setting-time-format')?.value || '24h';
+      return `
+        <div class="prayer-item" data-id="${prayer.id}">
+          <span class="prayer-name">${prayer.name}</span>
+          <div class="prayer-inputs">
+            <div>
+              <label>Waktu</label>
+              ${renderTimePicker(prayer.id, prayer.time, timeFormat)}
+            </div>
+            <div>
+              <label>Iqomah (menit)</label>
+              <input type="number" value="${prayer.iqomah_duration}" min="1" max="30"
+                     onchange="updatePrayer(${prayer.id}, 'iqomah_duration', this.value)">
+            </div>
           </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
+}
+
+// Render custom time picker based on format setting
+function renderTimePicker(prayerId, timeValue, timeFormat) {
+  const [hours24, minutes] = timeValue.split(':').map(Number);
+
+  if (timeFormat === '12h') {
+    // 12-hour format with AM/PM
+    const period = hours24 >= 12 ? 'PM' : 'AM';
+    const hours12 = hours24 % 12 || 12;
+
+    const hourOptions = Array.from({length: 12}, (_, i) => i + 1)
+      .map(h => `<option value="${h}" ${h === hours12 ? 'selected' : ''}>${h}</option>`).join('');
+
+    const minuteOptions = Array.from({length: 60}, (_, i) => i)
+      .map(m => `<option value="${m}" ${m === minutes ? 'selected' : ''}>${String(m).padStart(2, '0')}</option>`).join('');
+
+    return `
+      <div class="time-picker-12h">
+        <select onchange="updateTimeFromPicker12h(${prayerId}, this)">${hourOptions}</select>
+        <span>:</span>
+        <select onchange="updateTimeFromPicker12h(${prayerId}, this)">
+          ${minuteOptions}
+        </select>
+        <select onchange="updateTimeFromPicker12h(${prayerId}, this)">
+          <option value="AM" ${period === 'AM' ? 'selected' : ''}>AM</option>
+          <option value="PM" ${period === 'PM' ? 'selected' : ''}>PM</option>
+        </select>
+      </div>
+    `;
+  } else {
+    // 24-hour format
+    const hourOptions = Array.from({length: 24}, (_, i) => i)
+      .map(h => `<option value="${h}" ${h === hours24 ? 'selected' : ''}>${String(h).padStart(2, '0')}</option>`).join('');
+
+    const minuteOptions = Array.from({length: 60}, (_, i) => i)
+      .map(m => `<option value="${m}" ${m === minutes ? 'selected' : ''}>${String(m).padStart(2, '0')}</option>`).join('');
+
+    return `
+      <div class="time-picker-24h">
+        <select onchange="updateTimeFromPicker24h(${prayerId}, this)">${hourOptions}</select>
+        <span>:</span>
+        <select onchange="updateTimeFromPicker24h(${prayerId}, this)">
+          ${minuteOptions}
+        </select>
+      </div>
+    `;
+  }
+}
+
+// Update time from 24h picker
+function updateTimeFromPicker24h(prayerId, element) {
+  const container = element.closest('.time-picker-24h');
+  const selects = container.querySelectorAll('select');
+  const hours = parseInt(selects[0].value);
+  const minutes = parseInt(selects[1].value);
+  const timeValue = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  updatePrayer(prayerId, 'time', timeValue);
+}
+
+// Update time from 12h picker
+function updateTimeFromPicker12h(prayerId, element) {
+  const container = element.closest('.time-picker-12h');
+  const selects = container.querySelectorAll('select');
+  let hours = parseInt(selects[0].value);
+  const minutes = parseInt(selects[1].value);
+  const period = selects[2].value;
+
+  // Convert 12h to 24h
+  if (period === 'PM' && hours !== 12) hours += 12;
+  if (period === 'AM' && hours === 12) hours = 0;
+
+  const timeValue = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  updatePrayer(prayerId, 'time', timeValue);
+}
+
+// Re-render prayer list when time format changes
+function onTimeFormatChange() {
+  renderPrayers();
+  renderCalculatedTimes();
 }
 
 async function renderCalculatedTimes() {
@@ -272,7 +367,7 @@ async function renderCalculatedTimes() {
       return `
         <div class="calc-time-card">
           <div class="prayer-name">${prayerIcons[name] || '🕌'} ${name}</div>
-          <div class="prayer-time">${data.times[name]}</div>
+          <div class="prayer-time">${formatTime(data.times[name])}</div>
           <div class="iqomah-section">
             <label>Iqomah (menit)</label>
             <input type="number" value="${prayer.iqomah_duration}" min="1" max="30"
@@ -836,6 +931,9 @@ function populateSettings() {
   document.getElementById('setting-font-scale').value = fontScale;
   updateFontScalePreview(fontScale);
 
+  // Time format
+  document.getElementById('setting-time-format').value = appData.settings.time_format || '24h';
+
   // Logo image preview
   if (appData.settings.mosque_logo_image) {
     logoImageData = appData.settings.mosque_logo_image;
@@ -959,12 +1057,12 @@ async function previewPrayerCalculation() {
         Metode: ${data.method} | Lokasi: ${data.location.latitude.toFixed(4)}, ${data.location.longitude.toFixed(4)}
       </div>
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-        <div><strong>Subuh:</strong> ${data.times.Subuh}</div>
-        <div><strong>Dzuhur:</strong> ${data.times.Dzuhur}</div>
-        <div><strong>Ashar:</strong> ${data.times.Ashar}</div>
-        <div><strong>Maghrib:</strong> ${data.times.Maghrib}</div>
-        <div><strong>Isya:</strong> ${data.times.Isya}</div>
-        <div><strong>Syuruq:</strong> ${data.times.Syuruq}</div>
+        <div><strong>Subuh:</strong> ${formatTime(data.times.Subuh)}</div>
+        <div><strong>Dzuhur:</strong> ${formatTime(data.times.Dzuhur)}</div>
+        <div><strong>Ashar:</strong> ${formatTime(data.times.Ashar)}</div>
+        <div><strong>Maghrib:</strong> ${formatTime(data.times.Maghrib)}</div>
+        <div><strong>Isya:</strong> ${formatTime(data.times.Isya)}</div>
+        <div><strong>Syuruq:</strong> ${formatTime(data.times.Syuruq)}</div>
       </div>
     `;
 
@@ -1111,6 +1209,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       donations_rotation: document.getElementById('setting-donations-rotation').value,
       donation_qr_enabled: document.getElementById('setting-donation-qr-enabled').checked ? 'true' : 'false',
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
+      time_format: document.getElementById('setting-time-format').value,
       font_scale: document.getElementById('setting-font-scale').value,
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,
