@@ -77,6 +77,7 @@ const defaultSettings = {
   background_image: '',
   hadith_rotation_interval: 30,
   show_live_indicator: 'true',
+  font_scale: '1', // Font size multiplier for different screen resolutions
   marquee_loop: 'true',
   marquee_speed: 30,
   marquee_gap: 4,

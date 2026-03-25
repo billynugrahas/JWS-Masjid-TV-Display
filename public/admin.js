@@ -831,6 +831,11 @@ function populateSettings() {
   document.getElementById('setting-mosque-address').value = appData.settings.mosque_address || '';
   document.getElementById('setting-mosque-phone').value = appData.settings.mosque_phone || '';
 
+  // Font scale
+  const fontScale = parseFloat(appData.settings.font_scale) || 1;
+  document.getElementById('setting-font-scale').value = fontScale;
+  updateFontScalePreview(fontScale);
+
   // Logo image preview
   if (appData.settings.mosque_logo_image) {
     logoImageData = appData.settings.mosque_logo_image;
@@ -1056,6 +1061,11 @@ function clearDonationQR() {
   document.getElementById('setting-donation-qr-image').value = '';
 }
 
+// Font scale preview
+function updateFontScalePreview(value) {
+  document.getElementById('font-scale-value').textContent = parseFloat(value).toFixed(1) + 'x';
+}
+
 // ==================== SAVE ALL ====================
 document.getElementById('save-all-btn').addEventListener('click', async () => {
   const btn = document.getElementById('save-all-btn');
@@ -1101,6 +1111,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       donations_rotation: document.getElementById('setting-donations-rotation').value,
       donation_qr_enabled: document.getElementById('setting-donation-qr-enabled').checked ? 'true' : 'false',
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
+      font_scale: document.getElementById('setting-font-scale').value,
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,
       marquee_gap: document.getElementById('setting-marquee-gap').value,

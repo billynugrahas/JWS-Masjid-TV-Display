@@ -15,6 +15,9 @@
 }
 
 :root {
+  /* Font Scale - can be adjusted for different screen resolutions */
+  --font-scale: 1;
+
   /* Color Variables */
   --bg-primary: #F8F9FA;
   --bg-card: rgba(255, 255, 255, 0.85);
@@ -94,8 +97,8 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto auto auto auto;
   height: 100vh;
-  padding: 1.5vh 2vw;
-  gap: 1.5vh;
+  padding: 1vh 1.5vw;
+  gap: 1vh;
   overflow: hidden;
 }
 
@@ -118,7 +121,7 @@ body {
 }
 
 .mosque-logo {
-  font-size: clamp(1.5rem, 3vh, 2.5rem);
+  font-size: calc(clamp(1.5rem, 3vh, 2.5rem) * var(--font-scale));
   line-height: 1;
   display: flex;
   align-items: center;
@@ -135,14 +138,14 @@ body {
 
 .mosque-name {
   font-family: var(--font-display);
-  font-size: clamp(1rem, 2vh, 1.5rem);
+  font-size: calc(clamp(1rem, 2vh, 1.5rem) * var(--font-scale));
   font-weight: 700;
   color: var(--color-primary);
   letter-spacing: -0.02em;
 }
 
 .mosque-tagline {
-  font-size: clamp(0.6rem, 1vh, 0.75rem);
+  font-size: calc(clamp(0.6rem, 1vh, 0.75rem) * var(--font-scale));
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -166,20 +169,20 @@ body {
 
 .calendar-masehi {
   font-family: var(--font-display);
-  font-size: clamp(0.9rem, 1.5vh, 1.1rem);
+  font-size: calc(clamp(0.9rem, 1.5vh, 1.1rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-text);
 }
 
 .calendar-hijri {
   font-family: var(--font-arabic);
-  font-size: clamp(0.8rem, 1.3vh, 0.95rem);
+  font-size: calc(clamp(0.8rem, 1.3vh, 0.95rem) * var(--font-scale));
   color: var(--color-primary);
   direction: rtl;
 }
 
 .calendar-hijri-arabic {
-  font-size: clamp(0.85rem, 1.4vh, 1rem);
+  font-size: calc(clamp(0.85rem, 1.4vh, 1rem) * var(--font-scale));
 }
 
 .date-card {
@@ -191,14 +194,14 @@ body {
 
 .date-masehi {
   font-family: var(--font-display);
-  font-size: clamp(0.9rem, 1.5vh, 1.1rem);
+  font-size: calc(clamp(0.9rem, 1.5vh, 1.1rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-text);
 }
 
 .date-hijri {
   font-family: var(--font-arabic);
-  font-size: clamp(0.8rem, 1.3vh, 0.95rem);
+  font-size: calc(clamp(0.8rem, 1.3vh, 0.95rem) * var(--font-scale));
   color: var(--color-primary);
 }
 
@@ -206,7 +209,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5vw;
-  font-size: clamp(0.7rem, 1.2vh, 0.85rem);
+  font-size: calc(clamp(0.7rem, 1.2vh, 0.85rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-danger);
 }
@@ -243,7 +246,7 @@ body {
 
 .clock-time {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 15vh, 12rem);
+  font-size: calc(clamp(4rem, 15vh, 12rem) * var(--font-scale));
   font-weight: 800;
   color: var(--color-primary);
   letter-spacing: -0.04em;
@@ -253,7 +256,7 @@ body {
 
 .clock-seconds {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 5vh, 4rem);
+  font-size: calc(clamp(1.5rem, 5vh, 4rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-accent);
   margin-left: 0.5vw;
@@ -280,7 +283,7 @@ body {
 }
 
 .countdown-pill .countdown-label {
-  font-size: clamp(0.7rem, 1.2vh, 0.9rem);
+  font-size: calc(clamp(0.7rem, 1.2vh, 0.9rem) * var(--font-scale));
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -290,7 +293,7 @@ body {
 
 .countdown-pill .countdown-time {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vh, 2.5rem);
+  font-size: calc(clamp(1.5rem, 3vh, 2.5rem) * var(--font-scale));
   font-weight: 700;
   letter-spacing: 0.05em;
   color: var(--color-white);
@@ -309,7 +312,7 @@ body {
 
 .iqomah-title {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3.5vh, 3rem);
+  font-size: calc(clamp(1.5rem, 3.5vh, 3rem) * var(--font-scale));
   font-weight: 800;
   color: var(--color-danger);
   text-transform: uppercase;
@@ -319,7 +322,7 @@ body {
 
 .iqomah-time {
   font-family: var(--font-display);
-  font-size: clamp(5rem, 12vh, 10rem);
+  font-size: calc(clamp(5rem, 12vh, 10rem) * var(--font-scale));
   font-weight: 800;
   color: var(--color-primary);
   line-height: 1;
@@ -332,7 +335,7 @@ body {
 }
 
 .prayer-progress-icon {
-  font-size: clamp(2rem, 5vh, 4rem);
+  font-size: calc(clamp(2rem, 5vh, 4rem) * var(--font-scale));
   margin-bottom: 1vh;
   animation: float 3s ease-in-out infinite;
 }
@@ -355,7 +358,7 @@ body {
 
 .prayer-progress-text {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vh, 2.5rem);
+  font-size: calc(clamp(1.5rem, 3vh, 2.5rem) * var(--font-scale));
   font-weight: 700;
   color: var(--color-primary);
   text-transform: uppercase;
@@ -367,14 +370,14 @@ body {
 }
 
 .prayer-progress-sub {
-  font-size: clamp(0.9rem, 1.5vh, 1.1rem);
+  font-size: calc(clamp(0.9rem, 1.5vh, 1.1rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-text-muted);
   margin-top: 0.5vh;
 }
 
 .prayer-progress-sub2 {
-  font-size: clamp(0.8rem, 1.3vh, 1rem);
+  font-size: calc(clamp(0.8rem, 1.3vh, 1rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-top: 0.3vh;
 }
@@ -393,7 +396,7 @@ body {
 /* ==================== OPTIONAL TIMES SECTION ==================== */
 .optional-times-section {
   padding: 0 1vw;
-  margin-bottom: 0.5vh;
+  margin-bottom: 0.3vh;
 }
 
 .optional-times-grid {
@@ -415,12 +418,12 @@ body {
 }
 
 .optional-time-card .icon {
-  font-size: clamp(1.2rem, 2vh, 1.5rem);
+  font-size: calc(clamp(1.2rem, 2vh, 1.5rem) * var(--font-scale));
 }
 
 .optional-time-card .name {
   font-family: var(--font-display);
-  font-size: clamp(0.8rem, 1.3vh, 1rem);
+  font-size: calc(clamp(0.8rem, 1.3vh, 1rem) * var(--font-scale));
   font-weight: 700;
   color: var(--color-primary);
   text-transform: uppercase;
@@ -429,7 +432,7 @@ body {
 
 .optional-time-card .time {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 2vh, 1.5rem);
+  font-size: calc(clamp(1.2rem, 2vh, 1.5rem) * var(--font-scale));
   font-weight: 800;
   color: var(--color-primary);
 }
@@ -480,13 +483,13 @@ body {
 }
 
 .prayer-card .icon {
-  font-size: clamp(1.5rem, 3vh, 2rem);
+  font-size: calc(clamp(1.5rem, 3vh, 2rem) * var(--font-scale));
   margin-bottom: 0.5vh;
 }
 
 .prayer-card .name {
   font-family: var(--font-display);
-  font-size: clamp(0.9rem, 1.5vh, 1.2rem);
+  font-size: calc(clamp(0.9rem, 1.5vh, 1.2rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-primary);
   margin-bottom: 0.25vh;
@@ -500,7 +503,7 @@ body {
 
 .prayer-card .time {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.5vh, 2.2rem);
+  font-size: calc(clamp(1.5rem, 2.5vh, 2.2rem) * var(--font-scale));
   font-weight: 700;
   color: var(--color-text);
 }
@@ -510,7 +513,7 @@ body {
 }
 
 .prayer-card .iqomah {
-  font-size: clamp(0.65rem, 1vh, 0.75rem);
+  font-size: calc(clamp(0.65rem, 1vh, 0.75rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-top: 0.25vh;
 }
@@ -549,12 +552,12 @@ body {
 }
 
 .info-card-icon {
-  font-size: clamp(1rem, 1.5vh, 1.25rem);
+  font-size: calc(clamp(1rem, 1.5vh, 1.25rem) * var(--font-scale));
 }
 
 .info-card-title {
   font-family: var(--font-display);
-  font-size: clamp(0.7rem, 1.2vh, 0.9rem);
+  font-size: calc(clamp(0.7rem, 1.2vh, 0.9rem) * var(--font-scale));
   font-weight: 700;
   color: #1E3A2B;
   text-transform: uppercase;
@@ -577,7 +580,7 @@ body {
 
 .announcement-title {
   font-family: var(--font-display);
-  font-size: clamp(0.7rem, 1.1vh, 0.9rem);
+  font-size: calc(clamp(0.7rem, 1.1vh, 0.9rem) * var(--font-scale));
   font-weight: 600;
   color: #1E3A2B;
   line-height: 1.3;
@@ -585,7 +588,7 @@ body {
 
 .announcement-content {
   font-family: var(--font-body);
-  font-size: clamp(0.6rem, 0.9vh, 0.75rem);
+  font-size: calc(clamp(0.6rem, 0.9vh, 0.75rem) * var(--font-scale));
   color: var(--color-text-muted);
   line-height: 1.4;
   display: -webkit-box;
@@ -623,7 +626,7 @@ body {
 
 .donation-category {
   font-family: var(--font-body);
-  font-size: clamp(0.6rem, 1vh, 0.75rem);
+  font-size: calc(clamp(0.6rem, 1vh, 0.75rem) * var(--font-scale));
   color: var(--color-text-muted);
 }
 
@@ -635,7 +638,7 @@ body {
 
 .donation-amount {
   font-family: var(--font-display);
-  font-size: clamp(0.7rem, 1.2vh, 0.95rem);
+  font-size: calc(clamp(0.7rem, 1.2vh, 0.95rem) * var(--font-scale));
   font-weight: 700;
   color: #1E3A2B;
   white-space: nowrap;
@@ -659,7 +662,7 @@ body {
 
 .donation-percent {
   font-family: var(--font-body);
-  font-size: clamp(0.55rem, 0.9vh, 0.7rem);
+  font-size: calc(clamp(0.55rem, 0.9vh, 0.7rem) * var(--font-scale));
   font-weight: 600;
   color: #1E3A2B;
   min-width: 2.5vw;
@@ -678,7 +681,7 @@ body {
 
 .donation-qr-label {
   font-family: var(--font-body);
-  font-size: clamp(0.55rem, 0.9vh, 0.7rem);
+  font-size: calc(clamp(0.55rem, 0.9vh, 0.7rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-bottom: 0.5vh;
   text-align: center;
@@ -700,8 +703,8 @@ body {
   display: grid;
   grid-template-columns: 30% 40% 30%;
   gap: 1.5vh;
-  min-height: 45vh;
-  height: 45vh;
+  min-height: 46vh;
+  height: 46vh;
 }
 
 /* Left Column - Announcements & Donations */
@@ -709,6 +712,25 @@ body {
   display: grid;
   grid-template-rows: 1fr 1fr;
   gap: 1.5vh;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Make info-cards inside column-left have fixed height with scrollable content */
+.column-left .info-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow grid to control height */
+  height: 100%;
+  overflow: hidden;
+}
+
+.column-left .info-card .announcements-container,
+.column-left .info-card .donations-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* Allow flexbox to shrink */
 }
 
 .announcements-block {
@@ -718,6 +740,15 @@ body {
   padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
   box-shadow: var(--shadow-md);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow flexbox to shrink */
+}
+
+.announcements-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .announcements-header {
@@ -728,7 +759,7 @@ body {
 }
 
 .announcements-title {
-  font-size: clamp(0.75rem, 1.3vh, 0.9rem);
+  font-size: calc(clamp(0.75rem, 1.3vh, 0.9rem) * var(--font-scale));
   font-weight: 700;
   color: var(--color-primary);
   text-transform: uppercase;
@@ -742,7 +773,7 @@ body {
 }
 
 .announcement-title {
-  font-size: clamp(0.7rem, 1.2vh, 0.85rem);
+  font-size: calc(clamp(0.7rem, 1.2vh, 0.85rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-text);
   margin-bottom: 0.25vh;
@@ -750,13 +781,13 @@ body {
 }
 
 .announcement-content {
-  font-size: clamp(0.6rem, 1vh, 0.75rem);
+  font-size: calc(clamp(0.6rem, 1vh, 0.75rem) * var(--font-scale));
   color: var(--color-text-muted);
   line-height: 1.4;
 }
 
 .announcement-date {
-  font-size: clamp(0.55rem, 0.9vh, 0.7rem);
+  font-size: calc(clamp(0.55rem, 0.9vh, 0.7rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-top: 0.25vh;
 }
@@ -768,6 +799,15 @@ body {
   padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
   box-shadow: var(--shadow-md);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow flexbox to shrink */
+}
+
+.donations-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .donations-header {
@@ -778,7 +818,7 @@ body {
 }
 
 .donations-title {
-  font-size: clamp(0.75rem, 1.3vh, 0.9rem);
+  font-size: calc(clamp(0.75rem, 1.3vh, 0.9rem) * var(--font-scale));
   font-weight: 700;
   color: var(--color-primary);
   text-transform: uppercase;
@@ -792,7 +832,7 @@ body {
 }
 
 .donation-category {
-  font-size: clamp(0.65rem, 1vh, 0.8rem);
+  font-size: calc(clamp(0.65rem, 1vh, 0.8rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-bottom: 0.25vh;
 }
@@ -820,14 +860,14 @@ body {
 }
 
 .donation-percentage {
-  font-size: clamp(0.65rem, 1vh, 0.8rem);
+  font-size: calc(clamp(0.65rem, 1vh, 0.8rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-primary);
   margin-left: 0.5vh;
 }
 
 .donation-target {
-  font-size: clamp(0.6rem, 1vh, 0.75rem);
+  font-size: calc(clamp(0.6rem, 1vh, 0.75rem) * var(--font-scale));
   color: var(--color-text-muted);
 }
 
@@ -845,7 +885,7 @@ body {
 
 .clock {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vh, 5rem);
+  font-size: calc(clamp(2.5rem, 5vh, 5rem) * var(--font-scale));
   font-weight: 700;
   color: var(--color-text);
   line-height: 1;
@@ -854,7 +894,7 @@ body {
 
 .date-display {
   font-family: var(--font-display);
-  font-size: clamp(0.9rem, 1.8vh, 1.2rem);
+  font-size: calc(clamp(0.9rem, 1.8vh, 1.2rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-top: 0.5vh;
 }
@@ -864,7 +904,7 @@ body {
 }
 
 .countdown-label {
-  font-size: clamp(0.8rem, 1.5vh, 1rem);
+  font-size: calc(clamp(0.8rem, 1.5vh, 1rem) * var(--font-scale));
   font-weight: 600;
   color: var(--color-text-muted);
   margin-bottom: 0.5vh;
@@ -874,14 +914,14 @@ body {
 
 .countdown-time {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3.5vh, 3.5rem);
+  font-size: calc(clamp(1.8rem, 3.5vh, 3.5rem) * var(--font-scale));
   font-weight: 700;
   color: var(--color-primary);
   line-height: 1;
 }
 
 .countdown-target {
-  font-size: clamp(0.75rem, 1.3vh, 0.9rem);
+  font-size: calc(clamp(0.75rem, 1.3vh, 0.9rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-top: 0.5vh;
 }
@@ -910,12 +950,12 @@ body {
 }
 
 .video-icon {
-  font-size: clamp(2rem, 4vh, 4rem);
+  font-size: calc(clamp(2rem, 4vh, 4rem) * var(--font-scale));
   color: var(--color-text-muted);
 }
 
 .video-label {
-  font-size: clamp(0.75rem, 1.3vh, 0.9rem);
+  font-size: calc(clamp(0.75rem, 1.3vh, 0.9rem) * var(--font-scale));
   color: var(--color-text-muted);
   text-align: center;
   text-transform: uppercase;
@@ -948,14 +988,14 @@ body {
 }
 
 .video-placeholder-icon {
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: calc(clamp(2rem, 5vw, 4rem) * var(--font-scale));
   opacity: 0.7;
 }
 
 .video-placeholder-text {
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  font-size: calc(clamp(0.7rem, 1.5vw, 0.9rem) * var(--font-scale));
   color: #1E3A2B;
   text-align: center;
   line-height: 1.4;
@@ -1014,7 +1054,7 @@ body {
 
 .video-live-status {
   font-family: 'Poppins', sans-serif;
-  font-size: 0.7rem;
+  font-size: calc(0.7rem * var(--font-scale));
   font-weight: 600;
   color: #1E3A2B;
   text-transform: uppercase;
@@ -1048,8 +1088,8 @@ body.adhan-mode .column-left {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  min-height: 12vh;
-  height: 12vh;
+  min-height: 9vh;
+  height: 9vh;
 }
 
 .info-container {
@@ -1062,13 +1102,13 @@ body.adhan-mode .column-left {
   padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
   border-left: 4px solid var(--color-accent);
   box-shadow: var(--shadow-md);
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   width: 100%;
   overflow: hidden;
 }
 
-.info-content {
+.info-content{
   flex: 1;
   overflow: hidden;
   display: -webkit-box;
@@ -1076,27 +1116,27 @@ body.adhan-mode .column-left {
   -webkit-box-orient: vertical;
 }
 
-.info-text {
+.info-text{
   font-family: var(--font-arabic);
-  font-size: clamp(0.9rem, 1.5vh, 1.15rem);
+  font-size: calc(clamp(0.9rem, 1.5vh, 1.15rem) * var(--font-scale));
   color: var(--color-text);
   font-style: italic;
   line-height: 1.5;
   transition: opacity 0.4s ease;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
 .info-icon {
-  font-size: clamp(1.5rem, 3vh, 2.5rem);
+  font-size: calc(clamp(1.5rem, 3vh, 2.5rem) * var(--font-scale));
   flex-shrink: 0;
 }
 
 .info-source {
   display: block;
-  font-size: clamp(0.7rem, 1.2vh, 0.85rem);
+  font-size: calc(clamp(0.7rem, 1.2vh, 0.85rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-top: 0.5vh;
   font-style: normal;
@@ -1139,11 +1179,11 @@ body.adhan-mode .column-left {
   align-items: center;
   gap: 0.5vw;
   color: var(--color-white);
-  font-size: clamp(0.8rem, 1.3vh, 0.95rem);
+  font-size: calc(clamp(0.8rem, 1.3vh, 0.95rem) * var(--font-scale));
 }
 
 .marquee-tag {
-  font-size: clamp(0.55rem, 0.9vh, 0.65rem);
+  font-size: calc(clamp(0.55rem, 0.9vh, 0.65rem) * var(--font-scale));
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;

@@ -314,6 +314,10 @@ function updateDisplayElements() {
 
   // Update Ka'bah video display
   updateKabahVideoDisplay();
+
+  // Update font scale
+  const fontScale = parseFloat(settings.font_scale) || 1;
+  document.documentElement.style.setProperty('--font-scale', fontScale);
 }
 
 // ==================== PRAYER GRID RENDERING ====================
