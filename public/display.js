@@ -582,21 +582,30 @@ function checkPrayerState() {
 
     // Check if currently in prayer
     if (currentTimeMinutes >= iqomahEndMinutes && currentTimeMinutes < prayerEndMinutes) {
-      setPrayerInProgress(prayer.name);
+      // Only transition to prayer state if not already in it
+      if (currentState !== AppState.PRAYER) {
+        setPrayerInProgress(prayer.name);
+      }
       foundState = true;
       break;
     }
 
     // Check if in iqomah countdown
     if (currentTimeMinutes >= prayerTimeMinutes && currentTimeMinutes < iqomahEndMinutes) {
-      setIqomahCountdown(iqomahEndMinutes - currentTimeMinutes, prayer);
+      // Only transition to iqomah state if not already in it
+      if (currentState !== AppState.IQOMAH) {
+        setIqomahCountdown(iqomahEndMinutes - currentTimeMinutes, prayer);
+      }
       foundState = true;
       break;
     }
 
     // Check if at adzan time (first minute)
     if (currentTimeMinutes === prayerTimeMinutes && currentSeconds < 60) {
-      setAdzanState(prayer);
+      // Only transition to adzan state if not already in it
+      if (currentState !== AppState.ADZAN) {
+        setAdzanState(prayer);
+      }
       foundState = true;
       break;
     }
@@ -645,6 +654,9 @@ function setCountdownToNextPrayer(prayerIndex) {
   // Clear existing interval
   if (countdownInterval) clearInterval(countdownInterval);
 
+  // Track the last second we beeped for to prevent multiple beeps per second
+  let lastBeepedSecond = -1;
+
   function updateCountdown() {
     const now = new Date();
     const [hours, minutes] = prayer.time.split(':').map(Number);
@@ -667,6 +679,16 @@ function setCountdownToNextPrayer(prayerIndex) {
 
     document.getElementById('countdown-label').textContent = `Menuju Adzan ${prayer.name}`;
     document.getElementById('countdown-time').textContent = formatCountdown(diff);
+
+    // Play beep in last X seconds (same setting as iqomah)
+    const beepSeconds = parseInt(settings.iqomah_beep_seconds) || 3;
+    const totalSecondsRemaining = Math.ceil(diff / 1000);
+
+    // Only beep when we're in the last X seconds, and only once per second
+    if (beepSeconds > 0 && totalSecondsRemaining <= beepSeconds && totalSecondsRemaining !== lastBeepedSecond) {
+      lastBeepedSecond = totalSecondsRemaining;
+      playBeep();
+    }
   }
 
   updateCountdown();
@@ -711,11 +733,27 @@ function setIqomahCountdown(remainingMinutes, prayer) {
 
   updatePrayerHighlight(currentPrayerIndex);
   updateIqomahDisplay(iqomahEnd);
-  playBeep();
+}
+
+function setPrayerInProgress(prayerName) {
+  currentState = AppState.PRAYER;
+
+  document.getElementById('countdown-pill').style.display = 'none';
+  document.getElementById('iqomah-section').style.display = 'none';
+  document.getElementById('prayer-progress').style.display = 'block';
+  document.body.classList.add('calm-mode');
+
+  document.getElementById('current-prayer-name').textContent = prayerName.toUpperCase();
+
+  // Play countdown-ended beep (different from regular beep)
+  playCountdownEndBeep();
 }
 
 function updateIqomahDisplay(endTime) {
   if (iqomahInterval) clearInterval(iqomahInterval);
+
+  // Track the last second we beeped for to prevent multiple beeps per second
+  let lastBeepedSecond = -1;
 
   iqomahInterval = setInterval(() => {
     const now = new Date();
@@ -733,23 +771,18 @@ function updateIqomahDisplay(endTime) {
     document.getElementById('iqomah-time').textContent =
       `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
-    // Play beep in last 10 seconds
-    if (diff <= 10000 && diff > 9900) {
+    // Play beep in last X seconds (configurable, default 3)
+    const beepSeconds = parseInt(settings.iqomah_beep_seconds) || 3;
+    const totalSecondsRemaining = Math.ceil(diff / 1000);
+
+    // Only beep when we're in the last X seconds, and only once per second
+    if (beepSeconds > 0 && totalSecondsRemaining <= beepSeconds && totalSecondsRemaining !== lastBeepedSecond) {
+      lastBeepedSecond = totalSecondsRemaining;
       playBeep();
     }
   }, 100);
 }
 
-function setPrayerInProgress(prayerName) {
-  currentState = AppState.PRAYER;
-
-  document.getElementById('countdown-pill').style.display = 'none';
-  document.getElementById('iqomah-section').style.display = 'none';
-  document.getElementById('prayer-progress').style.display = 'block';
-  document.body.classList.add('calm-mode');
-
-  document.getElementById('current-prayer-name').textContent = prayerName.toUpperCase();
-}
 
 // ==================== UTILITY FUNCTIONS ====================
 function formatCountdown(ms) {
@@ -933,6 +966,70 @@ function startDonationRotation() {
 }
 
 
+
+// ==================== SOUND FUNCTIONS ====================
+let audioContext = null;
+
+function initAudioContext() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  // Always try to resume (browser autoplay policy)
+  if (audioContext.state === 'suspended') {
+    audioContext.resume().catch(() => {});
+  }
+}
+
+// Helper to play a single beep tone
+function playTone(frequency, duration, volume) {
+  if (!audioContext) {
+    initAudioContext();
+  }
+
+  try {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.frequency.value = frequency;
+    oscillator.type = 'sine';
+    gainNode.gain.value = volume;
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + duration);
+  } catch (error) {
+    // Silent fail
+  }
+}
+
+function playBeep() {
+  if (!audioContext) {
+    initAudioContext();
+  }
+  playTone(800, 0.2, 0.3);
+}
+
+// Special beep pattern for countdown ended (Iqomah -> Prayer transition)
+// Pattern: 3 short beeps, then 1 long beep
+function playCountdownEndBeep() {
+  if (!audioContext) {
+    initAudioContext();
+  }
+
+  // 3 short beeps at 0ms, 500ms, 1000ms
+  [0, 500, 1000].forEach(delay => {
+    setTimeout(() => playTone(880, 0.15, 0.3), delay);
+  });
+
+  // 1 long beep at 1500ms
+  setTimeout(() => playTone(660, 1.0, 0.4), 1500);
+}
+
+// Enable audio on first user interaction (click/touch)
+document.addEventListener('click', initAudioContext, { once: true });
+document.addEventListener('touchstart', initAudioContext, { once: true });
 
 // ==================== KA'bah Video Functions ====================
 

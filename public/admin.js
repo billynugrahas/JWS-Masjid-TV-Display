@@ -950,6 +950,7 @@ function populateSettings() {
 
   document.getElementById('setting-hadith-interval').value = appData.settings.hadith_rotation_interval || 30;
   document.getElementById('setting-prayer-duration').value = appData.settings.prayer_duration || 15;
+  document.getElementById('setting-iqomah-beep-seconds').value = appData.settings.iqomah_beep_seconds || 3;
   document.getElementById('setting-prayer-subtext').value = appData.settings.prayer_subtext || '';
   document.getElementById('setting-prayer-subtext-2').value = appData.settings.prayer_subtext_2 || '';
   document.getElementById('setting-show-live').checked = appData.settings.show_live_indicator === 'true';
@@ -1191,6 +1192,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       mosque_phone: document.getElementById('setting-mosque-phone').value,
       hadith_rotation_interval: document.getElementById('setting-hadith-interval').value,
       prayer_duration: document.getElementById('setting-prayer-duration').value,
+      iqomah_beep_seconds: document.getElementById('setting-iqomah-beep-seconds').value,
       prayer_subtext: document.getElementById('setting-prayer-subtext').value,
       prayer_subtext_2: document.getElementById('setting-prayer-subtext-2').value,
       // Prayer calculation settings
