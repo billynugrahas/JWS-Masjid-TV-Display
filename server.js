@@ -108,7 +108,10 @@ const defaultSettings = {
   kabah_video_type: 'youtube',
   kabah_video_url: '',
   // Time format setting
-  time_format: '24h' // '24h' or '12h'
+  time_format: '24h', // '24h' or '12h'
+  // Dark mode settings
+  dark_mode_enabled: 'false',
+  dark_mode_style: 'soft' // 'soft' or 'calm'
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');

@@ -371,6 +371,9 @@ function updateDisplayElements() {
   // Update font scale
   const fontScale = parseFloat(settings.font_scale) || 1;
   document.documentElement.style.setProperty('--font-scale', fontScale);
+
+  // Update dark mode
+  updateDarkMode();
 }
 
 // ==================== PRAYER GRID RENDERING ====================
@@ -694,6 +697,7 @@ function setCountdownToNextPrayer(prayerIndex) {
   updateCountdown();
   countdownInterval = setInterval(updateCountdown, 1000);
   updatePrayerHighlight(prayerIndex);
+  updateDarkMode(); // Will apply dark mode if enabled (state is WAITING_ADZAN)
 }
 
 function setAdzanState(prayer) {
@@ -712,6 +716,7 @@ function setAdzanState(prayer) {
 
   updatePrayerHighlight(currentPrayerIndex);
   playBeep();
+  updateDarkMode(); // Will remove dark mode since state is ADZAN
 }
 
 function setIqomahCountdown(remainingMinutes, prayer) {
@@ -733,6 +738,7 @@ function setIqomahCountdown(remainingMinutes, prayer) {
 
   updatePrayerHighlight(currentPrayerIndex);
   updateIqomahDisplay(iqomahEnd);
+  updateDarkMode(); // Will apply dark mode if enabled (state is IQOMAH)
 
   // Play long beep to indicate entering iqomah (same as prayer state transition)
   playTone(660, 1.5, 0.4);
@@ -750,6 +756,7 @@ function setPrayerInProgress(prayerName) {
 
   // Play countdown-ended beep (different from regular beep)
   playCountdownEndBeep();
+  updateDarkMode(); // Will remove dark mode since state is PRAYER
 }
 
 function updateIqomahDisplay(endTime) {
@@ -969,6 +976,21 @@ function startDonationRotation() {
 }
 
 
+
+// ==================== DARK MODE ====================
+function updateDarkMode() {
+  const darkModeEnabled = settings.dark_mode_enabled === 'true';
+  const darkModeStyle = settings.dark_mode_style || 'soft';
+
+  // Remove dark mode classes first
+  document.body.classList.remove('dark-mode', 'dark-soft', 'dark-calm');
+
+  // Apply dark mode only if enabled and not in special states
+  // ADZAN uses adhan-mode, PRAYER uses calm-mode - both have their own styling
+  if (darkModeEnabled && currentState !== AppState.ADZAN && currentState !== AppState.PRAYER) {
+    document.body.classList.add('dark-mode', `dark-${darkModeStyle}`);
+  }
+}
 
 // ==================== SOUND FUNCTIONS ====================
 let audioContext = null;

@@ -341,6 +341,22 @@
                   <span>Tampilkan indikator LIVE di header</span>
                 </label>
               </div>
+              <hr style="border-color: var(--color-text-light); margin: 1rem 0;">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-dark-mode-enabled" onchange="toggleDarkModeStyleVisibility()">
+                  <span>🌙 Enable Dark Mode</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Mode gelap untuk tampilan display (tidak berlaku saat Adzan dan Sholat)</small>
+              </div>
+              <div id="dark-mode-style-group" class="form-group" style="display: none; margin-left: 1.5rem;">
+                <label>Style</label>
+                <select id="setting-dark-mode-style">
+                  <option value="soft">Soft Dark</option>
+                  <option value="calm">Calm Mode Style</option>
+                </select>
+                <small style="color: var(--color-text-muted);">Soft Dark = Latar gelap modern, Calm = Gradien hijau seperti mode sholat</small>
+              </div>
             </div>
           </div>
 

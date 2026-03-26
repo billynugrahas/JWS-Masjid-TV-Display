@@ -1232,6 +1232,192 @@ body.adhan-mode .column-left {
   opacity: 0.5;
 }
 
+/* ==================== DARK MODE ==================== */
+
+/* Dark Mode - Soft Style */
+body.dark-mode.dark-soft {
+  --bg-primary: #0F0F1A;
+  --bg-card: rgba(30, 30, 50, 0.85);
+  --bg-glass: rgba(30, 30, 50, 0.7);
+  --color-text: #E8E8E8;
+  --color-text-muted: #9CA3AF;
+  --color-text-light: #6B7280;
+}
+
+/* Dark Mode - Calm Style */
+body.dark-mode.dark-calm {
+  background: linear-gradient(135deg, #081C15 0%, #1B4332 100%) !important;
+  --bg-card: rgba(27, 67, 50, 0.6);
+  --bg-glass: rgba(27, 67, 50, 0.5);
+  --color-text: #E8E8E8;
+  --color-text-muted: #9CA3AF;
+  --color-text-light: #6B7280;
+}
+
+/* Dark mode overrides for elements with hardcoded colors */
+
+/* Header */
+body.dark-mode .header {
+  background: var(--bg-glass);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Prayer cards */
+body.dark-mode .prayer-card {
+  background: var(--bg-glass);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .prayer-card .name {
+  color: var(--color-text);
+}
+
+body.dark-mode .prayer-card .time {
+  color: var(--color-accent);
+}
+
+body.dark-mode .prayer-card .iqomah {
+  color: var(--color-text-muted);
+}
+
+/* Optional time cards */
+body.dark-mode .optional-time-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .optional-time-card .name,
+body.dark-mode .optional-time-card .time {
+  color: var(--color-accent);
+}
+
+/* Info cards */
+body.dark-mode .info-card {
+  background: var(--bg-glass);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .info-card-title {
+  color: var(--color-text);
+}
+
+/* Announcements */
+body.dark-mode .announcement-title {
+  color: var(--color-text);
+}
+
+body.dark-mode .announcement-content {
+  color: var(--color-text-muted);
+}
+
+/* Donations */
+body.dark-mode .donation-category {
+  color: var(--color-text-muted);
+}
+
+body.dark-mode .donation-amount {
+  color: var(--color-accent);
+}
+
+body.dark-mode .donation-progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .donation-progress-fill {
+  background: linear-gradient(90deg, var(--color-primary-light), var(--color-accent));
+}
+
+body.dark-mode .donation-percent {
+  color: var(--color-text);
+}
+
+body.dark-mode .donation-qr-section {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Info section (hadiths) */
+body.dark-mode .info-container {
+  background: var(--bg-glass);
+  border-left-color: var(--color-accent);
+}
+
+body.dark-mode .info-text {
+  color: var(--color-text);
+}
+
+body.dark-mode .info-source {
+  color: var(--color-text-muted);
+}
+
+/* Video placeholder */
+body.dark-mode .video-placeholder {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .video-placeholder-text {
+  color: var(--color-text-muted);
+}
+
+/* Background overlay - add dark tint */
+body.dark-mode .bg-overlay.active {
+  background-color: rgba(0, 0, 0, 0.3);
+  background-blend-mode: multiply;
+}
+
+/* IQOMAH section */
+body.dark-mode .iqomah-title {
+  color: var(--color-danger);
+}
+
+body.dark-mode .iqomah-time {
+  color: var(--color-accent);
+}
+
+/* Countdown pill - keep gradient but ensure visibility */
+body.dark-mode .countdown-pill {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), var(--shadow-glow);
+}
+
+/* Footer in dark mode - slightly darker for better contrast */
+body.dark-mode .footer {
+  background: linear-gradient(135deg, #0D1F17 0%, #1B4332 100%);
+}
+
+/* Main clock - make white for visibility on dark background */
+body.dark-mode .clock-time {
+  color: var(--color-white);
+}
+
+body.dark-mode .clock-seconds {
+  color: var(--color-accent);
+}
+
+/* Date displays in dark mode */
+body.dark-mode .date-masehi,
+body.dark-mode .calendar-masehi {
+  color: var(--color-text);
+}
+
+body.dark-mode .date-hijri,
+body.dark-mode .calendar-hijri {
+  color: var(--color-accent);
+}
+
+/* Mosque name in dark mode */
+body.dark-mode .mosque-name {
+  color: var(--color-accent);
+}
+
+/* Ensure state modes override dark mode visuals */
+body.adhan-mode {
+  background: var(--bg-primary) !important;
+}
+
+body.calm-mode {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%) !important;
+}
+
 /* ==================== CALM MODE (During Prayer) ==================== */
 body.calm-mode {
   background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);

@@ -1047,6 +1047,11 @@ function populateSettings() {
   const bgOpacity = parseFloat(appData.settings.background_opacity) || 0.15;
   document.getElementById('setting-background-opacity').value = bgOpacity;
   updateBackgroundOpacityPreview(bgOpacity);
+
+  // Dark mode settings
+  document.getElementById('setting-dark-mode-enabled').checked = appData.settings.dark_mode_enabled === 'true';
+  document.getElementById('setting-dark-mode-style').value = appData.settings.dark_mode_style || 'soft';
+  toggleDarkModeStyleVisibility();
 }
 
 // Preview prayer calculation
@@ -1175,6 +1180,13 @@ function updateBackgroundOpacityPreview(value) {
   document.getElementById('background-opacity-value').textContent = Math.round(parseFloat(value) * 100) + '%';
 }
 
+// Dark mode style visibility toggle
+function toggleDarkModeStyleVisibility() {
+  const enabled = document.getElementById('setting-dark-mode-enabled').checked;
+  const styleGroup = document.getElementById('dark-mode-style-group');
+  styleGroup.style.display = enabled ? 'block' : 'none';
+}
+
 // ==================== SAVE ALL ====================
 document.getElementById('save-all-btn').addEventListener('click', async () => {
   const btn = document.getElementById('save-all-btn');
@@ -1229,7 +1241,10 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       // Ka'bah video settings
       kabah_video_enabled: document.getElementById('setting-kabah-video-enabled').checked ? 'true' : 'false',
       kabah_video_type: document.querySelector('input[name="kabah-video-type"]:checked').value,
-      kabah_video_url: document.getElementById('setting-kabah-video-url').value
+      kabah_video_url: document.getElementById('setting-kabah-video-url').value,
+      // Dark mode settings
+      dark_mode_enabled: document.getElementById('setting-dark-mode-enabled').checked ? 'true' : 'false',
+      dark_mode_style: document.getElementById('setting-dark-mode-style').value
     };
 
     if (backgroundImageData !== appData.settings.background_image) {
