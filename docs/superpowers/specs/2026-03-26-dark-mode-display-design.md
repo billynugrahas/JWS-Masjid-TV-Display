@@ -38,7 +38,7 @@ Two new settings keys stored in the `settings` table:
 
 ### Admin Panel (Pengaturan Section)
 
-Location: After existing display settings, before or near "Show Live Indicator"
+Location: In the "Tampilan" subsection, after "Show Live Indicator"
 
 ```
 [✓] Enable Dark Mode
@@ -54,7 +54,7 @@ Location: After existing display settings, before or near "Show Live Indicator"
 ### Display Page
 
 **Soft Dark Style:**
-- Background: Dark navy/gray (#0F0F1A or #1A1A2E)
+- Background: Dark navy (#0F0F1A)
 - Cards: Semi-transparent dark with subtle borders
 - Text: White/light gray
 - Accent colors remain the same (gold, emerald)
@@ -67,11 +67,25 @@ Location: After existing display settings, before or near "Show Live Indicator"
 
 ## Technical Design
 
+### Server Changes (`server.js`)
+
+Add default values in the `defaultSettings` object (around line 68):
+
+```javascript
+dark_mode_enabled: 'false',
+dark_mode_style: 'soft'
+```
+
 ### CSS Changes (`style.css`)
 
-Add new CSS variables for dark mode inside a `body.dark-mode` selector:
+**CSS Specificity Strategy:**
+Dark mode uses `body.dark-mode.dark-soft` and `body.dark-mode.dark-calm` selectors. These have higher specificity than `body.calm-mode` and `body.adhan-mode` (which only use a single class), ensuring dark mode can be properly toggled on/off. However, during ADZAN and PRAYER states, JavaScript will remove dark mode classes before adding state-specific classes.
+
+**Complete CSS Rules (add at end of file, before media queries):**
 
 ```css
+/* ==================== DARK MODE ==================== */
+
 /* Dark Mode - Soft Style */
 body.dark-mode.dark-soft {
   --bg-primary: #0F0F1A;
@@ -79,49 +93,224 @@ body.dark-mode.dark-soft {
   --bg-glass: rgba(30, 30, 50, 0.7);
   --color-text: #E8E8E8;
   --color-text-muted: #9CA3AF;
-  /* ... other overrides */
+  --color-text-light: #6B7280;
 }
 
 /* Dark Mode - Calm Style */
 body.dark-mode.dark-calm {
-  background: linear-gradient(135deg, #081C15 0%, #1B4332 100%);
+  background: linear-gradient(135deg, #081C15 0%, #1B4332 100%) !important;
   --bg-card: rgba(27, 67, 50, 0.6);
   --bg-glass: rgba(27, 67, 50, 0.5);
   --color-text: #E8E8E8;
   --color-text-muted: #9CA3AF;
-  /* ... other overrides */
+  --color-text-light: #6B7280;
+}
+
+/* Dark mode overrides for elements with hardcoded colors */
+
+/* Header */
+body.dark-mode .header {
+  background: var(--bg-glass);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Prayer cards */
+body.dark-mode .prayer-card {
+  background: var(--bg-glass);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .prayer-card .name {
+  color: var(--color-text);
+}
+
+body.dark-mode .prayer-card .time {
+  color: var(--color-accent);
+}
+
+body.dark-mode .prayer-card .iqomah {
+  color: var(--color-text-muted);
+}
+
+/* Optional time cards */
+body.dark-mode .optional-time-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .optional-time-card .name,
+body.dark-mode .optional-time-card .time {
+  color: var(--color-accent);
+}
+
+/* Info cards */
+body.dark-mode .info-card {
+  background: var(--bg-glass);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .info-card-title {
+  color: var(--color-text);
+}
+
+/* Announcements */
+body.dark-mode .announcement-title {
+  color: var(--color-text);
+}
+
+body.dark-mode .announcement-content {
+  color: var(--color-text-muted);
+}
+
+/* Donations */
+body.dark-mode .donation-category {
+  color: var(--color-text-muted);
+}
+
+body.dark-mode .donation-amount {
+  color: var(--color-accent);
+}
+
+body.dark-mode .donation-progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .donation-progress-fill {
+  background: linear-gradient(90deg, var(--color-primary-light), var(--color-accent));
+}
+
+body.dark-mode .donation-percent {
+  color: var(--color-text);
+}
+
+body.dark-mode .donation-qr-section {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Info section (hadiths) */
+body.dark-mode .info-container {
+  background: var(--bg-glass);
+  border-left-color: var(--color-accent);
+}
+
+body.dark-mode .info-text {
+  color: var(--color-text);
+}
+
+body.dark-mode .info-source {
+  color: var(--color-text-muted);
+}
+
+/* Video placeholder */
+body.dark-mode .video-placeholder {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .video-placeholder-text {
+  color: var(--color-text-muted);
+}
+
+/* Background overlay - add dark tint */
+body.dark-mode .bg-overlay.active {
+  background-color: rgba(0, 0, 0, 0.3);
+  background-blend-mode: multiply;
+}
+
+/* IQOMAH section */
+body.dark-mode .iqomah-title {
+  color: var(--color-danger);
+}
+
+body.dark-mode .iqomah-time {
+  color: var(--color-accent);
+}
+
+/* Countdown pill - keep gradient but ensure visibility */
+body.dark-mode .countdown-pill {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), var(--shadow-glow);
 }
 ```
 
 ### JavaScript Changes (`display.js`)
 
-In `updateDisplayElements()` function, add:
+**Create a dedicated function for dark mode management:**
 
 ```javascript
-// Dark mode handling
-const darkModeEnabled = settings.dark_mode_enabled === 'true';
-const darkModeStyle = settings.dark_mode_style || 'soft';
+// ==================== DARK MODE ====================
+function updateDarkMode() {
+  const darkModeEnabled = settings.dark_mode_enabled === 'true';
+  const darkModeStyle = settings.dark_mode_style || 'soft';
 
-// Remove any existing dark mode classes
-document.body.classList.remove('dark-mode', 'dark-soft', 'dark-calm');
+  // Remove dark mode classes first
+  document.body.classList.remove('dark-mode', 'dark-soft', 'dark-calm');
 
-// Apply dark mode only if enabled and not in special states
-if (darkModeEnabled && currentState !== AppState.ADZAN && currentState !== AppState.PRAYER) {
-  document.body.classList.add('dark-mode', `dark-${darkModeStyle}`);
+  // Apply dark mode only if enabled and not in special states
+  // ADZAN uses adhan-mode, PRAYER uses calm-mode - both have their own styling
+  if (darkModeEnabled && currentState !== AppState.ADZAN && currentState !== AppState.PRAYER) {
+    document.body.classList.add('dark-mode', `dark-${darkModeStyle}`);
+  }
+}
+```
+
+**Call from `updateDisplayElements()`:**
+
+```javascript
+function updateDisplayElements() {
+  // ... existing code ...
+
+  // Update dark mode (call at the end)
+  updateDarkMode();
+}
+```
+
+**Call from state transition functions** to ensure dark mode is removed when entering ADZAN or PRAYER states:
+
+```javascript
+function setAdzanState(prayer) {
+  // ... existing code ...
+  updateDarkMode(); // Will remove dark mode since state is ADZAN
+}
+
+function setPrayerInProgress(prayerName) {
+  // ... existing code ...
+  updateDarkMode(); // Will remove dark mode since state is PRAYER
+}
+
+function setCountdownToNextPrayer(prayerIndex) {
+  // ... existing code ...
+  updateDarkMode(); // Will apply dark mode if enabled (state is WAITING_ADZAN)
+}
+
+function setIqomahCountdown(remainingMinutes, prayer) {
+  // ... existing code ...
+  updateDarkMode(); // Will apply dark mode if enabled (state is IQOMAH)
 }
 ```
 
 ### JavaScript Changes (`admin.js`)
 
-In `populateSettings()`:
+**Add helper function:**
+
 ```javascript
+function toggleDarkModeStyleVisibility() {
+  const enabled = document.getElementById('setting-dark-mode-enabled').checked;
+  const styleGroup = document.getElementById('dark-mode-style-group');
+  styleGroup.style.display = enabled ? 'block' : 'none';
+}
+```
+
+**In `populateSettings()`:**
+
+```javascript
+// Dark mode settings
 document.getElementById('setting-dark-mode-enabled').checked = appData.settings.dark_mode_enabled === 'true';
 document.getElementById('setting-dark-mode-style').value = appData.settings.dark_mode_style || 'soft';
-// Toggle style dropdown visibility
 toggleDarkModeStyleVisibility();
 ```
 
-In save handler:
+**In save handler (inside the settings object):**
+
 ```javascript
 dark_mode_enabled: document.getElementById('setting-dark-mode-enabled').checked ? 'true' : 'false',
 dark_mode_style: document.getElementById('setting-dark-mode-style').value
@@ -129,20 +318,22 @@ dark_mode_style: document.getElementById('setting-dark-mode-style').value
 
 ### HTML Changes (`admin.html`)
 
-Add to settings section:
+Add to the "Tampilan" subsection in settings (after the live indicator setting):
+
 ```html
-<div class="setting-item">
-  <label class="setting-label">
+<!-- Dark Mode Settings -->
+<div class="form-group">
+  <label class="checkbox-label">
     <input type="checkbox" id="setting-dark-mode-enabled" onchange="toggleDarkModeStyleVisibility()">
-    <span>🌙</span> Enable Dark Mode
+    <span>🌙 Enable Dark Mode</span>
   </label>
-  <div id="dark-mode-style-group" class="setting-sub-item" style="display: none;">
-    <label>Style</label>
-    <select id="setting-dark-mode-style">
-      <option value="soft">Soft Dark</option>
-      <option value="calm">Calm Mode Style</option>
-    </select>
-  </div>
+</div>
+<div id="dark-mode-style-group" class="form-group" style="display: none; margin-left: 1.5rem;">
+  <label>Style</label>
+  <select id="setting-dark-mode-style">
+    <option value="soft">Soft Dark</option>
+    <option value="calm">Calm Mode Style</option>
+  </select>
 </div>
 ```
 
@@ -152,19 +343,33 @@ Add to settings section:
 |-------|-------------------|-------|
 | IDLE | Yes (if enabled) | Default state |
 | WAITING_ADZAN | Yes (if enabled) | Countdown to adzan |
-| ADZAN | No | Uses `adhan-mode` styling |
-| IQOMAH | Yes (if enabled) | Countdown before prayer |
-| PRAYER | No | Uses `calm-mode` styling |
-| FINISHED | Yes (if enabled) | Brief transition state |
+| ADZAN | No | Uses `adhan-mode` styling, dark mode classes removed |
+| IQOMAH | Yes (if enabled) | Countdown before prayer, dark mode reapplied |
+| PRAYER | No | Uses `calm-mode` styling, dark mode classes removed |
+| FINISHED | Yes (if enabled) | Returns to IDLE with dark mode |
+
+**State Transition Flow:**
+1. WAITING_ADZAN → ADZAN: Dark mode removed (adhan-mode takes over)
+2. ADZAN → IQOMAH: Dark mode reapplied (adhan-mode removed)
+3. IQOMAH → PRAYER: Dark mode removed (calm-mode takes over)
+4. PRAYER → FINISHED/IDLE: Dark mode reapplied (calm-mode removed)
+
+## Background Image Handling
+
+When dark mode is enabled with a background image:
+- The `.bg-overlay` element gets an additional dark tint via `background-blend-mode: multiply`
+- This ensures text readability while still showing the background image
+- The existing `background_opacity` setting still applies
 
 ## Files to Modify
 
 | File | Changes |
 |------|---------|
-| `public/style.css` | Add dark mode CSS variables and body classes |
-| `public/display.js` | Apply dark mode classes in `updateDisplayElements()` |
-| `public/admin.html` | Add dark mode toggle and style dropdown |
-| `public/admin.js` | Add settings population and save logic |
+| `server.js` | Add default values for `dark_mode_enabled` and `dark_mode_style` |
+| `public/style.css` | Add dark mode CSS variables, body classes, and element overrides |
+| `public/display.js` | Add `updateDarkMode()` function, call from state transitions and `updateDisplayElements()` |
+| `public/admin.html` | Add dark mode toggle checkbox and style dropdown |
+| `public/admin.js` | Add `toggleDarkModeStyleVisibility()`, populate and save settings |
 
 ## Testing Checklist
 
@@ -174,9 +379,12 @@ Add to settings section:
 - [ ] Calm Mode style applies emerald gradient
 - [ ] Dark mode is disabled during ADZAN state
 - [ ] Dark mode is disabled during PRAYER state
+- [ ] Dark mode is re-enabled during IQOMAH state
 - [ ] Dark mode persists after page refresh
-- [ ] Background image still works with dark mode (with overlay)
+- [ ] Background image works with dark mode (dark tint applied)
 - [ ] All text remains readable in both styles
 - [ ] Glassmorphism cards look correct in both styles
 - [ ] Marquee/footer remains visible
 - [ ] Ka'bah video section works correctly
+- [ ] No flicker on page load
+- [ ] Transition between states is smooth (no visual conflicts)
