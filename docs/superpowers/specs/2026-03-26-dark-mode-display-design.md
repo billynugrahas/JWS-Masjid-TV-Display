@@ -230,6 +230,26 @@ body.dark-mode .iqomah-time {
 body.dark-mode .countdown-pill {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), var(--shadow-glow);
 }
+
+/* Footer in dark mode - slightly darker for better contrast */
+body.dark-mode .footer {
+  background: linear-gradient(135deg, #0D1F17 0%, #1B4332 100%);
+}
+```
+
+**Defensive CSS for State Modes:**
+
+To ensure ADZAN and PRAYER states always display correctly even if there's a brief overlap in class application, add these rules:
+
+```css
+/* Ensure state modes override dark mode visuals */
+body.adhan-mode {
+  background: var(--bg-primary) !important;
+}
+
+body.calm-mode {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%) !important;
+}
 ```
 
 ### JavaScript Changes (`display.js`)
@@ -263,6 +283,10 @@ function updateDisplayElements() {
   updateDarkMode();
 }
 ```
+
+**Initial Page Load Behavior:**
+
+On first page load, `settings` is initialized as `{}`. When `fetchData()` retrieves actual settings, `settingsChanged` will be `true` (comparing empty object to populated settings). This triggers `updateDisplayElements()` which calls `updateDarkMode()`, ensuring dark mode is correctly applied immediately on load without flicker.
 
 **Call from state transition functions** to ensure dark mode is removed when entering ADZAN or PRAYER states:
 
