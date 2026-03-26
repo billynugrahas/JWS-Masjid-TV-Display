@@ -32,6 +32,8 @@ let nextPrayerIndex = -1;
 let currentHadithIndex = 0;
 let currentDonationPage = 0;
 let currentAnnouncementPage = 0;
+let cachedHijriDate = null;
+let lastHijriCalculationDate = null;
 
 const DONATIONS_PER_PAGE = 6;
 const ANNOUNCEMENTS_PER_PAGE = 3;
@@ -83,14 +85,26 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeDisplay() {
   // Start clock update
   updateClock();
-  setInterval(updateClock, 1000);
+  const clockInterval = setInterval(updateClock, 1000);
 
   // Fetch initial data
   fetchData();
 
   // Set up intervals
-  setInterval(fetchData, 5000);      // Poll data every 5 seconds
-  setInterval(checkPrayerState, 1000); // Check state every second
+  const dataInterval = setInterval(fetchData, 30000);     // Poll data every 30 seconds (optimized for low-RAM systems)
+  const prayerCheckInterval = setInterval(checkPrayerState, 1000); // Check state every second
+
+  // Cleanup on page unload to prevent memory leaks
+  window.addEventListener('beforeunload', () => {
+    clearInterval(clockInterval);
+    clearInterval(dataInterval);
+    clearInterval(prayerCheckInterval);
+    if (countdownInterval) clearInterval(countdownInterval);
+    if (iqomahInterval) clearInterval(iqomahInterval);
+    if (hadithInterval) clearInterval(hadithInterval);
+    if (donationInterval) clearInterval(donationInterval);
+    if (announcementInterval) clearInterval(announcementInterval);
+  });
 }
 
 // ==================== CLOCK & DATE FUNCTIONS ====================
@@ -115,9 +129,13 @@ function updateDateDisplay(date) {
   const dateStr = `${dayName}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
   document.getElementById('date-masehi').textContent = dateStr;
 
-  // Hijri date (approximate calculation)
-  const hijriDate = calculateHijriDate(date);
-  document.getElementById('date-hijri').textContent = `${hijriDate.day} ${hijriMonths[hijriDate.month]} ${hijriDate.year} H`;
+  // Hijri date - only recalculate once per day for performance
+  const todayKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  if (!cachedHijriDate || lastHijriCalculationDate !== todayKey) {
+    cachedHijriDate = calculateHijriDate(date);
+    lastHijriCalculationDate = todayKey;
+  }
+  document.getElementById('date-hijri').textContent = `${cachedHijriDate.day} ${hijriMonths[cachedHijriDate.month]} ${cachedHijriDate.year} H`;
 }
 
 /**
@@ -790,7 +808,7 @@ function updateIqomahDisplay(endTime) {
       lastBeepedSecond = totalSecondsRemaining;
       playBeep();
     }
-  }, 100);
+  }, 1000); // Optimized from 100ms to 1000ms
 }
 
 

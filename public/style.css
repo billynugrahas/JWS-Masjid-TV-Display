@@ -110,7 +110,6 @@ body {
   align-items: center;
   padding: clamp(0.5rem, 1vh, 1rem) clamp(1rem, 2vw, 2rem);
   background: var(--bg-glass);
-  backdrop-filter: blur(10px);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
 }
@@ -428,7 +427,6 @@ body {
 
 .optional-time-card {
   background: rgba(27, 67, 50, 0.12);
-  backdrop-filter: blur(12px);
   border-radius: var(--radius-lg);
   padding: clamp(0.5rem, 1vh, 1rem) clamp(1rem, 2vw, 2rem);
   text-align: center;
@@ -461,7 +459,6 @@ body {
 /* ==================== PRAYER CARD - GLASSMORPHISM ==================== */
 .prayer-card {
   background: var(--bg-glass);
-  backdrop-filter: blur(12px);
   border-radius: var(--radius-xl);
   padding: clamp(0.75rem, 1.5vh, 1.5rem);
   text-align: center;
@@ -557,7 +554,6 @@ body {
 
 .info-card {
   background: var(--bg-glass);
-  backdrop-filter: blur(12px);
   border-radius: var(--radius-xl);
   padding: clamp(0.5rem, 1vh, 1rem) clamp(0.75rem, 1.5vw, 1.5rem);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -756,7 +752,6 @@ body {
 
 .announcements-block {
   background: var(--bg-glass);
-  backdrop-filter: blur(10px);
   border-radius: var(--radius-xl);
   padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
   box-shadow: var(--shadow-md);
@@ -815,7 +810,6 @@ body {
 
 .donations-block {
   background: var(--bg-glass);
-  backdrop-filter: blur(10px);
   border-radius: var(--radius-xl);
   padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
   box-shadow: var(--shadow-md);
@@ -1002,8 +996,6 @@ body {
   justify-content: center;
   gap: 12px;
   background: rgba(30, 58, 43, 0.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   border: 2px dashed rgba(30, 58, 43, 0.25);
   border-radius: 20px;
 }
@@ -1118,7 +1110,6 @@ body.adhan-mode .column-left {
   align-items: center;
   gap: clamp(0.75rem, 1.5vw, 1.5rem);
   background: var(--bg-glass);
-  backdrop-filter: blur(10px);
   border-radius: var(--radius-xl);
   padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
   border-left: 4px solid var(--color-accent);
