@@ -733,6 +733,9 @@ function setIqomahCountdown(remainingMinutes, prayer) {
 
   updatePrayerHighlight(currentPrayerIndex);
   updateIqomahDisplay(iqomahEnd);
+
+  // Play long beep to indicate entering iqomah (same as prayer state transition)
+  playTone(660, 1.5, 0.4);
 }
 
 function setPrayerInProgress(prayerName) {
