@@ -550,6 +550,19 @@
                   Hapus QR Code
                 </button>
               </div>
+              <hr style="border-color: var(--color-text-light); margin: 1rem 0;">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-donation-qr-fullscreen-enabled">
+                  <span>Tampilkan QR Layar Penuh</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Rotasi tampilan QR dalam ukuran besar untuk memudahkan scan dari jauh</small>
+              </div>
+              <div class="form-group">
+                <label>Durasi Tampil QR (detik)</label>
+                <input type="number" id="setting-donation-qr-fullscreen-interval" value="10" min="5" max="60">
+                <small style="color: var(--color-text-muted);">Durasi QR tampil sebelum kembali ke pengumuman/donasi</small>
+              </div>
             </div>
           </div>
 
