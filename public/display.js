@@ -504,7 +504,7 @@ function renderPrayerGrid() {
       `;
     } else {
       return `
-        <div class="prayer-card ${item.prayerIndex === nextPrayerIndex ? 'active' : ''}" data-index="${index}">
+        <div class="prayer-card ${item.prayerIndex === nextPrayerIndex ? 'active' : ''}" data-index="${index}" data-prayer-index="${item.prayerIndex}">
           <div class="icon">${item.icon}</div>
           <div class="name">${item.name}</div>
           <div class="time">${formatTime(item.time)}</div>
@@ -515,10 +515,13 @@ function renderPrayerGrid() {
   }).join('');
 }
 
-function updatePrayerHighlight(index) {
+function updatePrayerHighlight(prayerIndex) {
   const cards = document.querySelectorAll('.prayer-card');
-  cards.forEach((card, i) => {
-    card.classList.toggle('active', i === index);
+  cards.forEach(card => {
+    // Use data-prayer-index for prayers (ignores optional times)
+    // Optional times don't have data-prayer-index, so they'll never be highlighted
+    const cardPrayerIndex = card.dataset.prayerIndex;
+    card.classList.toggle('active', cardPrayerIndex !== undefined && parseInt(cardPrayerIndex) === prayerIndex);
   });
 }
 
