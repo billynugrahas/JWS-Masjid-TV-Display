@@ -138,7 +138,6 @@ if (existingPrayers.count === 0) {
 
 // Initialize default hadiths
 const defaultHadiths = [
-  { text: 'Barangsiapa yang menghidupkan bulan Ramadhan dengan iman dan mengharap pahala, maka diampunilah dosa-dosanya yang telah lalu.', source: 'HR. Bukhari & Muslim' },
   { text: 'Sholat berjamaah lebih utama 27 derajat dibanding sholat sendirian.', source: 'HR. Bukhari' },
   { text: 'Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya.', source: 'HR. Thabrani' }
 ];
