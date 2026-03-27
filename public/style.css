@@ -1223,6 +1223,43 @@ body.adhan-mode .column-left {
   opacity: 0.5;
 }
 
+/* Static marquee (no animation) - for low-RAM devices */
+.marquee.static {
+  animation: none !important;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0 !important;
+  flex-wrap: wrap;
+  white-space: normal;
+  gap: 1rem 2rem;
+  text-align: center;
+  width: 100%;
+}
+
+.marquee.static .marquee-separator {
+  display: none;
+}
+
+/* ==================== NO TRANSITIONS MODE (Low-RAM) ==================== */
+body.no-transitions .announcement-item,
+body.no-transitions .donation-item {
+  opacity: 1;
+  animation: none;
+}
+
+body.no-transitions .prayer-card {
+  transition: none;
+}
+
+body.no-transitions .info-text,
+body.no-transitions .info-source {
+  transition: none;
+}
+
+body.no-transitions .countdown-pill {
+  animation: none;
+}
+
 /* ==================== DARK MODE ==================== */
 
 /* Dark Mode - Soft Style */

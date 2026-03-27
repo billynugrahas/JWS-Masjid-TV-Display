@@ -392,6 +392,9 @@ function updateDisplayElements() {
 
   // Update dark mode
   updateDarkMode();
+
+  // Update performance mode (transitions)
+  updatePerformanceMode();
 }
 
 // ==================== PRAYER GRID RENDERING ====================
@@ -505,16 +508,25 @@ function rotateHadith() {
   const sourceEl = document.getElementById('info-source');
 
   if (textEl && sourceEl) {
-    // Fade out
-    textEl.style.opacity = 0;
-    sourceEl.style.opacity = 0;
+    // Check if transitions are disabled (for low-RAM devices)
+    const transitionsDisabled = settings.disable_transitions === 'true';
 
-    setTimeout(() => {
+    if (transitionsDisabled) {
+      // Instant update without fade transition
       textEl.textContent = `"${hadith.text}"`;
       sourceEl.textContent = `— ${hadith.source}`;
-      textEl.style.opacity = 1;
-      sourceEl.style.opacity = 1;
-    }, 300);
+    } else {
+      // Original fade transition
+      textEl.style.opacity = 0;
+      sourceEl.style.opacity = 0;
+
+      setTimeout(() => {
+        textEl.textContent = `"${hadith.text}"`;
+        sourceEl.textContent = `— ${hadith.source}`;
+        textEl.style.opacity = 1;
+        sourceEl.style.opacity = 1;
+      }, 300);
+    }
   }
 
   currentHadithIndex = (currentHadithIndex + 1) % hadiths.length;
@@ -531,6 +543,9 @@ const categoryLabels = {
 function renderMarquee() {
   const marqueeEl = document.getElementById('marquee');
   if (!marqueeEl) return;
+
+  // Check if marquee animation is disabled (for low-RAM devices)
+  const marqueeDisabled = settings.disable_marquee === 'true';
 
   // Get marquee settings with defaults
   const loop = settings.marquee_loop !== 'false'; // Default true (seamless loop)
@@ -556,20 +571,30 @@ function renderMarquee() {
       `;
     }).join('');
 
-    if (loop) {
+    if (marqueeDisabled) {
+      // Static centered display (no animation)
+      marqueeEl.innerHTML = items;
+      marqueeEl.classList.add('static');
+      marqueeEl.style.animationName = 'none';
+      marqueeEl.style.paddingLeft = '0';
+    } else if (loop) {
       // Seamless loop: duplicate items (2 copies total)
       // Animation translates -50% so when it reaches the end of first set,
       // the second set is exactly where the first set started
       marqueeEl.innerHTML = items + items;
+      marqueeEl.classList.remove('static');
       marqueeEl.style.animationName = 'marquee-seamless';
       marqueeEl.style.animationDuration = `${speed}s`;
       marqueeEl.style.animationIterationCount = 'infinite';
+      marqueeEl.style.paddingLeft = '100%';
     } else {
       // Non-seamless: single items, wait for exit then restart
       marqueeEl.innerHTML = items;
+      marqueeEl.classList.remove('static');
       marqueeEl.style.animationName = 'marquee';
       marqueeEl.style.animationDuration = `${speed}s`;
       marqueeEl.style.animationIterationCount = 'infinite';
+      marqueeEl.style.paddingLeft = '100%';
     }
   } else {
     // Fallback to default marquee
@@ -580,6 +605,11 @@ function renderMarquee() {
         ${defaultText}
       </span>
     `;
+    if (marqueeDisabled) {
+      marqueeEl.classList.add('static');
+      marqueeEl.style.animationName = 'none';
+      marqueeEl.style.paddingLeft = '0';
+    }
   }
 }
 
@@ -994,6 +1024,16 @@ function startDonationRotation() {
 }
 
 
+
+// ==================== UPDATE PERFORMANCE MODE ====================
+function updatePerformanceMode() {
+  const transitionsDisabled = settings.disable_transitions === 'true';
+  if (transitionsDisabled) {
+    document.body.classList.add('no-transitions');
+  } else {
+    document.body.classList.remove('no-transitions');
+  }
+}
 
 // ==================== DARK MODE ====================
 function updateDarkMode() {
