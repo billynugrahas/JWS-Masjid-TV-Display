@@ -98,6 +98,9 @@ const defaultSettings = {
   donations_enabled: 'true',
   donations_limit: '6',
   donations_rotation: '10',
+  // Fullscreen QR rotation settings
+  donation_qr_fullscreen_enabled: 'false',
+  donation_qr_fullscreen_interval: '10',
   // Prayer calculation settings
   prayer_calc_enabled: 'false',
   prayer_calc_method: 'Singapore', // Singapore = Kemenag method
