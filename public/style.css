@@ -1527,6 +1527,105 @@ body.calm-mode .column-right {
   pointer-events: none;
 }
 
+/* ==================== FULLSCREEN QR DISPLAY ==================== */
+.qr-fullscreen-display {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.column-left.qr-fullscreen .qr-fullscreen-display {
+  display: flex;
+  opacity: 1;
+}
+
+.qr-fullscreen-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5vh;
+  padding: 2vh;
+}
+
+.qr-fullscreen-icon {
+  font-size: calc(clamp(2rem, 4vh, 3rem) * var(--font-scale));
+}
+
+.qr-fullscreen-label {
+  font-family: var(--font-display);
+  font-size: calc(clamp(1.2rem, 2.5vh, 1.8rem) * var(--font-scale));
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.qr-fullscreen-image {
+  width: clamp(200px, 35vh, 350px);
+  height: clamp(200px, 35vh, 350px);
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  background: white;
+  padding: 1vh;
+  box-shadow: var(--shadow-lg);
+}
+
+.qr-fullscreen-subtext {
+  font-family: var(--font-body);
+  font-size: calc(clamp(0.85rem, 1.5vh, 1.1rem) * var(--font-scale));
+  color: var(--color-text-muted);
+  max-width: 80%;
+}
+
+/* Hide normal cards when in fullscreen QR mode */
+.column-left.qr-fullscreen .card-announcements,
+.column-left.qr-fullscreen .card-donations {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Smooth transition for column-left */
+.column-left {
+  position: relative;
+  transition: opacity 0.5s ease;
+}
+
+.column-left .card-announcements,
+.column-left .card-donations {
+  transition: opacity 0.5s ease;
+}
+
+/* No transitions mode - instant switching */
+body.no-transitions .qr-fullscreen-display,
+body.no-transitions .column-left,
+body.no-transitions .column-left .card-announcements,
+body.no-transitions .column-left .card-donations {
+  transition: none;
+}
+
+/* Dark mode support */
+body.dark-mode .qr-fullscreen-label {
+  color: var(--color-accent);
+}
+
+body.dark-mode .qr-fullscreen-image {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Calm mode - dim QR like other UI elements */
+body.calm-mode .qr-fullscreen-display {
+  opacity: 0.2;
+  filter: blur(2px);
+}
+
 /* ==================== RESPONSIVE DESIGN ==================== */
 /* For shorter screens (e.g., 1366x768 or 1280x720) */
 @media (max-height: 800px) {

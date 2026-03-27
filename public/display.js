@@ -27,6 +27,8 @@ let iqomahInterval = null;
 let hadithInterval = null;
 let donationInterval = null;
 let announcementInterval = null;
+let qrFullscreenInterval = null;
+let isQRFullscreenVisible = false;
 let currentPrayerIndex = -1;
 let nextPrayerIndex = -1;
 let currentHadithIndex = 0;
@@ -103,6 +105,7 @@ function initializeDisplay() {
     if (hadithInterval) clearInterval(hadithInterval);
     if (donationInterval) clearInterval(donationInterval);
     if (announcementInterval) clearInterval(announcementInterval);
+    if (qrFullscreenInterval) clearInterval(qrFullscreenInterval);
   });
 }
 
@@ -388,6 +391,18 @@ function updateDisplayElements() {
       donationQRSection.style.display = 'none';
       donationsWrapper.classList.remove('has-qr');
     }
+  }
+
+  // Update fullscreen QR display
+  updateQRFullscreenDisplay();
+
+  // Start or stop QR fullscreen rotation
+  const fullscreenEnabled = settings.donation_qr_fullscreen_enabled === 'true';
+
+  if (qrEnabled && fullscreenEnabled) {
+    startQRFullscreenRotation();
+  } else {
+    stopQRFullscreenRotation();
   }
 
   // Update Ka'bah video display
@@ -1115,6 +1130,79 @@ function startDonationRotation() {
     currentDonationPage = (currentDonationPage + 1) % totalPages;
     renderDonationsList();
   }, rotationInterval);
+}
+
+// ==================== QR FULLSCREEN ROTATION ====================
+function startQRFullscreenRotation() {
+  // Clear existing interval
+  if (qrFullscreenInterval) {
+    clearInterval(qrFullscreenInterval);
+  }
+
+  // Only start if both QR settings are enabled and we have an image
+  const qrEnabled = settings.donation_qr_enabled === 'true' && settings.donation_qr_image;
+  const fullscreenEnabled = settings.donation_qr_fullscreen_enabled === 'true';
+
+  if (!qrEnabled || !fullscreenEnabled) {
+    stopQRFullscreenRotation();
+    return;
+  }
+
+  // Get interval from settings (default 10 seconds)
+  const interval = (parseInt(settings.donation_qr_fullscreen_interval) || 10) * 1000;
+
+  // Start rotation
+  qrFullscreenInterval = setInterval(() => {
+    isQRFullscreenVisible = !isQRFullscreenVisible;
+    toggleQRFullscreenView(isQRFullscreenVisible);
+  }, interval);
+}
+
+function stopQRFullscreenRotation() {
+  if (qrFullscreenInterval) {
+    clearInterval(qrFullscreenInterval);
+    qrFullscreenInterval = null;
+  }
+  // Ensure we return to normal view
+  isQRFullscreenVisible = false;
+  toggleQRFullscreenView(false);
+}
+
+function toggleQRFullscreenView(show) {
+  const columnLeft = document.querySelector('.column-left');
+  const qrFullscreenImage = document.getElementById('qr-fullscreen-image');
+  const qrFullscreenSubtext = document.getElementById('qr-fullscreen-subtext');
+
+  if (!columnLeft) return;
+
+  if (show && settings.donation_qr_image) {
+    // Update QR image
+    if (qrFullscreenImage) {
+      qrFullscreenImage.src = settings.donation_qr_image;
+    }
+    // Update subtext with mosque name
+    if (qrFullscreenSubtext) {
+      qrFullscreenSubtext.textContent = settings.mosque_name || '';
+    }
+    // Add class to show fullscreen QR
+    columnLeft.classList.add('qr-fullscreen');
+  } else {
+    // Remove class to show normal view
+    columnLeft.classList.remove('qr-fullscreen');
+  }
+}
+
+function updateQRFullscreenDisplay() {
+  // Update the QR image source if fullscreen is currently visible
+  const qrFullscreenImage = document.getElementById('qr-fullscreen-image');
+  const qrFullscreenSubtext = document.getElementById('qr-fullscreen-subtext');
+
+  if (qrFullscreenImage && settings.donation_qr_image) {
+    qrFullscreenImage.src = settings.donation_qr_image;
+  }
+  if (qrFullscreenSubtext) {
+    qrFullscreenSubtext.textContent = settings.mosque_name || '';
+  }
 }
 
 
