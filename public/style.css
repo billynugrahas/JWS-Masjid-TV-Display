@@ -1287,6 +1287,18 @@ body.no-transitions .countdown-pill {
   animation: none;
 }
 
+body.no-transitions .prayer-progress-icon {
+  animation: none;
+}
+
+body.no-transitions .live-dot {
+  animation: none;
+}
+
+body.no-transitions .iqomah-section {
+  animation: none;
+}
+
 /* ==================== DARK MODE ==================== */
 
 /* Dark Mode - Soft Style */

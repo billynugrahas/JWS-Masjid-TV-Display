@@ -183,6 +183,7 @@ function calculateHijriDate(gregorianDate) {
 let previousAnnouncements = [];
 let previousDonations = [];
 let previousRunningTexts = [];
+let previousPrayerTimes = [];
 
 async function fetchData() {
   try {
@@ -217,14 +218,21 @@ async function fetchData() {
     previousAnnouncements = [...newAnnouncements];
     previousDonations = [...newDonations];
     previousRunningTexts = [...newRunningTexts];
+    previousPrayerTimes = [...newPrayerTimes];
+
+    // Check if prayer times changed
+    const prayerTimesChanged = JSON.stringify(newPrayerTimes) !== JSON.stringify(previousPrayerTimes);
 
     // Only re-render if data changed
     if (settingsChanged) {
       updateDisplayElements();
     }
 
-    renderPrayerGrid();
-    renderOptionalTimes();
+    // Only re-render prayer grid if prayer times or settings changed (prevents jitter)
+    if (prayerTimesChanged || settingsChanged) {
+      renderPrayerGrid();
+      renderOptionalTimes();
+    }
 
     if (settingsChanged || JSON.stringify(runningTexts) !== JSON.stringify(previousRunningTexts)) {
       renderMarquee();
