@@ -954,6 +954,7 @@ function populateSettings() {
   document.getElementById('setting-prayer-subtext').value = appData.settings.prayer_subtext || '';
   document.getElementById('setting-prayer-subtext-2').value = appData.settings.prayer_subtext_2 || '';
   document.getElementById('setting-show-live').checked = appData.settings.show_live_indicator === 'true';
+  document.getElementById('setting-hide-prayer-icons').checked = appData.settings.hide_prayer_icons === 'true';
 
   // Prayer calculation settings
   document.getElementById('setting-prayer-calc-enabled').checked = appData.settings.prayer_calc_enabled === 'true';
@@ -999,6 +1000,7 @@ function populateSettings() {
   document.getElementById('setting-syuruq-enabled').checked = appData.settings.syuruq_enabled === 'true';
   document.getElementById('setting-syuruq-label').value = appData.settings.syuruq_label || 'Syuruq';
   document.getElementById('setting-syuruq-offset').value = appData.settings.syuruq_offset || 20;
+  document.getElementById('setting-optional-in-prayer-grid').checked = appData.settings.optional_in_prayer_grid === 'true';
 
   // Info block settings (Announcements & Donations)
   document.getElementById('setting-announcements-enabled').checked = appData.settings.announcements_enabled !== 'false'; // Default true
@@ -1228,6 +1230,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       syuruq_enabled: document.getElementById('setting-syuruq-enabled').checked ? 'true' : 'false',
       syuruq_label: document.getElementById('setting-syuruq-label').value,
       syuruq_offset: document.getElementById('setting-syuruq-offset').value,
+      optional_in_prayer_grid: document.getElementById('setting-optional-in-prayer-grid').checked ? 'true' : 'false',
       // Info block settings
       announcements_enabled: document.getElementById('setting-announcements-enabled').checked ? 'true' : 'false',
       announcements_limit: document.getElementById('setting-announcements-limit').value,
@@ -1237,6 +1240,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       donations_rotation: document.getElementById('setting-donations-rotation').value,
       donation_qr_enabled: document.getElementById('setting-donation-qr-enabled').checked ? 'true' : 'false',
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
+      hide_prayer_icons: document.getElementById('setting-hide-prayer-icons').checked ? 'true' : 'false',
       time_format: document.getElementById('setting-time-format').value,
       font_scale: document.getElementById('setting-font-scale').value,
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',

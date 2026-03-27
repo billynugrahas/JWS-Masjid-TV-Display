@@ -395,6 +395,9 @@ function updateDisplayElements() {
 
   // Update performance mode (transitions)
   updatePerformanceMode();
+
+  // Update prayer icons visibility
+  updatePrayerIconsVisibility();
 }
 
 // ==================== PRAYER GRID RENDERING ====================
@@ -402,14 +405,92 @@ function renderPrayerGrid() {
   const prayerGrid = document.getElementById('prayer-grid');
   if (!prayerGrid || prayerTimes.length === 0) return;
 
-  prayerGrid.innerHTML = prayerTimes.map((prayer, index) => `
-    <div class="prayer-card ${index === nextPrayerIndex ? 'active' : ''}" data-index="${index}">
-      <div class="icon">${prayerIcons[prayer.name] || '🕌'}</div>
-      <div class="name">${prayer.name}</div>
-      <div class="time">${formatTime(prayer.time)}</div>
-      <div class="iqomah">Iqomah: ${prayer.iqomah_duration} menit</div>
-    </div>
-  `).join('');
+  // Check if optional times should be integrated into prayer grid
+  const integrateOptional = settings.optional_in_prayer_grid === 'true';
+
+  // Build the items array
+  let items = [];
+
+  // Get Subuh time for Imsak/Syuruq calculation
+  const subuhPrayer = prayerTimes.find(p => p.name.toLowerCase() === 'subuh');
+  let subuhTotalMinutes = 0;
+  if (subuhPrayer) {
+    const [subuhHours, subuhMinutes] = subuhPrayer.time.split(':').map(Number);
+    subuhTotalMinutes = subuhHours * 60 + subuhMinutes;
+  }
+
+  // Add Imsak first if enabled and integrating
+  if (integrateOptional && settings.imsak_enabled === 'true' && subuhPrayer) {
+    const imsakOffset = parseInt(settings.imsak_offset) || 10;
+    const imsakTotalMinutes = subuhTotalMinutes - imsakOffset;
+    const imsakHours = Math.floor(imsakTotalMinutes / 60) % 24;
+    const imsakMinutes = imsakTotalMinutes % 60;
+    const imsakTime = `${String(imsakHours).padStart(2, '0')}:${String(imsakMinutes).padStart(2, '0')}`;
+
+    items.push({
+      icon: '🌙',
+      name: settings.imsak_label || 'Imsak',
+      time: imsakTime,
+      isOptional: true,
+      sortTime: imsakTotalMinutes
+    });
+  }
+
+  // Add all 5 prayers
+  prayerTimes.forEach((prayer, index) => {
+    const [hours, minutes] = prayer.time.split(':').map(Number);
+    const prayerTotalMinutes = hours * 60 + minutes;
+
+    items.push({
+      icon: prayerIcons[prayer.name] || '🕌',
+      name: prayer.name,
+      time: prayer.time,
+      iqomah: prayer.iqomah_duration,
+      isOptional: false,
+      sortTime: prayerTotalMinutes,
+      prayerIndex: index
+    });
+
+    // Add Syuruq after Subuh if enabled and integrating
+    if (integrateOptional && settings.syuruq_enabled === 'true' && prayer.name.toLowerCase() === 'subuh') {
+      const syuruqOffset = parseInt(settings.syuruq_offset) || 20;
+      const syuruqTotalMinutes = subuhTotalMinutes + syuruqOffset;
+      const syuruqHours = Math.floor(syuruqTotalMinutes / 60) % 24;
+      const syuruqMinutes = syuruqTotalMinutes % 60;
+      const syuruqTime = `${String(syuruqHours).padStart(2, '0')}:${String(syuruqMinutes).padStart(2, '0')}`;
+
+      items.push({
+        icon: '🌅',
+        name: settings.syuruq_label || 'Syuruq',
+        time: syuruqTime,
+        isOptional: true,
+        sortTime: syuruqTotalMinutes
+      });
+    }
+  });
+
+  // Render the grid
+  prayerGrid.innerHTML = items.map((item, index) => {
+    if (item.isOptional) {
+      return `
+        <div class="prayer-card optional-time" data-index="${index}">
+          <div class="icon">${item.icon}</div>
+          <div class="name">${item.name}</div>
+          <div class="time">${formatTime(item.time)}</div>
+          <div class="iqomah">&nbsp;</div>
+        </div>
+      `;
+    } else {
+      return `
+        <div class="prayer-card ${item.prayerIndex === nextPrayerIndex ? 'active' : ''}" data-index="${index}">
+          <div class="icon">${item.icon}</div>
+          <div class="name">${item.name}</div>
+          <div class="time">${formatTime(item.time)}</div>
+          <div class="iqomah">Iqomah: ${item.iqomah} menit</div>
+        </div>
+      `;
+    }
+  }).join('');
 }
 
 function updatePrayerHighlight(index) {
@@ -424,6 +505,12 @@ function renderOptionalTimes() {
   const section = document.getElementById('optional-times-section');
   const grid = document.getElementById('optional-times-grid');
   if (!section || !grid) return;
+
+  // If optional times are integrated into prayer grid, hide this section
+  if (settings.optional_in_prayer_grid === 'true') {
+    section.style.display = 'none';
+    return;
+  }
 
   const items = [];
 
@@ -1032,6 +1119,16 @@ function updatePerformanceMode() {
     document.body.classList.add('no-transitions');
   } else {
     document.body.classList.remove('no-transitions');
+  }
+}
+
+// ==================== PRAYER ICONS VISIBILITY ====================
+function updatePrayerIconsVisibility() {
+  const hideIcons = settings.hide_prayer_icons === 'true';
+  if (hideIcons) {
+    document.body.classList.add('hide-prayer-icons');
+  } else {
+    document.body.classList.remove('hide-prayer-icons');
   }
 }
 

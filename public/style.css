@@ -411,7 +411,7 @@ body {
 
 .prayer-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: clamp(0.5rem, 1vw, 1rem);
 }
 
@@ -540,6 +540,30 @@ body {
 
 .prayer-card.active .iqomah {
   color: rgba(255, 255, 255, 0.8);
+}
+
+/* Optional time card in prayer grid (Imsak/Syuruq) */
+.prayer-card.optional-time {
+  background: var(--bg-glass);
+  border-style: dashed;
+  opacity: 0.85;
+}
+
+.prayer-card.optional-time .name {
+  color: var(--color-text-muted);
+}
+
+.prayer-card.optional-time .time {
+  color: var(--color-text-muted);
+}
+
+.prayer-card.optional-time .iqomah {
+  visibility: hidden;
+}
+
+/* Hide prayer icons (for low-resolution displays) */
+body.hide-prayer-icons .prayer-card .icon {
+  display: none;
 }
 
 /* ==================== MID-TIER INFO BLOCK ==================== */
@@ -1099,7 +1123,7 @@ body.adhan-mode .column-left {
 
 /* ==================== INFO / HADITH SECTION ==================== */
 .info-section {
-  padding: 1vh 1vw;
+  padding: 0.5vh 1vw;
   display: flex;
   align-items: center;
   flex-shrink: 0;
@@ -1113,10 +1137,10 @@ body.adhan-mode .column-left {
   gap: clamp(0.75rem, 1.5vw, 1.5rem);
   background: var(--bg-glass);
   border-radius: var(--radius-xl);
-  padding: clamp(0.75rem, 1.5vh, 1.5rem) clamp(1rem, 2vw, 2rem);
+  padding: clamp(0.75rem, 0.2vh, 1.5rem) clamp(1rem, 2vw, 2rem);
   border-left: 4px solid var(--color-accent);
   box-shadow: var(--shadow-md);
-  max-width: 1100px;
+  max-width: 900px; /* 1100px */
   margin: 0 auto;
   width: 100%;
   overflow: hidden;
@@ -1132,10 +1156,10 @@ body.adhan-mode .column-left {
 
 .info-text{
   font-family: var(--font-arabic);
-  font-size: calc(clamp(0.9rem, 1.5vh, 1.15rem) * var(--font-scale));
+  font-size: calc(clamp(1.1rem, 1.9vh, 1.4rem) * var(--font-scale));
   color: var(--color-text);
   font-style: italic;
-  line-height: 1.5;
+  line-height: 1.4;
   transition: opacity 0.4s ease;
   overflow: hidden;
   display: -webkit-box;
@@ -1162,6 +1186,7 @@ body.adhan-mode .column-left {
   padding: clamp(0.5rem, 1vh, 1rem) 0;
   border-radius: var(--radius-lg);
   overflow: hidden;
+  margin-top: 0.5vh;
 }
 
 .marquee-container {
@@ -1511,7 +1536,7 @@ body.calm-mode .column-right {
   }
 
   .prayer-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 0.5vw;
   }
 }
