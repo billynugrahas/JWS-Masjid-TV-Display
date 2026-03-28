@@ -155,7 +155,7 @@ body {
 }
 
 .mosque-address {
-  font-size: calc(clamp(0.65rem, 1.1vh, 0.85rem) * var(--font-scale));
+  font-size: calc(clamp(0.75rem, 1.3vh, 1rem) * var(--font-scale));
   color: var(--color-text-muted);
   letter-spacing: 0.02em;
 }
@@ -224,7 +224,7 @@ body {
 
 .date-hijri {
   font-family: var(--font-arabic);
-  font-size: calc(clamp(0.8rem, 1.3vh, 0.95rem) * var(--font-scale));
+  font-size: calc(clamp(0.9rem, 1.5vh, 1.1rem) * var(--font-scale));
   color: var(--color-primary);
 }
 
@@ -634,7 +634,7 @@ body.hide-prayer-icons .prayer-card .icon {
 
 .announcement-content {
   font-family: var(--font-body);
-  font-size: calc(clamp(0.75rem, 1.2vh, 0.9rem) * var(--font-scale));
+  font-size: calc(clamp(0.85rem, 1.4vh, 1.05rem) * var(--font-scale));
   color: var(--color-text-muted);
   line-height: 1.4;
   display: -webkit-box;
@@ -674,7 +674,7 @@ body.hide-prayer-icons .prayer-card .icon {
 
 .donation-category {
   font-family: var(--font-body);
-  font-size: calc(clamp(0.75rem, 1.2vh, 0.9rem) * var(--font-scale));
+  font-size: calc(clamp(0.85rem, 1.4vh, 1.05rem) * var(--font-scale));
   color: var(--color-text-muted);
 }
 
@@ -835,7 +835,7 @@ body.hide-prayer-icons .prayer-card .icon {
 }
 
 .announcement-content {
-  font-size: calc(clamp(0.75rem, 1.2vh, 0.9rem) * var(--font-scale));
+  font-size: calc(clamp(0.85rem, 1.4vh, 1.05rem) * var(--font-scale));
   color: var(--color-text-muted);
   line-height: 1.4;
 }
@@ -885,7 +885,7 @@ body.hide-prayer-icons .prayer-card .icon {
 }
 
 .donation-category {
-  font-size: calc(clamp(0.75rem, 1.2vh, 0.9rem) * var(--font-scale));
+  font-size: calc(clamp(0.85rem, 1.4vh, 1.05rem) * var(--font-scale));
   color: var(--color-text-muted);
   margin-bottom: 0.25vh;
 }
