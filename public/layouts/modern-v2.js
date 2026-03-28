@@ -182,6 +182,7 @@ var MasjidLayout = {
     align-items: flex-start;
     padding: 2rem 0;
     gap: 2rem;
+    position: relative;
   }
 
   /* Left Sidebar - Combined */
@@ -235,7 +236,10 @@ var MasjidLayout = {
     align-items: center;
     justify-content: center;
     height: 100%;
-    position: relative;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
   }
 
