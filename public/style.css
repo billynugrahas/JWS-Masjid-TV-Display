@@ -652,6 +652,8 @@ body.hide-prayer-icons .prayer-card .icon {
 
 .donations-wrapper.has-qr {
   grid-template-columns: 1fr auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .donations-container {
@@ -723,6 +725,8 @@ body.hide-prayer-icons .prayer-card .icon {
   justify-content: center;
   padding-left: 1vw;
   border-left: 1px solid rgba(30, 58, 43, 0.15);
+  overflow: hidden;
+  min-height: 0;
 }
 
 .donation-qr-label {
@@ -732,15 +736,20 @@ body.hide-prayer-icons .prayer-card .icon {
   margin-bottom: 0.5vh;
   text-align: center;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .donation-qr-image {
-  width: clamp(80px, 10vh, 120px);
-  height: clamp(80px, 10vh, 120px);
+  width: clamp(50px, 8vh, 120px);
+  height: clamp(50px, 8vh, 120px);
+  max-width: 100%;
+  max-height: calc(100% - 2vh);
   object-fit: contain;
   border-radius: var(--radius-sm);
   background: white;
   padding: 4px;
+  flex-shrink: 1;
+  min-height: 0;
 }
 
 

@@ -553,10 +553,17 @@
               <hr style="border-color: var(--color-text-light); margin: 1rem 0;">
               <div class="form-group">
                 <label class="checkbox-label">
-                  <input type="checkbox" id="setting-donation-qr-fullscreen-enabled">
+                  <input type="checkbox" id="setting-donation-qr-fullscreen-enabled" onchange="toggleFullscreenQrOnlyVisibility()">
                   <span>Tampilkan QR Layar Penuh</span>
                 </label>
                 <small style="color: var(--color-text-muted);">Rotasi tampilan QR dalam ukuran besar untuk memudahkan scan dari jauh</small>
+              </div>
+              <div class="form-group" id="fullscreen-qr-only-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-donation-qr-fullscreen-only">
+                  <span>Hanya QR Layar Penuh</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Sembunyikan QR kecil di kolom donasi, tampilkan hanya saat rotasi layar penuh</small>
               </div>
               <div class="form-group">
                 <label>Durasi Tampil QR (detik)</label>

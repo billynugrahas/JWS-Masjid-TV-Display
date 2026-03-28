@@ -381,9 +381,10 @@ function updateDisplayElements() {
   const donationQRImage = document.getElementById('donation-qr-image');
   const donationsWrapper = document.getElementById('donations-wrapper');
   const qrEnabled = settings.donation_qr_enabled === 'true';
+  const fullscreenOnly = settings.donation_qr_fullscreen_only === 'true' && settings.donation_qr_fullscreen_enabled === 'true';
 
   if (donationQRSection && donationQRImage && donationsWrapper) {
-    if (qrEnabled && settings.donation_qr_image) {
+    if (qrEnabled && settings.donation_qr_image && !fullscreenOnly) {
       donationQRImage.src = settings.donation_qr_image;
       donationQRSection.style.display = 'flex';
       donationsWrapper.classList.add('has-qr');

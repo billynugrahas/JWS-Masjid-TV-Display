@@ -1027,7 +1027,9 @@ function populateSettings() {
 
   // Fullscreen QR settings
   document.getElementById('setting-donation-qr-fullscreen-enabled').checked = appData.settings.donation_qr_fullscreen_enabled === 'true';
+  document.getElementById('setting-donation-qr-fullscreen-only').checked = appData.settings.donation_qr_fullscreen_only === 'true';
   document.getElementById('setting-donation-qr-fullscreen-interval').value = parseInt(appData.settings.donation_qr_fullscreen_interval) || 10;
+  toggleFullscreenQrOnlyVisibility();
 
   // Marquee settings
   document.getElementById('setting-marquee-loop').checked = appData.settings.marquee_loop !== 'false';
@@ -1197,6 +1199,13 @@ function toggleDarkModeStyleVisibility() {
   styleGroup.style.display = enabled ? 'block' : 'none';
 }
 
+// Fullscreen QR "only" option visibility toggle
+function toggleFullscreenQrOnlyVisibility() {
+  const fullscreenEnabled = document.getElementById('setting-donation-qr-fullscreen-enabled').checked;
+  const onlyGroup = document.getElementById('fullscreen-qr-only-group');
+  onlyGroup.style.display = fullscreenEnabled ? 'block' : 'none';
+}
+
 // ==================== SAVE ALL ====================
 document.getElementById('save-all-btn').addEventListener('click', async () => {
   const btn = document.getElementById('save-all-btn');
@@ -1244,6 +1253,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       donations_rotation: document.getElementById('setting-donations-rotation').value,
       donation_qr_enabled: document.getElementById('setting-donation-qr-enabled').checked ? 'true' : 'false',
       donation_qr_fullscreen_enabled: document.getElementById('setting-donation-qr-fullscreen-enabled').checked ? 'true' : 'false',
+      donation_qr_fullscreen_only: document.getElementById('setting-donation-qr-fullscreen-only').checked ? 'true' : 'false',
       donation_qr_fullscreen_interval: document.getElementById('setting-donation-qr-fullscreen-interval').value,
       show_live_indicator: document.getElementById('setting-show-live').checked ? 'true' : 'false',
       hide_prayer_icons: document.getElementById('setting-hide-prayer-icons').checked ? 'true' : 'false',

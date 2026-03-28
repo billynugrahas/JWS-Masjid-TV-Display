@@ -100,6 +100,7 @@ const defaultSettings = {
   donations_rotation: '10',
   // Fullscreen QR rotation settings
   donation_qr_fullscreen_enabled: 'false',
+  donation_qr_fullscreen_only: 'false',
   donation_qr_fullscreen_interval: '10',
   // Prayer calculation settings
   prayer_calc_enabled: 'false',
