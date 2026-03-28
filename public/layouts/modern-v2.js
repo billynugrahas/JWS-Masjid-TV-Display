@@ -350,12 +350,23 @@ var MasjidLayout = {
     color: #d1fae5;
   }
   .mv2-marquee-content {
-    width: 100%;
-    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
     font-size: 1.125rem;
     font-weight: 700;
     color: #d1fae5;
     padding: 0 1rem;
+    gap: var(--marquee-gap, 4rem);
+  }
+  /* Animated marquee - content starts off-screen */
+  body.layout-modern-v2 .mv2-marquee-content:not(.static) {
+    padding-left: 100%;
+    animation: marquee-seamless var(--marquee-speed, 30s) linear infinite;
+  }
+  @keyframes marquee-seamless {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
   body.layout-modern-v2 .mv2-marquee-content.static {
     overflow: visible;
