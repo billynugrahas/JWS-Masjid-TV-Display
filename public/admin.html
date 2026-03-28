@@ -271,6 +271,14 @@
             </div>
             <div class="card-body">
               <div class="form-group">
+                <label>Layout Tampilan</label>
+                <select id="setting-display-layout">
+                  <option value="default">Default (3 Kolom)</option>
+                </select>
+                <small style="color: var(--color-text-muted);">Pilih layout tampilan untuk display. Perubahan akan terlihat setelah halaman display di-refresh.</small>
+              </div>
+
+              <div class="form-group">
                 <label>Skala Font</label>
                 <input type="range" id="setting-font-scale" min="0.5" max="2" step="0.1" value="1" oninput="updateFontScalePreview(this.value)">
                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">

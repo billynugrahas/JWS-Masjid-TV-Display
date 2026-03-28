@@ -115,7 +115,9 @@ const defaultSettings = {
   time_format: '24h', // '24h' or '12h'
   // Dark mode settings
   dark_mode_enabled: 'false',
-  dark_mode_style: 'soft' // 'soft' or 'calm'
+  dark_mode_style: 'soft', // 'soft' or 'calm'
+  // Layout theme
+  display_layout: 'default'
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');

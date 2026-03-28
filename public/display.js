@@ -3,6 +3,36 @@
  * MASJID DISPLAY - JavaScript Controller
  * Modern Minimalist Theme
  * ============================================
+ *
+ * LAYOUT ELEMENT ID CONTRACT
+ * ==========================
+ * Every layout file must provide these element IDs in its HTML.
+ * If any ID is missing, the corresponding feature will silently fail.
+ *
+ * Required IDs:
+ *   bg-overlay, mosque-logo-img, mosque-logo-emoji,
+ *   mosque-name, mosque-tagline, mosque-address, mosque-phone,
+ *   date-masehi, date-hijri,
+ *   current-time, current-seconds,
+ *   countdown-pill, countdown-label, countdown-time,
+ *   iqomah-section, iqomah-time,
+ *   prayer-progress, current-prayer-name, prayer-subtext, prayer-subtext-2,
+ *   announcements-list, donations-list, donations-wrapper,
+ *   donation-qr-section, donation-qr-image,
+ *   qr-fullscreen-image, qr-fullscreen-subtext,
+ *   video-container, video-placeholder,
+ *   optional-times-section, optional-times-grid,
+ *   prayer-grid,
+ *   info-text, info-source,
+ *   marquee,
+ *   beep-sound
+ *
+ * Required CSS classes on elements:
+ *   .live-indicator (in header area)
+ *   .card-announcements (wrapper for announcements)
+ *   .card-donations (wrapper for donations)
+ *   .column-left (left column container)
+ *   .prayer-card (each prayer card, with data-prayer-index attr)
  */
 
 // ==================== STATE MANAGEMENT ====================
@@ -83,29 +113,84 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeDisplay();
 });
 
+async function fetchSettingsOnly() {
+  try {
+    const response = await fetch('/api/settings');
+    const tempSettings = await response.json();
+    return tempSettings.display_layout || 'default';
+  } catch (error) {
+    console.error('Error fetching settings:', error);
+    return 'default';
+  }
+}
+
+function loadLayout(layoutId, callback) {
+  var script = document.createElement('script');
+  script.src = '/layouts/' + layoutId + '.js';
+  script.onload = function() {
+    callback();
+  };
+  script.onerror = function() {
+    // Fallback to default layout if the chosen layout fails to load
+    console.warn('Failed to load layout: ' + layoutId + ', falling back to default');
+    if (layoutId !== 'default') {
+      var fallback = document.createElement('script');
+      fallback.src = '/layouts/default.js';
+      fallback.onload = function() {
+        callback();
+      };
+      fallback.onerror = function() {
+        console.error('Failed to load even the default layout');
+        callback();
+      };
+      document.head.appendChild(fallback);
+    } else {
+      callback();
+    }
+  };
+  document.head.appendChild(script);
+}
+
+function injectLayout() {
+  if (typeof MasjidLayout !== 'undefined' && MasjidLayout.getHTML) {
+    document.body.innerHTML = MasjidLayout.getHTML();
+    // Add layout-specific class for CSS scoping
+    document.body.classList.add('layout-' + MasjidLayout.id);
+  } else {
+    console.error('No MasjidLayout found. Display will not function correctly.');
+    document.body.innerHTML = '<p style="text-align:center;padding:4rem;font-family:sans-serif;">Error: Layout gagal dimuat. Periksa pengaturan layout di admin panel.</p>';
+  }
+}
+
 function initializeDisplay() {
-  // Start clock update
-  updateClock();
-  const clockInterval = setInterval(updateClock, 1000);
+  fetchSettingsOnly().then(function(layoutId) {
+    loadLayout(layoutId, function() {
+      injectLayout();
 
-  // Fetch initial data
-  fetchData();
+      // Start clock update
+      updateClock();
+      var clockInterval = setInterval(updateClock, 1000);
 
-  // Set up intervals
-  const dataInterval = setInterval(fetchData, 30000);     // Poll data every 30 seconds (optimized for low-RAM systems)
-  const prayerCheckInterval = setInterval(checkPrayerState, 1000); // Check state every second
+      // Fetch initial data
+      fetchData();
 
-  // Cleanup on page unload to prevent memory leaks
-  window.addEventListener('beforeunload', () => {
-    clearInterval(clockInterval);
-    clearInterval(dataInterval);
-    clearInterval(prayerCheckInterval);
-    if (countdownInterval) clearInterval(countdownInterval);
-    if (iqomahInterval) clearInterval(iqomahInterval);
-    if (hadithInterval) clearInterval(hadithInterval);
-    if (donationInterval) clearInterval(donationInterval);
-    if (announcementInterval) clearInterval(announcementInterval);
-    if (qrFullscreenInterval) clearInterval(qrFullscreenInterval);
+      // Set up intervals
+      var dataInterval = setInterval(fetchData, 30000);     // Poll data every 30 seconds (optimized for low-RAM systems)
+      var prayerCheckInterval = setInterval(checkPrayerState, 1000); // Check state every second
+
+      // Cleanup on page unload to prevent memory leaks
+      window.addEventListener('beforeunload', () => {
+        clearInterval(clockInterval);
+        clearInterval(dataInterval);
+        clearInterval(prayerCheckInterval);
+        if (countdownInterval) clearInterval(countdownInterval);
+        if (iqomahInterval) clearInterval(iqomahInterval);
+        if (hadithInterval) clearInterval(hadithInterval);
+        if (donationInterval) clearInterval(donationInterval);
+        if (announcementInterval) clearInterval(announcementInterval);
+        if (qrFullscreenInterval) clearInterval(qrFullscreenInterval);
+      });
+    });
   });
 }
 
