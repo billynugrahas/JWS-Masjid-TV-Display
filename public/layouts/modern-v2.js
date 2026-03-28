@@ -639,7 +639,7 @@ var MasjidLayout = {
   <div class="mv2-hadith-bar">
     <div class="mv2-hadith-label">HADITS HARI INI</div>
     <div class="mv2-hadith-content">
-      <span id="info-text"></span> \u2014 <span id="info-source" style="font-weight: 700;"></span>
+      <span id="info-text"></span> <span id="info-source" style="font-weight: 700;"></span>
     </div>
   </div>
 </div>
