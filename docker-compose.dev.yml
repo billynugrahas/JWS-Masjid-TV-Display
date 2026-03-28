@@ -1,0 +1,10 @@
+services:
+  masjid-display:
+    volumes:
+      - ./server.js:/app/server.js
+      - ./public:/app/public
+      - ./package.json:/app/package.json
+    environment:
+      - TZ=Asia/Jakarta
+      - NODE_ENV=development
+    command: npx nodemon server.js
