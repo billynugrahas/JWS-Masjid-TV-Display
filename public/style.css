@@ -63,14 +63,17 @@
   --radius-full: 9999px;
 }
 
-html, body {
+html {
   height: 100%;
   overflow: hidden;
+  color-scheme: light only;
 }
 
 body {
+  height: 100%;
+  overflow: hidden;
   font-family: var(--font-body);
-  background-color: var(--bg-primary);
+  background-color: #F8F9FA;
   color: var(--color-text);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
