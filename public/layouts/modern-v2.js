@@ -20,8 +20,6 @@ var MasjidLayout = {
 
 <!-- Background layers -->
 <div class="bg-overlay" id="bg-overlay"></div>
-<div id="video-container" class="mv2-video-bg"></div>
-<div id="video-placeholder" class="mv2-video-placeholder"></div>
 
 <style>
   /* ==================== BASE ==================== */
@@ -42,17 +40,30 @@ var MasjidLayout = {
     box-sizing: border-box;
   }
 
-  /* ==================== VIDEO BACKGROUND ==================== */
-  .mv2-video-bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: -2;
+  /* ==================== CONTENT WRAPPER (video scope) ==================== */
+  .mv2-content-wrapper {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 2rem;
   }
-  .mv2-video-bg iframe {
+
+  /* ==================== VIDEO BACKGROUND (inside wrapper) ==================== */
+  .mv2-video-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .mv2-video-bg iframe,
+  .mv2-video-bg video {
     width: 100%; height: 100%;
     object-fit: cover;
     border: none;
+    border-radius: 2rem;
   }
   .mv2-video-placeholder {
     display: none;
@@ -180,6 +191,8 @@ var MasjidLayout = {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    position: relative;
+    z-index: 1;
   }
   .mv2-sidebar-card {
     padding: 1.5rem;
@@ -212,6 +225,8 @@ var MasjidLayout = {
     align-items: center;
     justify-content: center;
     height: 100%;
+    position: relative;
+    z-index: 1;
   }
 
   /* Iqomah */
@@ -490,15 +505,7 @@ var MasjidLayout = {
     justify-content: center;
   }
 
-  body.calm-mode.layout-modern-v2 .mv2-main {
-    filter: blur(10px);
-    opacity: 0.3;
-  }
-  body.calm-mode.layout-modern-v2 .mv2-lower {
-    filter: blur(10px);
-    opacity: 0.3;
-  }
-  body.calm-mode.layout-modern-v2 .mv2-header {
+  body.calm-mode.layout-modern-v2 .mv2-content-wrapper {
     filter: blur(10px);
     opacity: 0.3;
   }
@@ -514,110 +521,117 @@ var MasjidLayout = {
   }
 </style>
 
-<!-- ==================== HEADER ==================== -->
-<header class="mv2-glass mv2-header">
-  <div class="mv2-header-left">
-    <span id="current-time" class="mv2-clock">00:00</span>
-    <span id="current-seconds" class="mv2-clock-seconds">:00</span>
-  </div>
+<!-- ==================== CONTENT WRAPPER (video scope) ==================== -->
+<div class="mv2-content-wrapper">
+  <!-- Video Background (covers main + lower) -->
+  <div id="video-container" class="mv2-video-bg"></div>
+  <div id="video-placeholder" class="mv2-video-placeholder"></div>
 
-  <div class="mv2-header-center">
-    <div class="mv2-mosque-logo-row">
-      <img id="mosque-logo-img" class="mv2-mosque-logo-img" style="display: none;">
-      <span id="mosque-logo-emoji" class="mv2-mosque-logo-emoji">\uD83D\uDD4C</span>
-      <h1 id="mosque-name" class="mv2-mosque-name">Masjid</h1>
+  <!-- ==================== HEADER ==================== -->
+  <header class="mv2-glass mv2-header">
+    <div class="mv2-header-left">
+      <span id="current-time" class="mv2-clock">00:00</span>
+      <span id="current-seconds" class="mv2-clock-seconds">:00</span>
     </div>
-    <span id="mosque-tagline" class="mv2-mosque-tagline"></span>
-    <span id="mosque-address" style="display: none;"></span>
-    <span id="mosque-phone" style="display: none;"></span>
-  </div>
 
-  <div class="mv2-header-right">
-    <div id="date-masehi" class="mv2-date-masehi">Date</div>
-    <div id="date-hijri" class="mv2-date-hijri">Hijri</div>
-    <div class="live-indicator mv2-live-indicator">\u25CF LIVE</div>
-  </div>
-</header>
-
-<!-- ==================== MAIN CONTENT ==================== -->
-<main class="mv2-main">
-  <!-- Left Sidebar: Announcements -->
-  <div class="column-left mv2-sidebar">
-    <div class="mv2-glass mv2-sidebar-card card-announcements">
-      <div class="mv2-sidebar-header">
-        <span class="mv2-sidebar-icon">\uD83D\uDCE2</span>
-        <h3 class="mv2-sidebar-title">Pengumuman</h3>
+    <div class="mv2-header-center">
+      <div class="mv2-mosque-logo-row">
+        <img id="mosque-logo-img" class="mv2-mosque-logo-img" style="display: none;">
+        <span id="mosque-logo-emoji" class="mv2-mosque-logo-emoji">\uD83D\uDD4C</span>
+        <h1 id="mosque-name" class="mv2-mosque-name">Masjid</h1>
       </div>
-      <div id="announcements-list" class="mv2-announcements-list">
-        <span style="color: #6b7280; font-size: 0.8rem;">Memuat pengumuman...</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Center: Iqomah & Prayer Progress -->
-  <div class="mv2-center">
-    <div id="iqomah-section" class="mv2-glass mv2-iqomah" style="display: none;">
-      <div class="mv2-iqomah-label">Iqomah</div>
-      <div id="iqomah-time" class="mv2-iqomah-time">00:00</div>
+      <span id="mosque-tagline" class="mv2-mosque-tagline"></span>
+      <span id="mosque-address" style="display: none;"></span>
+      <span id="mosque-phone" style="display: none;"></span>
     </div>
 
-    <div id="prayer-progress" class="mv2-glass mv2-prayer-progress">
-      <div class="mv2-prayer-progress-title">SHOLAT <span id="current-prayer-name"></span></div>
-      <div id="prayer-subtext" class="mv2-prayer-progress-sub"></div>
-      <div id="prayer-subtext-2" class="mv2-prayer-progress-sub2"></div>
+    <div class="mv2-header-right">
+      <div id="date-masehi" class="mv2-date-masehi">Date</div>
+      <div id="date-hijri" class="mv2-date-hijri">Hijri</div>
+      <div class="live-indicator mv2-live-indicator">\u25CF LIVE</div>
     </div>
-  </div>
+  </header>
 
-  <!-- Right Sidebar: Donations -->
-  <div class="column-right mv2-sidebar">
-    <div class="mv2-glass mv2-sidebar-card card-donations">
-      <div class="mv2-sidebar-header">
-        <span class="mv2-sidebar-icon">\uD83D\uDCB0</span>
-        <h3 class="mv2-sidebar-title">Donasi</h3>
-      </div>
-      <div id="donations-wrapper">
-        <div id="donations-list" class="mv2-donations-list">
-          <span style="color: #6b7280; font-size: 0.8rem;">Memuat data donasi...</span>
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="mv2-main">
+    <!-- Left Sidebar: Announcements -->
+    <div class="column-left mv2-sidebar">
+      <div class="mv2-glass mv2-sidebar-card card-announcements">
+        <div class="mv2-sidebar-header">
+          <span class="mv2-sidebar-icon">\uD83D\uDCE2</span>
+          <h3 class="mv2-sidebar-title">Pengumuman</h3>
         </div>
-        <div id="donation-qr-section" class="mv2-donation-qr">
-          <img id="donation-qr-image" alt="QR Code Donasi">
-          <p class="mv2-donation-qr-label">Scan QRIS</p>
+        <div id="announcements-list" class="mv2-announcements-list">
+          <span style="color: #6b7280; font-size: 0.8rem;">Memuat pengumuman...</span>
         </div>
       </div>
     </div>
-  </div>
-</main>
 
-<!-- ==================== LOWER SECTION ==================== -->
-<section class="mv2-lower">
-  <!-- Countdown Pill -->
-  <div id="countdown-pill" class="mv2-glass mv2-countdown-pill">
-    <span id="countdown-label" class="mv2-countdown-label">Menuju</span>
-    <span id="countdown-time" class="mv2-countdown-time">00:00:00</span>
-  </div>
+    <!-- Center: Iqomah & Prayer Progress -->
+    <div class="mv2-center">
+      <div id="iqomah-section" class="mv2-glass mv2-iqomah" style="display: none;">
+        <div class="mv2-iqomah-label">Iqomah</div>
+        <div id="iqomah-time" class="mv2-iqomah-time">00:00</div>
+      </div>
 
-  <!-- Optional Times -->
-  <div id="optional-times-section" class="mv2-optional-times">
-    <div id="optional-times-grid" class="mv2-optional-times-grid"></div>
-  </div>
-
-  <!-- Prayer Grid -->
-  <div id="prayer-grid" class="mv2-prayer-grid"></div>
-
-  <!-- Double Footer Marquee -->
-  <div class="mv2-footer-area">
-    <div class="mv2-marquee-bar">
-      <div id="marquee" class="mv2-marquee-content"></div>
-    </div>
-
-    <div class="mv2-hadith-bar">
-      <div class="mv2-hadith-label">HADITS HARI INI</div>
-      <div class="mv2-hadith-content">
-        <span id="info-text"></span> \u2014 <span id="info-source" style="font-weight: 700;"></span>
+      <div id="prayer-progress" class="mv2-glass mv2-prayer-progress">
+        <div class="mv2-prayer-progress-title">SHOLAT <span id="current-prayer-name"></span></div>
+        <div id="prayer-subtext" class="mv2-prayer-progress-sub"></div>
+        <div id="prayer-subtext-2" class="mv2-prayer-progress-sub2"></div>
       </div>
     </div>
+
+    <!-- Right Sidebar: Donations -->
+    <div class="column-right mv2-sidebar">
+      <div class="mv2-glass mv2-sidebar-card card-donations">
+        <div class="mv2-sidebar-header">
+          <span class="mv2-sidebar-icon">\uD83D\uDCB0</span>
+          <h3 class="mv2-sidebar-title">Donasi</h3>
+        </div>
+        <div id="donations-wrapper">
+          <div id="donations-list" class="mv2-donations-list">
+            <span style="color: #6b7280; font-size: 0.8rem;">Memuat data donasi...</span>
+          </div>
+          <div id="donation-qr-section" class="mv2-donation-qr">
+            <img id="donation-qr-image" alt="QR Code Donasi">
+            <p class="mv2-donation-qr-label">Scan QRIS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== LOWER SECTION ==================== -->
+  <section class="mv2-lower">
+    <!-- Countdown Pill -->
+    <div id="countdown-pill" class="mv2-glass mv2-countdown-pill">
+      <span id="countdown-label" class="mv2-countdown-label">Menuju</span>
+      <span id="countdown-time" class="mv2-countdown-time">00:00:00</span>
+    </div>
+
+    <!-- Optional Times -->
+    <div id="optional-times-section" class="mv2-optional-times">
+      <div id="optional-times-grid" class="mv2-optional-times-grid"></div>
+    </div>
+
+    <!-- Prayer Grid -->
+    <div id="prayer-grid" class="mv2-prayer-grid"></div>
+  </section>
+</div>
+
+<!-- Double Footer Marquee (outside wrapper - no video) -->
+<div class="mv2-footer-area">
+  <div class="mv2-marquee-bar">
+    <div id="marquee" class="mv2-marquee-content"></div>
   </div>
-</section>
+
+  <div class="mv2-hadith-bar">
+    <div class="mv2-hadith-label">HADITS HARI INI</div>
+    <div class="mv2-hadith-content">
+      <span id="info-text"></span> \u2014 <span id="info-source" style="font-weight: 700;"></span>
+    </div>
+  </div>
+</div>
 
 <!-- QR Fullscreen Display -->
 <div id="qr-fullscreen-display" class="mv2-qr-fullscreen">
