@@ -340,7 +340,37 @@ var MasjidLayout = {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
+    gap: 0.5rem;
+  }
+
+  /* Prayer cards - more opaque to cover video background */
+  body.layout-modern-v2 .prayer-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  body.layout-modern-v2 .prayer-card .name {
+    color: #064e3b;
+  }
+  body.layout-modern-v2 .prayer-card .time {
+    color: #022c22;
+  }
+  body.layout-modern-v2 .prayer-card .iqomah {
+    color: #6b7280;
+  }
+  body.layout-modern-v2 .prayer-card.active {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  }
+  body.layout-modern-v2 .prayer-card.active .name {
+    color: #fff;
+  }
+  body.layout-modern-v2 .prayer-card.active .time {
+    color: #a7f3d0;
+  }
+  body.layout-modern-v2 .prayer-card.optional-time {
+    background: rgba(255, 255, 255, 0.85);
   }
 
   /* Footer marquee */
