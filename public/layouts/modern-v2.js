@@ -179,24 +179,34 @@ var MasjidLayout = {
   .mv2-main {
     flex-grow: 1;
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
     padding: 2rem 0;
+    gap: 2rem;
   }
 
-  /* Sidebars */
+  /* Left Sidebar - Combined */
   .mv2-sidebar {
     width: 18rem;
-    height: 100%;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     position: relative;
     z-index: 1;
+    max-height: 100%;
+    overflow: hidden;
   }
   .mv2-sidebar-card {
     padding: 1.5rem;
-    height: 100%;
+    flex-shrink: 0;
+  }
+  .mv2-sidebar-card.card-announcements {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .mv2-sidebar-card.card-donations {
+    flex-shrink: 0;
   }
   .mv2-sidebar-header {
     display: flex;
@@ -419,29 +429,42 @@ var MasjidLayout = {
     opacity: 0.8;
   }
 
-  /* ==================== QR FULLSCREEN ==================== */
+  /* ==================== QR FULLSCREEN (within sidebar) ==================== */
   .mv2-qr-fullscreen {
     display: none;
-    position: fixed;
-    inset: 0;
-    background: #fff;
-    z-index: 100;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2.5rem;
+    padding: 1.5rem;
+    text-align: center;
+    width: 100%;
+    flex: 1;
   }
   .mv2-qr-fullscreen-img {
-    width: 50%;
-    max-width: 28rem;
+    width: 100%;
+    max-width: 14rem;
     height: auto;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
   }
   .mv2-qr-fullscreen-text {
-    font-size: 2.25rem;
-    font-weight: 900;
+    font-size: 0.875rem;
+    font-weight: 700;
     text-transform: uppercase;
     color: #022c22;
+    letter-spacing: 0.05em;
+  }
+  /* Expand sidebar width when QR fullscreen is active */
+  body.layout-modern-v2 .column-left.qr-fullscreen {
+    width: 24rem;
+  }
+  /* Show fullscreen QR when parent has qr-fullscreen class */
+  body.layout-modern-v2 .column-left.qr-fullscreen .mv2-qr-fullscreen {
+    display: flex;
+  }
+  /* Hide sidebar cards when QR fullscreen is active */
+  body.layout-modern-v2 .column-left.qr-fullscreen .mv2-sidebar-card {
+    display: none;
   }
 
   /* ==================== DONATION QR ==================== */
@@ -451,6 +474,10 @@ var MasjidLayout = {
     border-top: 1px solid #ecfdf5;
     text-align: center;
     display: none;
+  }
+  /* Show donation QR when enabled */
+  body.layout-modern-v2 .card-donations .mv2-donation-qr {
+    display: block;
   }
   .mv2-donation-qr img {
     width: 8rem;
@@ -507,8 +534,7 @@ var MasjidLayout = {
   }
 
   /* ==================== STATE MANAGEMENT ==================== */
-  body.adhan-mode.layout-modern-v2 .column-left,
-  body.adhan-mode.layout-modern-v2 .column-right,
+  body.adhan-mode.layout-modern-v2 .mv2-sidebar,
   body.adhan-mode.layout-modern-v2 .mv2-footer-area {
     display: none !important;
   }
@@ -565,7 +591,7 @@ var MasjidLayout = {
 
   <!-- ==================== MAIN CONTENT ==================== -->
   <main class="mv2-main">
-    <!-- Left Sidebar: Announcements -->
+    <!-- Left Sidebar: Announcements + Donations (Combined) -->
     <div class="column-left mv2-sidebar">
       <div class="mv2-glass mv2-sidebar-card card-announcements">
         <div class="mv2-sidebar-header">
@@ -575,6 +601,28 @@ var MasjidLayout = {
         <div id="announcements-list" class="mv2-announcements-list">
           <span style="color: #6b7280; font-size: 0.8rem;">Memuat pengumuman...</span>
         </div>
+      </div>
+
+      <div class="mv2-glass mv2-sidebar-card card-donations">
+        <div class="mv2-sidebar-header">
+          <span class="mv2-sidebar-icon">\u2764\uFE0F</span>
+          <h3 class="mv2-sidebar-title">Donasi</h3>
+        </div>
+        <div id="donations-wrapper">
+          <div id="donations-list" class="mv2-donations-list">
+            <span style="color: #6b7280; font-size: 0.8rem;">Memuat data donasi...</span>
+          </div>
+          <div id="donation-qr-section" class="mv2-donation-qr">
+            <img id="donation-qr-image" alt="QR Code Donasi">
+            <p class="mv2-donation-qr-label">Scan untuk Donasi</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullscreen QR Display (for rotation mode) - must be inside column-left -->
+      <div id="qr-fullscreen-display" class="mv2-glass mv2-qr-fullscreen">
+        <img id="qr-fullscreen-image" class="mv2-qr-fullscreen-img">
+        <div id="qr-fullscreen-subtext" class="mv2-qr-fullscreen-text"></div>
       </div>
     </div>
 
@@ -589,25 +637,6 @@ var MasjidLayout = {
         <div class="mv2-prayer-progress-title">SHOLAT <span id="current-prayer-name"></span></div>
         <div id="prayer-subtext" class="mv2-prayer-progress-sub"></div>
         <div id="prayer-subtext-2" class="mv2-prayer-progress-sub2"></div>
-      </div>
-    </div>
-
-    <!-- Right Sidebar: Donations -->
-    <div class="column-right mv2-sidebar">
-      <div class="mv2-glass mv2-sidebar-card card-donations">
-        <div class="mv2-sidebar-header">
-          <span class="mv2-sidebar-icon">\uD83D\uDCB0</span>
-          <h3 class="mv2-sidebar-title">Donasi</h3>
-        </div>
-        <div id="donations-wrapper">
-          <div id="donations-list" class="mv2-donations-list">
-            <span style="color: #6b7280; font-size: 0.8rem;">Memuat data donasi...</span>
-          </div>
-          <div id="donation-qr-section" class="mv2-donation-qr">
-            <img id="donation-qr-image" alt="QR Code Donasi">
-            <p class="mv2-donation-qr-label">Scan QRIS</p>
-          </div>
-        </div>
       </div>
     </div>
   </main>
@@ -642,12 +671,6 @@ var MasjidLayout = {
       <span id="info-text"></span> <span id="info-source" style="font-weight: 700;"></span>
     </div>
   </div>
-</div>
-
-<!-- QR Fullscreen Display -->
-<div id="qr-fullscreen-display" class="mv2-qr-fullscreen">
-  <img id="qr-fullscreen-image" class="mv2-qr-fullscreen-img">
-  <div id="qr-fullscreen-subtext" class="mv2-qr-fullscreen-text"></div>
 </div>
 
 <!-- Audio -->
