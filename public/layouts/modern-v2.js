@@ -299,19 +299,23 @@ var MasjidLayout = {
     display: none;
     align-items: center;
     gap: 0.75rem;
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    color: #fff;
+    border-radius: 9999px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     animation: mv2-bounce 1s infinite;
   }
   .mv2-countdown-label {
     font-size: 0.625rem;
     font-weight: 900;
     text-transform: uppercase;
-    color: #059669;
+    color: #d1fae5;
     letter-spacing: 0.15em;
   }
   .mv2-countdown-time {
     font-size: 1.5rem;
     font-weight: 900;
-    color: #022c22;
+    color: #fff;
   }
   @keyframes mv2-bounce {
     0%, 100% { transform: translateY(0); }
@@ -644,7 +648,7 @@ var MasjidLayout = {
   <!-- ==================== LOWER SECTION ==================== -->
   <section class="mv2-lower">
     <!-- Countdown Pill -->
-    <div id="countdown-pill" class="mv2-glass mv2-countdown-pill">
+    <div id="countdown-pill" class="mv2-countdown-pill">
       <span id="countdown-label" class="mv2-countdown-label">Menuju</span>
       <span id="countdown-time" class="mv2-countdown-time">00:00:00</span>
     </div>
