@@ -395,6 +395,8 @@ var MasjidLayout = {
     border: none;
     background: #064e3b;
     color: #d1fae5;
+    z-index: 10;
+    flex-shrink: 0;
   }
   .mv2-marquee-content {
     display: inline-flex;
@@ -694,14 +696,15 @@ var MasjidLayout = {
     <!-- Prayer Grid -->
     <div id="prayer-grid" class="mv2-prayer-grid"></div>
   </section>
-</div>
 
-<!-- Double Footer Marquee (outside wrapper - no video) -->
-<div class="mv2-footer-area">
+  <!-- Upper Marquee Bar (inside wrapper - with video background) -->
   <div class="mv2-marquee-bar">
     <div id="marquee" class="mv2-marquee-content"></div>
   </div>
+</div>
 
+<!-- Hadith Bar (outside wrapper - no video) -->
+<div class="mv2-footer-area">
   <div class="mv2-hadith-bar">
     <div class="mv2-hadith-label">HADITS HARI INI</div>
     <div class="mv2-hadith-content">
