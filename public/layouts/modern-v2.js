@@ -369,6 +369,9 @@ var MasjidLayout = {
   body.layout-modern-v2 .prayer-card.active .time {
     color: #a7f3d0;
   }
+  body.layout-modern-v2 .prayer-card.active .iqomah {
+    color: rgba(255, 255, 255, 0.85);
+  }
   body.layout-modern-v2 .prayer-card.optional-time {
     background: rgba(255, 255, 255, 0.85);
   }
