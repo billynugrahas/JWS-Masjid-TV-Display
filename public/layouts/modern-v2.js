@@ -642,6 +642,194 @@ var MasjidLayout = {
   body.calm-mode.layout-modern-v2 .mv2-prayer-progress-sub2 {
     color: #6b7280 !important;
   }
+
+  /* ==================== DARK MODE ==================== */
+  /* Dark Mode - Soft Style (default) */
+  body.layout-modern-v2.dark-mode.dark-soft {
+    background: #0F0F1A;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-glass {
+    background: rgba(30, 30, 50, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-header {
+    color: #E8E8E8;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-clock {
+    color: #FFFFFF;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-clock-seconds {
+    color: #9CA3AF;
+    opacity: 0.7;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-mosque-name {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-date-masehi {
+    color: #E8E8E8;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-date-hijri {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-sidebar-title {
+    color: #E8E8E8;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .mv2-announcements-list {
+    color: #9CA3AF;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .announcement-title {
+    color: #E8E8E8;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .announcement-content {
+    color: #9CA3AF;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .donation-category {
+    color: #9CA3AF;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .donation-amount {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .donation-progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .donation-progress-fill {
+    background: linear-gradient(90deg, #2D6A4F, #D4AF37);
+  }
+  body.layout-modern-v2.dark-mode.dark-soft .donation-percent {
+    color: #E8E8E8;
+  }
+
+  /* Dark Mode - Prayer Cards */
+  body.layout-modern-v2.dark-mode .prayer-card {
+    background: rgba(30, 30, 50, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  body.layout-modern-v2.dark-mode .prayer-card .name {
+    color: #E8E8E8;
+  }
+  body.layout-modern-v2.dark-mode .prayer-card .time {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode .prayer-card .iqomah {
+    color: #9CA3AF;
+  }
+  body.layout-modern-v2.dark-mode .prayer-card.active {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  }
+  body.layout-modern-v2.dark-mode .prayer-card.active .name {
+    color: #fff;
+  }
+  body.layout-modern-v2.dark-mode .prayer-card.active .time {
+    color: #a7f3d0;
+  }
+  body.layout-modern-v2.dark-mode .prayer-card.active .iqomah {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  body.layout-modern-v2.dark-mode .prayer-card.optional-time {
+    background: rgba(30, 30, 50, 0.7);
+    border-style: dashed;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Dark Mode - Countdown Pill */
+  body.layout-modern-v2.dark-mode .mv2-countdown-pill {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Dark Mode - Marquee Bars */
+  body.layout-modern-v2.dark-mode .mv2-marquee-bar {
+    background: linear-gradient(135deg, #0D1F17 0%, #1B4332 100%);
+  }
+  body.layout-modern-v2.dark-mode .mv2-hadith-bar {
+    background: #0a1a14;
+  }
+  body.layout-modern-v2.dark-mode .mv2-hadith-label {
+    background: #047857;
+  }
+  body.layout-modern-v2.dark-mode .mv2-hadith-content {
+    color: #9CA3AF;
+  }
+
+  /* Dark Mode - IQOMAH Section */
+  body.layout-modern-v2.dark-mode .mv2-iqomah-label {
+    color: #ef4444;
+  }
+  body.layout-modern-v2.dark-mode .mv2-iqomah-time {
+    color: #D4AF37;
+  }
+
+  /* Dark Mode - Prayer Progress (calm mode) */
+  body.layout-modern-v2.dark-mode .mv2-prayer-progress {
+    background: rgba(30, 30, 50, 0.95) !important;
+    border-color: #047857 !important;
+  }
+  body.layout-modern-v2.dark-mode .mv2-prayer-progress-title {
+    color: #E8E8E8 !important;
+  }
+  body.layout-modern-v2.dark-mode .mv2-prayer-progress-title span {
+    color: #D4AF37 !important;
+  }
+  body.layout-modern-v2.dark-mode .mv2-prayer-progress-sub {
+    color: #9CA3AF !important;
+  }
+  body.layout-modern-v2.dark-mode .mv2-prayer-progress-sub2 {
+    color: #6B7280 !important;
+  }
+
+  /* Dark Mode - QR Section */
+  body.layout-modern-v2.dark-mode .mv2-donation-qr {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+  body.layout-modern-v2.dark-mode .mv2-donation-qr-label {
+    color: #9CA3AF;
+  }
+  body.layout-modern-v2.dark-mode .mv2-qr-fullscreen-text {
+    color: #D4AF37;
+  }
+
+  /* Dark Mode - Calm Style (alternative) */
+  body.layout-modern-v2.dark-mode.dark-calm {
+    background: linear-gradient(135deg, #081C15 0%, #1B4332 100%);
+  }
+  body.layout-modern-v2.dark-mode.dark-calm .mv2-glass {
+    background: rgba(27, 67, 50, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  body.layout-modern-v2.dark-mode.dark-calm .mv2-clock {
+    color: #FFFFFF;
+  }
+  body.layout-modern-v2.dark-mode.dark-calm .mv2-mosque-name {
+    color: #a7f3d0;
+  }
+  body.layout-modern-v2.dark-mode.dark-calm .mv2-date-masehi {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode.dark-calm .mv2-date-hijri {
+    color: #a7f3d0;
+  }
+  body.layout-modern-v2.dark-mode.dark-calm #mosque-address {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode.dark-calm .mv2-sidebar-title {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode.dark-calm #info-text {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode.dark-calm .mv2-hadith-content {
+    color: #D4AF37;
+  }
+  body.layout-modern-v2.dark-mode.dark-calm .donation-category {
+    color: #FFFFFF;
+  }
+
+  /* Ensure adhan-mode and calm-mode override dark mode when needed */
+  body.layout-modern-v2.adhan-mode {
+    background: #0F0F1A !important;
+  }
+  body.layout-modern-v2.adhan-mode.dark-mode.dark-calm {
+    background: linear-gradient(135deg, #081C15 0%, #1B4332 100%) !important;
+  }
 </style>
 
 <!-- ==================== CONTENT WRAPPER (video scope) ==================== -->
