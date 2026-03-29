@@ -199,15 +199,14 @@ var MasjidLayout = {
   }
   .mv2-sidebar-card {
     padding: 1.5rem;
-    flex-shrink: 0;
-  }
-  .mv2-sidebar-card.card-announcements {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
   }
+  .mv2-sidebar-card.card-announcements,
   .mv2-sidebar-card.card-donations {
-    flex-shrink: 0;
+    flex: 1 1 0;
+    max-height: 50%;
   }
   .mv2-sidebar-header {
     display: flex;
