@@ -235,12 +235,8 @@ var MasjidLayout = {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     z-index: 1;
+    width: 100%;
   }
 
   /* Iqomah */
@@ -269,23 +265,50 @@ var MasjidLayout = {
     display: none;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 3px solid #047857 !important;
+    border-radius: 2rem;
+  }
+  .mv2-prayer-progress-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+    animation: mv2-float 3s ease-in-out infinite;
+  }
+  @keyframes mv2-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
   .mv2-prayer-progress-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 900;
-    color: #022c22;
+    color: #022c22 !important;
     margin-bottom: 1rem;
     text-transform: uppercase;
+    display: block;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  .mv2-prayer-progress-title span {
+    color: #047857 !important;
   }
   .mv2-prayer-progress-sub {
     font-size: 1.25rem;
     font-weight: 700;
-    opacity: 0.8;
+    color: #064e3b !important;
     margin-bottom: 0.5rem;
+    display: block;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   .mv2-prayer-progress-sub2 {
     font-size: 1.125rem;
-    opacity: 0.6;
+    color: #6b7280 !important;
+    display: block;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   /* ==================== LOWER SECTION ==================== */
@@ -585,19 +608,39 @@ var MasjidLayout = {
     justify-content: center;
   }
 
-  body.calm-mode.layout-modern-v2 .mv2-content-wrapper {
+  body.calm-mode.layout-modern-v2 .mv2-header,
+  body.calm-mode.layout-modern-v2 .mv2-sidebar,
+  body.calm-mode.layout-modern-v2 .mv2-lower,
+  body.calm-mode.layout-modern-v2 .mv2-marquee-bar,
+  body.calm-mode.layout-modern-v2 .mv2-video-bg {
     filter: blur(10px);
     opacity: 0.3;
+    pointer-events: none;
   }
   body.calm-mode.layout-modern-v2 #prayer-progress {
     display: flex !important;
-    filter: none !important;
     opacity: 1 !important;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 50;
+    background: rgba(255, 255, 255, 0.95);
+    border: 3px solid #047857;
+    border-radius: 2rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+  body.calm-mode.layout-modern-v2 .mv2-prayer-progress-icon {
+    color: #064e3b;
+  }
+  body.calm-mode.layout-modern-v2 .mv2-prayer-progress-title {
+    color: #022c22 !important;
+  }
+  body.calm-mode.layout-modern-v2 .mv2-prayer-progress-sub {
+    color: #064e3b !important;
+  }
+  body.calm-mode.layout-modern-v2 .mv2-prayer-progress-sub2 {
+    color: #6b7280 !important;
   }
 </style>
 
@@ -677,6 +720,7 @@ var MasjidLayout = {
       </div>
 
       <div id="prayer-progress" class="mv2-glass mv2-prayer-progress">
+        <div class="mv2-prayer-progress-icon">🕌</div>
         <div class="mv2-prayer-progress-title">SHOLAT <span id="current-prayer-name"></span></div>
         <div id="prayer-subtext" class="mv2-prayer-progress-sub"></div>
         <div id="prayer-subtext-2" class="mv2-prayer-progress-sub2"></div>
