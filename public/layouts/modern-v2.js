@@ -122,14 +122,33 @@ var MasjidLayout = {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     margin-bottom: 0.25rem;
+  }
+  .mv2-mosque-logo-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .mv2-mosque-info-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
   }
   .mv2-mosque-name {
     font-size: 1.875rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.2em;
+    line-height: 1.1;
+  }
+  .mv2-mosque-address {
+    font-size: 0.875rem;
+    font-weight: 600;
+    opacity: 0.7;
+    letter-spacing: 0.05em;
   }
   .mv2-mosque-tagline {
     font-size: 0.75rem;
@@ -140,11 +159,11 @@ var MasjidLayout = {
     display: block;
   }
   .mv2-mosque-logo-img {
-    height: 2.5rem;
+    height: 3.5rem;
     width: auto;
   }
   .mv2-mosque-logo-emoji {
-    font-size: 1.875rem;
+    font-size: 2.5rem;
   }
 
   /* Date */
@@ -800,6 +819,9 @@ var MasjidLayout = {
   body.layout-modern-v2.dark-mode.dark-calm .mv2-mosque-name {
     color: #a7f3d0;
   }
+  body.layout-modern-v2.dark-mode.dark-calm .mv2-mosque-address {
+    color: #D4AF37;
+  }
   body.layout-modern-v2.dark-mode.dark-calm .mv2-date-masehi {
     color: #D4AF37;
   }
@@ -846,12 +868,16 @@ var MasjidLayout = {
 
     <div class="mv2-header-center">
       <div class="mv2-mosque-logo-row">
-        <img id="mosque-logo-img" class="mv2-mosque-logo-img" style="display: none;">
-        <span id="mosque-logo-emoji" class="mv2-mosque-logo-emoji">\uD83D\uDD4C</span>
-        <h1 id="mosque-name" class="mv2-mosque-name">Masjid</h1>
+        <div class="mv2-mosque-logo-col">
+          <img id="mosque-logo-img" class="mv2-mosque-logo-img" style="display: none;">
+          <span id="mosque-logo-emoji" class="mv2-mosque-logo-emoji">\uD83D\uDD4C</span>
+        </div>
+        <div class="mv2-mosque-info-col">
+          <h1 id="mosque-name" class="mv2-mosque-name">Masjid</h1>
+          <span id="mosque-address" class="mv2-mosque-address" style="display: none;"></span>
+        </div>
       </div>
       <span id="mosque-tagline" class="mv2-mosque-tagline"></span>
-      <span id="mosque-address" style="display: none;"></span>
       <span id="mosque-phone" style="display: none;"></span>
     </div>
 
