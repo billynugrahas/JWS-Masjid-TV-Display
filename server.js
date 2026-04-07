@@ -454,11 +454,27 @@ app.get('/api/state', (req, res) => {
     settings[row.key] = row.value;
   }
 
-  const prayers = db.prepare('SELECT * FROM prayer_times ORDER BY id').all();
+  const rawPrayers = db.prepare('SELECT * FROM prayer_times ORDER BY id').all();
   const hadiths = db.prepare('SELECT * FROM hadiths WHERE is_active = 1').all();
   const announcements = db.prepare("SELECT * FROM announcements WHERE status = 'published' AND (expiry_date IS NULL OR expiry_date > date('now'))").all();
   const runningTexts = db.prepare('SELECT * FROM running_texts WHERE is_active = 1 ORDER BY priority DESC').all();
   const donations = db.prepare('SELECT * FROM donations ORDER BY updated_at DESC').all();
+
+  // Apply auto-calculation if enabled (same logic as /api/prayers)
+  let prayers = rawPrayers;
+  if (settings.prayer_calc_enabled === 'true') {
+    const calculated = calculatePrayerTimes(settings);
+    const prayerOrder = ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+    prayers = prayerOrder.map((name, index) => {
+      const existing = rawPrayers.find(p => p.name === name) || { id: index + 1, iqomah_duration: 10 };
+      return {
+        id: existing.id,
+        name: name,
+        time: calculated[name],
+        iqomah_duration: existing.iqomah_duration
+      };
+    });
+  }
 
   res.json({
     settings,
