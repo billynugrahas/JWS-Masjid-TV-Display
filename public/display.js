@@ -45,6 +45,19 @@ const AppState = {
   FINISHED: 'FINISHED'
 };
 
+// Check if today is Friday (Jum'at)
+function isFriday() {
+  return new Date().getDay() === 5;
+}
+
+// Get display name for a prayer (Dzuhur → Sholat Jum'at on Fridays)
+function getPrayerDisplayName(prayer) {
+  if (isFriday() && prayer.name === 'Dzuhur') {
+    return 'Sholat Jum\'at';
+  }
+  return prayer.name;
+}
+
 let currentState = AppState.IDLE;
 let prayerTimes = [];
 let settings = {};
@@ -548,12 +561,13 @@ function renderPrayerGrid() {
   prayerTimes.forEach((prayer, index) => {
     const [hours, minutes] = prayer.time.split(':').map(Number);
     const prayerTotalMinutes = hours * 60 + minutes;
+    const isFridayDzuhur = isFriday() && prayer.name === 'Dzuhur';
 
     items.push({
-      icon: prayerIcons[prayer.name] || '🕌',
-      name: prayer.name,
+      icon: isFridayDzuhur ? '🕌' : (prayerIcons[prayer.name] || '🕌'),
+      name: getPrayerDisplayName(prayer),
       time: prayer.time,
-      iqomah: prayer.iqomah_duration,
+      iqomah: isFridayDzuhur ? 0 : prayer.iqomah_duration,
       isOptional: false,
       sortTime: prayerTotalMinutes,
       prayerIndex: index
@@ -594,7 +608,7 @@ function renderPrayerGrid() {
           <div class="icon">${item.icon}</div>
           <div class="name">${item.name}</div>
           <div class="time">${formatTime(item.time)}</div>
-          <div class="iqomah">Iqomah: ${item.iqomah} menit</div>
+          <div class="iqomah">${item.iqomah > 0 ? 'Iqomah: ' + item.iqomah + ' menit' : '&nbsp;'}</div>
         </div>
       `;
     }
@@ -826,21 +840,24 @@ function checkPrayerState() {
     const prayer = prayerTimes[i];
     const [hours, minutes] = prayer.time.split(':').map(Number);
     const prayerTimeMinutes = hours * 60 + minutes;
-    const iqomahEndMinutes = prayerTimeMinutes + prayer.iqomah_duration;
+    const isFridayDzuhur = isFriday() && prayer.name === 'Dzuhur';
+    const effectiveIqomah = isFridayDzuhur ? 0 : prayer.iqomah_duration;
+    const iqomahEndMinutes = prayerTimeMinutes + effectiveIqomah;
     const prayerEndMinutes = iqomahEndMinutes + prayerDuration;
+    const displayName = getPrayerDisplayName(prayer);
 
     // Check if currently in prayer
     if (currentTimeMinutes >= iqomahEndMinutes && currentTimeMinutes < prayerEndMinutes) {
       // Only transition to prayer state if not already in it
       if (currentState !== AppState.PRAYER) {
-        setPrayerInProgress(prayer.name);
+        setPrayerInProgress(displayName);
       }
       foundState = true;
       break;
     }
 
-    // Check if in iqomah countdown
-    if (currentTimeMinutes >= prayerTimeMinutes && currentTimeMinutes < iqomahEndMinutes) {
+    // Check if in iqomah countdown (skip for Friday Jum'at)
+    if (effectiveIqomah > 0 && currentTimeMinutes >= prayerTimeMinutes && currentTimeMinutes < iqomahEndMinutes) {
       // Only transition to iqomah state if not already in it
       if (currentState !== AppState.IQOMAH) {
         setIqomahCountdown(iqomahEndMinutes - currentTimeMinutes, prayer);
@@ -926,7 +943,7 @@ function setCountdownToNextPrayer(prayerIndex) {
       return;
     }
 
-    document.getElementById('countdown-label').textContent = `Menuju Adzan ${prayer.name}`;
+    document.getElementById('countdown-label').textContent = `Menuju Adzan ${getPrayerDisplayName(prayer)}`;
     document.getElementById('countdown-time').textContent = formatCountdown(diff);
 
     // Play beep in last X seconds (same setting as iqomah)
@@ -957,7 +974,7 @@ function setAdzanState(prayer) {
   document.body.classList.add('adhan-mode');
   document.body.classList.remove('calm-mode');
 
-  document.getElementById('countdown-label').textContent = `WAKTU ADZAN ${prayer.name.toUpperCase()}`;
+  document.getElementById('countdown-label').textContent = `WAKTU ADZAN ${getPrayerDisplayName(prayer).toUpperCase()}`;
   document.getElementById('countdown-time').textContent = formatTime(prayer.time);
 
   updatePrayerHighlight(currentPrayerIndex);
