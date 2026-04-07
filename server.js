@@ -117,6 +117,8 @@ const defaultSettings = {
   // Dark mode settings
   dark_mode_enabled: 'false',
   dark_mode_style: 'soft', // 'soft' or 'calm'
+  // Padding scale for different display resolutions
+  padding_scale: '1',
   // Layout theme
   display_layout: 'default'
 };

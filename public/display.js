@@ -511,6 +511,10 @@ function updateDisplayElements() {
   const fontScale = parseFloat(settings.font_scale) || 1;
   document.documentElement.style.setProperty('--font-scale', fontScale);
 
+  // Update padding scale
+  const paddingScale = parseFloat(settings.padding_scale) || 1;
+  document.documentElement.style.setProperty('--padding-scale', paddingScale);
+
   // Update dark mode
   updateDarkMode();
 
@@ -756,6 +760,15 @@ function renderMarquee() {
   const marqueeEl = document.getElementById('marquee');
   if (!marqueeEl) return;
 
+  // Hide marquee bar when no active running texts
+  const marqueeBar = marqueeEl.closest('.mv2-marquee-bar') || marqueeEl.closest('.footer');
+  if (runningTexts.length === 0) {
+    if (marqueeBar) marqueeBar.style.display = 'none';
+    return;
+  } else {
+    if (marqueeBar) marqueeBar.style.display = '';
+  }
+
   // Check if marquee animation is disabled (for low-RAM devices)
   const marqueeDisabled = settings.disable_marquee === 'true';
 
@@ -768,8 +781,7 @@ function renderMarquee() {
   marqueeEl.style.setProperty('--marquee-gap', `${gap}rem`);
   marqueeEl.style.gap = `${gap}rem`;
 
-  // If we have dynamic running texts, use them
-  if (runningTexts.length > 0) {
+  // Render running texts
     const items = runningTexts.map(rt => {
       const category = rt.category || 'info';
       const categoryClass = `tag-${category}`;
@@ -808,21 +820,6 @@ function renderMarquee() {
       marqueeEl.style.animationIterationCount = 'infinite';
       marqueeEl.style.paddingLeft = '100%';
     }
-  } else {
-    // Fallback to default marquee
-    const defaultText = settings.running_text || 'Selamat datang di Masjid';
-    marqueeEl.innerHTML = `
-      <span class="marquee-item">
-        <span class="marquee-tag tag-info">INFO</span>
-        ${defaultText}
-      </span>
-    `;
-    if (marqueeDisabled) {
-      marqueeEl.classList.add('static');
-      marqueeEl.style.animationName = 'none';
-      marqueeEl.style.paddingLeft = '0';
-    }
-  }
 }
 
 // ==================== PRAYER STATE MANAGEMENT ====================

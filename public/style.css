@@ -465,7 +465,7 @@ body {
 .prayer-card {
   background: var(--bg-glass);
   border-radius: var(--radius-xl);
-  padding: clamp(0.75rem, 1.5vh, 1.5rem);
+  padding: clamp(calc(0.75rem * var(--padding-scale, 1)), calc(1.5vh * var(--padding-scale, 1)), calc(1.5rem * var(--padding-scale, 1)));
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: var(--shadow-md);

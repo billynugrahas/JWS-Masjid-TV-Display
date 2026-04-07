@@ -25,7 +25,7 @@ var MasjidLayout = {
   /* ==================== BASE ==================== */
   body.layout-modern-v2 {
     margin: 0;
-    padding: 1.5rem;
+    padding: calc(1.5rem * var(--padding-scale, 1));
     font-family: 'Plus Jakarta Sans', sans-serif;
     background: #f8fafc;
     height: 100vh;
@@ -47,7 +47,7 @@ var MasjidLayout = {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-radius: 2rem;
+    border-radius: calc(2rem * var(--padding-scale, 1));
   }
 
   /* ==================== VIDEO BACKGROUND (inside wrapper) ==================== */
@@ -82,7 +82,7 @@ var MasjidLayout = {
   /* ==================== HEADER ==================== */
   .mv2-header {
     width: 100%;
-    padding: 1.25rem 2.5rem;
+    padding: calc(1.25rem * var(--padding-scale, 1)) calc(2.5rem * var(--padding-scale, 1));
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -199,7 +199,7 @@ var MasjidLayout = {
     flex-grow: 1;
     display: flex;
     align-items: flex-start;
-    padding: 2rem 0;
+    padding: calc(2rem * var(--padding-scale, 1)) 0;
     gap: 2rem;
     position: relative;
   }
@@ -217,7 +217,7 @@ var MasjidLayout = {
     overflow: hidden;
   }
   .mv2-sidebar-card {
-    padding: 1.5rem;
+    padding: calc(1.5rem * var(--padding-scale, 1));
     flex: 1;
     min-height: 0;
     overflow-y: auto;
@@ -259,7 +259,7 @@ var MasjidLayout = {
 
   /* Iqomah */
   .mv2-iqomah {
-    padding: 2rem 3rem;
+    padding: calc(2rem * var(--padding-scale, 1)) calc(3rem * var(--padding-scale, 1));
     text-align: center;
   }
   .mv2-iqomah-label {
@@ -278,7 +278,7 @@ var MasjidLayout = {
 
   /* Prayer progress */
   .mv2-prayer-progress {
-    padding: 2rem 3rem;
+    padding: calc(2rem * var(--padding-scale, 1)) calc(3rem * var(--padding-scale, 1));
     text-align: center;
     display: none;
     flex-direction: column;
@@ -340,7 +340,7 @@ var MasjidLayout = {
 
   /* Countdown pill */
   .mv2-countdown-pill {
-    padding: 0.5rem 2rem;
+    padding: calc(0.5rem * var(--padding-scale, 1)) calc(2rem * var(--padding-scale, 1));
     display: none;
     align-items: center;
     gap: 0.75rem;

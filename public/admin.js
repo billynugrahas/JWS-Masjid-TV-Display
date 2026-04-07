@@ -932,6 +932,11 @@ function populateSettings() {
   document.getElementById('setting-font-scale').value = fontScale;
   updateFontScalePreview(fontScale);
 
+  // Padding scale
+  const paddingScale = parseFloat(appData.settings.padding_scale) || 1;
+  document.getElementById('setting-padding-scale').value = paddingScale;
+  updatePaddingScalePreview(paddingScale);
+
   // Layout theme
   document.getElementById('setting-display-layout').value = appData.settings.display_layout || 'default';
 
@@ -1229,6 +1234,11 @@ function updateFontScalePreview(value) {
   document.getElementById('font-scale-value').textContent = parseFloat(value).toFixed(1) + 'x';
 }
 
+// Padding scale preview
+function updatePaddingScalePreview(value) {
+  document.getElementById('padding-scale-value').textContent = parseFloat(value).toFixed(1) + 'x';
+}
+
 // Background opacity preview
 function updateBackgroundOpacityPreview(value) {
   document.getElementById('background-opacity-value').textContent = Math.round(parseFloat(value) * 100) + '%';
@@ -1301,6 +1311,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       hide_prayer_icons: document.getElementById('setting-hide-prayer-icons').checked ? 'true' : 'false',
       time_format: document.getElementById('setting-time-format').value,
       font_scale: document.getElementById('setting-font-scale').value,
+      padding_scale: document.getElementById('setting-padding-scale').value,
       display_layout: document.getElementById('setting-display-layout').value,
       marquee_loop: document.getElementById('setting-marquee-loop').checked ? 'true' : 'false',
       marquee_speed: document.getElementById('setting-marquee-speed').value,
