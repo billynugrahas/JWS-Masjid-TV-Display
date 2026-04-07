@@ -1445,11 +1445,56 @@ function updateKabahVideoDisplay() {
       const separator = embedUrl.includes('?') ? '&' : '?';
       embedUrl = `${embedUrl}${separator}autoplay=1&mute=1&loop=1&playlist=${getYouTubeVideoId(embedUrl)}`;
       videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+
+      // Detect YouTube iframe failure and show fallback image
+      monitorIframeLoad(videoContainer, embedUrl);
     }
   } else {
     // Hide video section: add no-kabah-video class
     document.body.classList.add('no-kabah-video');
     videoContainer.classList.remove('active');
+  }
+}
+
+// Monitor iframe load and fallback to image on failure
+function monitorIframeLoad(videoContainer, embedUrl) {
+  const iframe = videoContainer.querySelector('iframe');
+  if (!iframe) return;
+
+  let fallbackTriggered = false;
+
+  function showFallback() {
+    if (fallbackTriggered) return;
+    fallbackTriggered = true;
+
+    if (settings.kabah_video_fallback_image) {
+      videoContainer.innerHTML = `<img src="${settings.kabah_video_fallback_image}" style="width:100%;height:100%;object-fit:cover;border-radius:2rem;" alt="Ka'bah">`;
+      console.warn('YouTube video failed to load, showing fallback image');
+    }
+  }
+
+  // Use YouTube oEmbed API to check if the video actually exists
+  const videoId = getYouTubeVideoId(embedUrl);
+  if (videoId) {
+    fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
+      .then(res => {
+        if (!res.ok) {
+          // Video not found or removed — immediate fallback
+          showFallback();
+        }
+        // If OK, video exists — let the iframe play normally
+      })
+      .catch(() => {
+        // Network error — device might be offline or YouTube blocked.
+        // Give iframe 10s to load, then fallback if it hasn't
+        setTimeout(() => {
+          // Check if iframe is still in the DOM and video container is active
+          const currentIframe = videoContainer.querySelector('iframe');
+          if (currentIframe && settings.kabah_video_fallback_image) {
+            showFallback();
+          }
+        }, 10000);
+      });
   }
 }
 

@@ -17,6 +17,7 @@ let appData = {
 let backgroundImageData = '';
 let logoImageData = '';
 let donationQRImageData = '';
+let kabahFallbackImageData = '';
 let indonesiaCitiesData = null;
 
 // Time formatting function
@@ -1049,6 +1050,20 @@ function populateSettings() {
   document.getElementById('kabah-video-type-offline').checked = appData.settings.kabah_video_type === 'offline';
   document.getElementById('setting-kabah-video-url').value = appData.settings.kabah_video_url || '';
 
+  // Ka'bah fallback image preview
+  if (appData.settings.kabah_video_fallback_image) {
+    kabahFallbackImageData = appData.settings.kabah_video_fallback_image;
+    document.getElementById('kabah-fallback-preview').src = kabahFallbackImageData;
+    document.getElementById('kabah-fallback-preview').style.display = 'block';
+    document.getElementById('clear-kabah-fallback-btn').style.display = 'inline-flex';
+    document.getElementById('kabah-fallback-upload-label').innerHTML = '<span>📷</span> Ganti Gambar Fallback';
+  } else {
+    kabahFallbackImageData = '';
+    document.getElementById('kabah-fallback-preview').style.display = 'none';
+    document.getElementById('clear-kabah-fallback-btn').style.display = 'none';
+    document.getElementById('kabah-fallback-upload-label').innerHTML = '<span>📷</span> Upload Gambar Fallback';
+  }
+
   // Background image
   if (appData.settings.background_image) {
     backgroundImageData = appData.settings.background_image;
@@ -1185,6 +1200,30 @@ function clearDonationQR() {
   document.getElementById('setting-donation-qr-image').value = '';
 }
 
+// Ka'bah video fallback image handlers
+function handleKabahFallbackUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    kabahFallbackImageData = e.target.result;
+    document.getElementById('kabah-fallback-preview').src = kabahFallbackImageData;
+    document.getElementById('kabah-fallback-preview').style.display = 'block';
+    document.getElementById('clear-kabah-fallback-btn').style.display = 'inline-flex';
+    document.getElementById('kabah-fallback-upload-label').innerHTML = `<span>📷</span> ${file.name}`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearKabahFallback() {
+  kabahFallbackImageData = '';
+  document.getElementById('kabah-fallback-preview').style.display = 'none';
+  document.getElementById('clear-kabah-fallback-btn').style.display = 'none';
+  document.getElementById('kabah-fallback-upload-label').innerHTML = '<span>📷</span> Upload Gambar Fallback';
+  document.getElementById('setting-kabah-fallback-image').value = '';
+}
+
 // Font scale preview
 function updateFontScalePreview(value) {
   document.getElementById('font-scale-value').textContent = parseFloat(value).toFixed(1) + 'x';
@@ -1273,6 +1312,8 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       kabah_video_enabled: document.getElementById('setting-kabah-video-enabled').checked ? 'true' : 'false',
       kabah_video_type: document.querySelector('input[name="kabah-video-type"]:checked').value,
       kabah_video_url: document.getElementById('setting-kabah-video-url').value,
+      // Ka'bah fallback image
+      ...(kabahFallbackImageData !== appData.settings.kabah_video_fallback_image ? { kabah_video_fallback_image: kabahFallbackImageData } : {}),
       // Dark mode settings
       dark_mode_enabled: document.getElementById('setting-dark-mode-enabled').checked ? 'true' : 'false',
       dark_mode_style: document.getElementById('setting-dark-mode-style').value

@@ -713,6 +713,20 @@
                   Offline: path file di folder public (contoh: /videos/kabah.mp4)
                 </small>
               </div>
+              <div class="form-group" id="kabah-fallback-group">
+                <label>Gambar Fallback</label>
+                <small style="color: var(--color-text-muted); display: block; margin-bottom: 0.5rem;">Ditampilkan jika video YouTube gagal dimuat</small>
+                <div class="file-upload">
+                  <input type="file" id="setting-kabah-fallback-image" accept="image/*" onchange="handleKabahFallbackUpload(event)">
+                  <div class="file-upload-label" id="kabah-fallback-upload-label">
+                    <span>📷</span> Upload Gambar Fallback
+                  </div>
+                  <img id="kabah-fallback-preview" class="image-preview" style="display: none;">
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="clearKabahFallback()" id="clear-kabah-fallback-btn" style="display: none;">
+                  Hapus Gambar
+                </button>
+              </div>
             </div>
           </div>
         </div>
