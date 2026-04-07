@@ -326,8 +326,13 @@ app.post('/api/prayers/sync', (req, res) => {
 
 app.put('/api/prayers/:id', (req, res) => {
   const { time, iqomah_duration } = req.body;
+  const existing = db.prepare('SELECT * FROM prayer_times WHERE id = ?').get(req.params.id);
+  if (!existing) return res.status(404).json({ error: 'Prayer not found' });
+
+  const finalTime = time !== undefined ? time : existing.time;
+  const finalIqomah = iqomah_duration !== undefined ? iqomah_duration : existing.iqomah_duration;
   const updatePrayer = db.prepare('UPDATE prayer_times SET time = ?, iqomah_duration = ? WHERE id = ?');
-  updatePrayer.run(time, iqomah_duration, req.params.id);
+  updatePrayer.run(finalTime, finalIqomah, req.params.id);
   res.json({ success: true });
 });
 
