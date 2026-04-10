@@ -1438,9 +1438,9 @@ function updateKabahVideoDisplay() {
       if (embedUrl.includes('watch?v=')) {
         embedUrl = embedUrl.replace('watch?v=', 'embed/');
       }
-      // Add autoplay parameters (YouTube requires muted for autoplay)
+      // Add autoplay + JS API parameters (YouTube requires muted for autoplay)
       const separator = embedUrl.includes('?') ? '&' : '?';
-      embedUrl = `${embedUrl}${separator}autoplay=1&mute=1&loop=1&playlist=${getYouTubeVideoId(embedUrl)}`;
+      embedUrl = `${embedUrl}${separator}autoplay=1&mute=1&loop=1&playlist=${getYouTubeVideoId(embedUrl)}&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
       videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
 
       // Detect YouTube iframe failure and show fallback image
@@ -1459,16 +1459,37 @@ function monitorIframeLoad(videoContainer, embedUrl) {
   if (!iframe) return;
 
   let fallbackTriggered = false;
+  let monitorInterval = null;
 
   function showFallback() {
     if (fallbackTriggered) return;
     fallbackTriggered = true;
+
+    // Stop monitoring
+    if (monitorInterval) clearInterval(monitorInterval);
 
     if (settings.kabah_video_fallback_image) {
       videoContainer.innerHTML = `<img src="${settings.kabah_video_fallback_image}" style="width:100%;height:100%;object-fit:cover;border-radius:2rem;" alt="Ka'bah">`;
       console.warn('YouTube video failed to load, showing fallback image');
     }
   }
+
+  // Listen for YouTube IFrame API error messages
+  function onYouTubeMessage(event) {
+    if (fallbackTriggered) return;
+    // YouTube posts messages when player errors occur
+    try {
+      const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+      // YouTube IFrame API sends error events via postMessage
+      if (data && data.event === 'onError') {
+        console.warn('YouTube player error detected via postMessage:', data);
+        showFallback();
+      }
+    } catch (e) {
+      // Not a JSON message or not from YouTube — ignore
+    }
+  }
+  window.addEventListener('message', onYouTubeMessage);
 
   // Use YouTube oEmbed API to check if the video actually exists
   const videoId = getYouTubeVideoId(embedUrl);
@@ -1478,14 +1499,33 @@ function monitorIframeLoad(videoContainer, embedUrl) {
         if (!res.ok) {
           // Video not found or removed — immediate fallback
           showFallback();
+          return;
         }
-        // If OK, video exists — let the iframe play normally
+        // oEmbed says video exists, but it might be a dead live stream.
+        // Start periodic monitoring — re-check oEmbed every 2 minutes.
+        // Dead live streams can appear valid on oEmbed for a while but
+        // eventually return errors. We also use the IFrame API error listener.
+        monitorInterval = setInterval(() => {
+          if (fallbackTriggered) {
+            clearInterval(monitorInterval);
+            return;
+          }
+          fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
+            .then(res => {
+              if (!res.ok) {
+                showFallback();
+              }
+            })
+            .catch(() => {
+              // Network error on re-check — don't trigger fallback,
+              // might just be temporary connectivity issue
+            });
+        }, 120000); // 2 minutes
       })
       .catch(() => {
         // Network error — device might be offline or YouTube blocked.
         // Give iframe 10s to load, then fallback if it hasn't
         setTimeout(() => {
-          // Check if iframe is still in the DOM and video container is active
           const currentIframe = videoContainer.querySelector('iframe');
           if (currentIframe && settings.kabah_video_fallback_image) {
             showFallback();
@@ -1493,6 +1533,20 @@ function monitorIframeLoad(videoContainer, embedUrl) {
         }, 10000);
       });
   }
+
+  // Ultimate safety net: configurable fallback timeout.
+  // If no error was detected by the methods above within this time,
+  // assume the stream is stuck/unavailable and show the fallback image.
+  // This catches "This live stream recording is not available" and similar
+  // cases where YouTube's player doesn't fire formal error events.
+  const fallbackTimeout = parseInt(settings.kabah_video_fallback_timeout) || 300; // default 5 minutes
+  setTimeout(() => {
+    if (fallbackTriggered) return;
+    if (settings.kabah_video_fallback_image) {
+      console.warn(`YouTube video: no playback confirmed after ${fallbackTimeout}s, showing fallback image`);
+      showFallback();
+    }
+  }, fallbackTimeout * 1000);
 }
 
 // Extract YouTube video ID from URL

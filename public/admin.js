@@ -1054,6 +1054,7 @@ function populateSettings() {
   document.getElementById('kabah-video-type-youtube').checked = appData.settings.kabah_video_type !== 'offline';
   document.getElementById('kabah-video-type-offline').checked = appData.settings.kabah_video_type === 'offline';
   document.getElementById('setting-kabah-video-url').value = appData.settings.kabah_video_url || '';
+  document.getElementById('setting-kabah-video-fallback-timeout').value = appData.settings.kabah_video_fallback_timeout || '300';
 
   // Ka'bah fallback image preview
   if (appData.settings.kabah_video_fallback_image) {
@@ -1325,6 +1326,8 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       kabah_video_url: document.getElementById('setting-kabah-video-url').value,
       // Ka'bah fallback image
       ...(kabahFallbackImageData !== appData.settings.kabah_video_fallback_image ? { kabah_video_fallback_image: kabahFallbackImageData } : {}),
+      // Ka'bah fallback timeout
+      kabah_video_fallback_timeout: document.getElementById('setting-kabah-video-fallback-timeout').value || '300',
       // Dark mode settings
       dark_mode_enabled: document.getElementById('setting-dark-mode-enabled').checked ? 'true' : 'false',
       dark_mode_style: document.getElementById('setting-dark-mode-style').value

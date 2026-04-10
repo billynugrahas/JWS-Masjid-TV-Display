@@ -112,6 +112,7 @@ const defaultSettings = {
   kabah_video_type: 'youtube',
   kabah_video_url: '',
   kabah_video_fallback_image: '',
+  kabah_video_fallback_timeout: '300',
   // Time format setting
   time_format: '24h', // '24h' or '12h'
   // Dark mode settings
