@@ -1,193 +1,187 @@
 # Masjid Display System
 
-A lightweight, web-based mosque display system for STB (Set-Top Box) devices.
+A lightweight web-based mosque display system designed for TV/kiosk displays (STB devices). Features a fullscreen display for prayer times and a mobile-friendly admin panel.
+
+## Demo
+
+### TV Display
+
+![TV Display](docs/image/ui-display.png)
+
+### Admin Panel
+
+![Admin Panel](docs/image/ui-admin.png)
+
+## Quick Start
+
+```bash
+# Development
+npm install
+npm start
+
+# Docker (Production)
+docker compose up -d --build
+```
+
+- **Display**: http://localhost:3000/display (or port 5000 in Docker)
+- **Admin**: http://localhost:3000/admin
 
 ## Features
 
-- **Display Page** (`/display`): Fullscreen TV display with:
-  - Clock and date
-  - Prayer schedule (Subuh, Dzuhur, Ashar, Maghrib, Isya)
-  - Countdown to next adzan
-  - Iqomah countdown with beep alert
-  - Calm mode during prayer
-  - Running text ticker
-  - Changeable background image
+### Display Page (`/display`)
 
-- **Admin Panel** (`/admin`): Mobile-friendly control panel to:
-  - Set mosque name
-  - Configure prayer times
-  - Set iqomah duration per prayer
-  - Edit running text message
-  - Upload background image
+- Real-time clock and date
+- Prayer schedule with countdown to next adzan
+- Iqomah countdown with beep alert
+- Calm mode during prayer
+- Rotating hadiths
+- Running text ticker (marquee)
+- Customizable background image
+- Live indicator badge
 
-## Installation
+### Admin Panel (`/admin`)
 
-### Option 1: Docker (Recommended)
+- Mosque settings (name, logo, tagline, address, phone)
+- Prayer times and iqomah duration configuration
+- Hadith management (CRUD)
+- Donation tracking (CRUD)
+- Announcement management with priority and expiry
+- Running text management
+- Background image upload
 
-**Using convenience scripts:**
+## Architecture
 
-Production mode:
-```bash
-./prod.sh           # Start production
-./prod.sh logs      # View logs
-./prod.sh down      # Stop
-./prod.sh rebuild   # Rebuild after code changes
+```
+┌─────────────────────────────────────────────────────────┐
+│                     Express Server                       │
+│                      (server.js)                         │
+├─────────────────────────────────────────────────────────┤
+│  /api/*  │  REST API (CRUD for all resources)           │
+│  /public │  Static files (HTML, CSS, JS)                │
+├─────────────────────────────────────────────────────────┤
+│              SQLite (better-sqlite3)                     │
+│              Data stored in ./masjid.db                  │
+│              Docker: /app/data/masjid.db                 │
+└─────────────────────────────────────────────────────────┘
 ```
 
-Development mode (with hot reload):
-```bash
-./dev.sh            # Start development
-./dev.sh logs       # View logs
-./dev.sh down       # Stop
-./dev.sh rebuild    # Rebuild after dependency changes
+## File Structure
+
+```
+masjid-display-jws/
+├── server.js           # Express server + all API routes + DB schema
+├── package.json        # Dependencies: express, better-sqlite3, cors
+├── docker-compose.yml  # Docker config (port 5000:3000, TZ: Asia/Jakarta)
+├── Dockerfile          # Node 18 Alpine, copies public/ into image
+├── docs/
+│   └── image/
+│       ├── ui-display.png   # Display screenshot
+│       └── ui-admin.png     # Admin screenshot
+└── public/
+    ├── display.html    # Main TV display page
+    ├── display.js      # Display logic (clock, prayer state machine, marquee)
+    ├── style.css       # Display styles (viewport-relative, CSS Grid layout)
+    ├── admin.html      # Admin panel SPA
+    ├── admin.js        # Admin logic (CRUD operations, modals)
+    └── admin.css       # Admin styles
 ```
 
-**Or using Docker Compose directly:**
+## Database Schema
 
-Production:
-```bash
-docker compose up -d
-docker compose logs -f
-docker compose down
+SQLite tables created on startup:
+
+| Table | Columns | Notes |
+|-------|---------|-------|
+| `settings` | `key` (PK), `value` | Key-value store for mosque config |
+| `prayer_times` | `id`, `name`, `time`, `iqomah_duration` | 5 prayers: Subuh, Dzuhur, Ashar, Maghrib, Isya |
+| `hadiths` | `id`, `text`, `source`, `is_active`, `created_at` | Rotating quotes on display |
+| `donations` | `id`, `category`, `amount`, `target`, `description`, `updated_at` | Donation tracking |
+| `announcements` | `id`, `title`, `content`, `priority`, `status`, `expiry_date`, `created_at` | Announcements |
+| `running_texts` | `id`, `text`, `category`, `priority`, `is_active` | Marquee ticker items |
+
+## API Endpoints
+
+### Settings
+- `GET /api/settings` - Get all settings as object
+- `POST /api/settings` - Update settings (key-value pairs in body)
+
+### Prayer Times
+- `GET /api/prayers` - Get all 5 prayers
+- `PUT /api/prayers/:id` - Update time/iqomah_duration
+
+### Hadiths
+- `GET /api/hadiths` - All hadiths
+- `GET /api/hadiths/active` - Active only
+- `POST /api/hadiths` - Create
+- `PUT /api/hadiths/:id` - Update
+- `DELETE /api/hadiths/:id` - Delete
+
+### Donations
+- `GET /api/donations` - All donations
+- `POST /api/donations` - Create
+- `PUT /api/donations/:id` - Update
+- `DELETE /api/donations/:id` - Delete
+
+### Announcements
+- `GET /api/announcements` - All
+- `GET /api/announcements/published` - Published + not expired
+- `POST /api/announcements` - Create
+- `PUT /api/announcements/:id` - Update
+- `DELETE /api/announcements/:id` - Delete
+
+### Running Texts
+- `GET /api/running-texts` - All
+- `GET /api/running-texts/active` - Active only (for display)
+- `POST /api/running-texts` - Create
+- `PUT /api/running-texts/:id` - Update
+- `DELETE /api/running-texts/:id` - Delete
+
+### Combined State
+- `GET /api/state` - Returns `{ settings, prayers, hadiths, announcements, runningTexts, serverTime }` - Used by display page for single fetch
+
+## Display State Machine
+
+The display uses a state machine for prayer flow:
+
+```
+IDLE → WAITING_ADZAN → ADZAN → IQOMAH → PRAYER → FINISHED → IDLE
 ```
 
-Development:
-```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-docker compose -f docker-compose.yml -f docker-compose.dev.yml logs -f
-docker compose -f docker-compose.yml -f docker-compose.dev.yml down
-```
+- **IDLE**: Shows countdown to next prayer
+- **WAITING_ADZAN**: 1 minute before adzan
+- **ADZAN**: Adzan time
+- **IQOMAH**: Iqomah countdown with beep alert
+- **PRAYER**: Calm mode (dimmed UI)
+- **FINISHED**: Post-prayer state before returning to IDLE
 
-**Or using Docker directly:**
+## Settings
 
-```bash
-docker build -t masjid-display .
-docker run -d -p 3000:3000 -v masjid-data:/app/data -e TZ=Asia/Jakarta masjid-display
-```
-
-### Option 2: Manual Installation
-
-1. Install Node.js on your device
-2. Clone or copy this project
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-4. Start the server:
-   ```bash
-   npm start
-   ```
-
-## Docker Management Scripts
-
-This project includes convenient bash scripts for managing Docker containers:
-
-### Production (`prod.sh`)
-
-```bash
-./prod.sh [ACTION]
-```
-
-Actions:
-- `up` (default) - Start production containers
-- `down` - Stop production containers
-- `rebuild` - Rebuild and restart containers
-- `logs` - View container logs (follow mode)
-- `status` - Show container status
-- `help` - Show help message
-
-### Development (`dev.sh`)
-
-```bash
-./dev.sh [ACTION]
-```
-
-Actions: Same as production
-
-Development mode features:
-- Hot reload enabled via nodemon
-- Code changes auto-reload without rebuild
-- `server.js`, `public/`, and `package.json` mounted as volumes
-
-### Unified (`docker.sh`)
-
-Alternative unified script with mode selection:
-
-```bash
-./docker.sh [MODE] [ACTION]
-```
-
-Modes: `prod` (default) or `dev`
-
-Examples:
-```bash
-./docker.sh prod up      # Start production
-./docker.sh dev up       # Start development
-./docker.sh dev logs     # View dev logs
-```
-
-## Usage
-
-- **Display**: Open `http://localhost:5000/display` in Chromium kiosk mode
-- **Admin**: Open `http://localhost:5000/admin` from your phone/laptop
-
-Note: Port 5000 is mapped to internal port 3000 in Docker
-
-## Auto-start on Boot (Armbian)
-
-Create a systemd service:
-
-```bash
-sudo nano /etc/systemd/system/masjid-display.service
-```
-
-Content:
-```ini
-[Unit]
-Description=Masjid Display System
-After=network.target
-
-[Service]
-Type=simple
-User=<your-username>
-WorkingDirectory=/path/to/masjid-display-jws
-ExecStart=/usr/bin/node server.js
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Enable and start:
-```bash
-sudo systemctl enable masjid-display
-sudo systemctl start masjid-display
-```
-
-## Kiosk Mode (Chromium)
-
-Auto-start Chromium in kiosk mode:
-
-```bash
-chromium-browser --kiosk --noerrdialogs --disable-infobars --no-first-run --enable-features=OverlayScrollbar http://localhost:3000/display
-```
+| Key | Default | Description |
+|-----|---------|-------------|
+| `mosque_name` | "Masjid Al-Muhajirin" | Display header |
+| `mosque_logo` | "🕌" | Emoji logo |
+| `mosque_tagline` | "Baitullah untuk Umat" | Subtitle |
+| `mosque_address` | "" | Address |
+| `mosque_phone` | "" | Phone |
+| `background_image` | "" | Base64 data URL |
+| `hadith_rotation_interval` | "30" | Seconds between hadith rotation |
+| `show_live_indicator` | "true" | Show LIVE badge |
+| `marquee_loop` | "true" | Seamless marquee loop |
+| `marquee_speed` | "30" | Marquee duration (seconds) |
+| `marquee_gap` | "4" | Gap between marquee items (rem) |
 
 ## Technology Stack
 
 - **Backend**: Express.js + SQLite (better-sqlite3)
 - **Frontend**: Vanilla HTML/CSS/JavaScript
-- **Port**: 3000
-- **Timezone**: WIB (Asia/Jakarta, UTC+7)
+- **Port**: 3000 (internal), 5000 (Docker)
+- **Timezone**: Asia/Jakarta (WIB, UTC+7)
 
-## API Endpoints
+## Deployment Notes
 
-- `GET /api/state` - Get all settings and prayer times
-- `GET /api/settings` - Get settings only
-- `POST /api/settings` - Update settings
-- `GET /api/prayers` - Get all prayer times
-- `PUT /api/prayers/:id` - Update prayer time
+- Port mapping: Docker maps 5000 → 3000 internally
+- Data persistence: `masjid-data` volume for SQLite database
+- No hot reload in production - must rebuild Docker image for code changes
 
 ## License
 
