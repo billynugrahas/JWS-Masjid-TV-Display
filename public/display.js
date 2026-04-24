@@ -53,7 +53,7 @@ function isFriday() {
 // Get display name for a prayer (Dzuhur → Sholat Jum'at on Fridays)
 function getPrayerDisplayName(prayer) {
   if (isFriday() && prayer.name === 'Dzuhur') {
-    return 'Sholat Jum\'at';
+    return 'Jum\'at';
   }
   return prayer.name;
 }
@@ -1411,17 +1411,42 @@ document.addEventListener('touchstart', initAudioContext, { once: true });
 
 // ==================== KA'bah Video Functions ====================
 
-function updateKabahVideoDisplay() {
+async function updateKabahVideoDisplay() {
   const videoContainer = document.getElementById('video-container');
   const videoPlaceholder = document.getElementById('video-placeholder');
 
   if (!videoContainer || !videoPlaceholder) return;
 
   const isEnabled = settings.kabah_video_enabled === 'true';
+  if (!isEnabled) {
+    document.body.classList.add('no-kabah-video');
+    videoContainer.classList.remove('active');
+    return;
+  }
+
+  // If auto-find is enabled and we're using YouTube, try to find a live stream first
+  const isAutofindEnabled = settings.kabah_video_autofind_enabled === 'true';
+  const isYoutube = settings.kabah_video_type !== 'offline';
+
+  if (isAutofindEnabled && isYoutube) {
+    try {
+      const response = await fetch('/api/youtube/find-live');
+      const data = await response.json();
+      if (data.found && data.url) {
+        settings.kabah_video_url = data.url;
+        console.log('[Auto-Find] Found live stream:', data.title, data.url);
+      } else {
+        console.warn('[Auto-Find] No live stream found:', data.message);
+      }
+    } catch (error) {
+      console.warn('[Auto-Find] Failed to search for live stream:', error);
+    }
+  }
+
   const hasUrl = settings.kabah_video_url && settings.kabah_video_url.trim() !== '';
 
   // Toggle body class to show/hide the entire right column
-  if (isEnabled && hasUrl) {
+  if (hasUrl) {
     // Show video: remove no-kabah-video class
     document.body.classList.remove('no-kabah-video');
 
@@ -1453,6 +1478,44 @@ function updateKabahVideoDisplay() {
   }
 }
 
+// Attempt to auto-find a new live stream and reload the video
+async function autofindAndRetryVideo(videoContainer) {
+  if (settings.kabah_video_autofind_enabled !== 'true') return false;
+  if (settings.kabah_video_type === 'offline') return false;
+
+  try {
+    // Clear the server-side cache so we get fresh results
+    await fetch('/api/youtube/find-live/cache-clear', { method: 'POST' });
+
+    const response = await fetch('/api/youtube/find-live');
+    const data = await response.json();
+
+    if (data.found && data.url) {
+      const currentVideoId = getYouTubeVideoId(settings.kabah_video_url);
+      const newVideoId = data.videoId;
+
+      // Only reload if the found video is different from current
+      if (newVideoId !== currentVideoId) {
+        console.log('[Auto-Find] Replacing dead stream with:', data.title, data.url);
+        settings.kabah_video_url = data.url;
+
+        let embedUrl = data.url;
+        if (embedUrl.includes('watch?v=')) {
+          embedUrl = embedUrl.replace('watch?v=', 'embed/');
+        }
+        const separator = embedUrl.includes('?') ? '&' : '?';
+        embedUrl = `${embedUrl}${separator}autoplay=1&mute=1&loop=1&playlist=${newVideoId}&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
+        videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+        monitorIframeLoad(videoContainer, embedUrl);
+        return true;
+      }
+    }
+  } catch (error) {
+    console.warn('[Auto-Find] Retry failed:', error);
+  }
+  return false;
+}
+
 // Monitor iframe load and fallback to image on failure
 function monitorIframeLoad(videoContainer, embedUrl) {
   const iframe = videoContainer.querySelector('iframe');
@@ -1468,7 +1531,15 @@ function monitorIframeLoad(videoContainer, embedUrl) {
     // Stop monitoring
     if (monitorInterval) clearInterval(monitorInterval);
 
-    if (settings.kabah_video_fallback_image) {
+    // Try auto-find before showing fallback image
+    if (settings.kabah_video_autofind_enabled === 'true' && settings.kabah_video_type !== 'offline') {
+      autofindAndRetryVideo(videoContainer).then((found) => {
+        if (!found && settings.kabah_video_fallback_image) {
+          videoContainer.innerHTML = `<img src="${settings.kabah_video_fallback_image}" style="width:100%;height:100%;object-fit:cover;border-radius:2rem;" alt="Ka'bah">`;
+          console.warn('YouTube video failed to load, auto-find found nothing, showing fallback image');
+        }
+      });
+    } else if (settings.kabah_video_fallback_image) {
       videoContainer.innerHTML = `<img src="${settings.kabah_video_fallback_image}" style="width:100%;height:100%;object-fit:cover;border-radius:2rem;" alt="Ka'bah">`;
       console.warn('YouTube video failed to load, showing fallback image');
     }
