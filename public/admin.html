@@ -743,6 +743,45 @@
                 <small style="color: var(--color-text-muted); display: block; margin-bottom: 0.5rem;">Waktu tunggu sebelum fallback ditampilkan jika video tidak terdeteksi error (default: 300 = 5 menit)</small>
                 <input type="number" id="setting-kabah-video-fallback-timeout" class="form-control" value="300" min="30" max="3600" step="30">
               </div>
+              <hr style="border-color: var(--color-border); margin: 1rem 0;">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-kabah-video-autofind-enabled" onchange="toggleAutofindSettingsVisibility()">
+                  <span>Cari Otomatis Live Stream</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Otomatis mencari live stream Ka'bah di YouTube berdasarkan keyword. Link yang ditemukan akan menggantikan URL manual.</small>
+              </div>
+              <div id="autofind-settings-group" style="display: none;">
+                <div class="form-group">
+                  <label>YouTube API Key</label>
+                  <input type="text" id="setting-kabah-video-autofind-api-key" placeholder="AIza..." style="font-family: monospace;">
+                  <small style="color: var(--color-text-muted);">
+                    Diperlukan YouTube Data API v3 key. <br>
+                    Buat di <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Google Cloud Console</a> → Credentials → Create API Key → aktifkan "YouTube Data API v3".<br>
+                    Kuota gratis: ~10.000 unit/hari (1 pencarian = 100 unit).
+                  </small>
+                </div>
+                <div class="form-group">
+                  <label>Kata Kunci Pencarian</label>
+                  <input type="text" id="setting-kabah-video-autofind-keyword" placeholder="live kaaba" value="live kaaba">
+                  <small style="color: var(--color-text-muted);">Kata kunci untuk mencari live stream di YouTube. Default: "live kaaba"</small>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-secondary" onclick="testAutoFind()" id="test-autofind-btn" style="margin-right: 0.5rem;">
+                    🔍 Test Pencarian
+                  </button>
+                  <div id="autofind-test-result" style="margin-top: 0.5rem; display: none;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--color-bg); border-radius: 0.5rem;">
+                      <img id="autofind-test-thumbnail" style="width: 80px; height: 45px; object-fit: cover; border-radius: 0.25rem; display: none;">
+                      <div>
+                        <div id="autofind-test-title" style="font-weight: 500;"></div>
+                        <div id="autofind-test-channel" style="font-size: 0.8rem; color: var(--color-text-muted);"></div>
+                        <div id="autofind-test-url" style="font-size: 0.75rem; color: var(--color-text-muted); word-break: break-all;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ const express = require('express');
 const Database = require('better-sqlite3');
 const cors = require('cors');
 const path = require('path');
+const https = require('https');
 const adhan = require('adhan');
 
 const app = express();
@@ -113,6 +114,10 @@ const defaultSettings = {
   kabah_video_url: '',
   kabah_video_fallback_image: '',
   kabah_video_fallback_timeout: '300',
+  // YouTube Auto-Find Live Stream settings
+  kabah_video_autofind_enabled: 'false',
+  kabah_video_autofind_keyword: 'live kaaba',
+  kabah_video_autofind_api_key: '',
   // Time format setting
   time_format: '24h', // '24h' or '12h'
   // Dark mode settings
@@ -193,6 +198,92 @@ app.post('/api/settings', (req, res) => {
   for (const [key, value] of Object.entries(req.body)) {
     updateSetting.run(key, String(value));
   }
+  res.json({ success: true });
+});
+
+// ---------- YOUTUBE AUTO-FIND LIVE STREAM ----------
+let cachedYouTubeResult = null;
+let cachedYouTubeTime = 0;
+const YOUTUBE_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
+function httpsGet(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve({ statusCode: res.statusCode, body: data });
+        } else {
+          reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+        }
+      });
+    }).on('error', reject);
+  });
+}
+
+app.get('/api/youtube/find-live', async (req, res) => {
+  try {
+    const settingsRows = db.prepare('SELECT key, value FROM settings').all();
+    const s = {};
+    for (const row of settingsRows) {
+      s[row.key] = row.value;
+    }
+
+    const apiKey = s.kabah_video_autofind_api_key;
+    if (!apiKey || apiKey.trim() === '') {
+      return res.status(400).json({ error: 'YouTube API key not configured. Please set it in Settings > Video Ka\'bah > Auto-Find.' });
+    }
+
+    const keyword = s.kabah_video_autofind_keyword || 'live kaaba';
+
+    // Return cached result if still valid
+    if (cachedYouTubeResult && (Date.now() - cachedYouTubeTime) < YOUTUBE_CACHE_TTL) {
+      return res.json({ ...cachedYouTubeResult, cached: true });
+    }
+
+    const encodedKeyword = encodeURIComponent(keyword);
+    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodedKeyword}&type=video&eventType=live&order=viewCount&maxResults=5&key=${apiKey}`;
+
+    const searchResponse = await httpsGet(searchUrl);
+    const searchData = JSON.parse(searchResponse.body);
+
+    if (!searchData.items || searchData.items.length === 0) {
+      const result = { found: false, message: `No live stream found for "${keyword}"` };
+      cachedYouTubeResult = result;
+      cachedYouTubeTime = Date.now();
+      return res.json(result);
+    }
+
+    // Get the top result by view count - use the first item (already sorted by viewCount)
+    const topItem = searchData.items[0];
+    const videoId = topItem.id.videoId;
+    const result = {
+      found: true,
+      videoId: videoId,
+      title: topItem.snippet.title,
+      channelTitle: topItem.snippet.channelTitle,
+      url: `https://www.youtube.com/watch?v=${videoId}`,
+      thumbnail: topItem.snippet.thumbnails.medium?.url || topItem.snippet.thumbnails.default?.url
+    };
+
+    cachedYouTubeResult = result;
+    cachedYouTubeTime = Date.now();
+
+    // Auto-update the kabah_video_url in the database so display picks it up
+    const updateSetting = db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
+    updateSetting.run('kabah_video_url', result.url);
+
+    res.json({ ...result, cached: false });
+  } catch (error) {
+    console.error('YouTube auto-find error:', error.message);
+    res.status(500).json({ error: 'Failed to search YouTube: ' + error.message });
+  }
+});
+
+app.post('/api/youtube/find-live/cache-clear', (req, res) => {
+  cachedYouTubeResult = null;
+  cachedYouTubeTime = 0;
   res.json({ success: true });
 });
 

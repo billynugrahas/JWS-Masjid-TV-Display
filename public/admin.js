@@ -1070,6 +1070,12 @@ function populateSettings() {
     document.getElementById('kabah-fallback-upload-label').innerHTML = '<span>📷</span> Upload Gambar Fallback';
   }
 
+  // YouTube Auto-Find Live Stream settings
+  document.getElementById('setting-kabah-video-autofind-enabled').checked = appData.settings.kabah_video_autofind_enabled === 'true';
+  document.getElementById('setting-kabah-video-autofind-api-key').value = appData.settings.kabah_video_autofind_api_key || '';
+  document.getElementById('setting-kabah-video-autofind-keyword').value = appData.settings.kabah_video_autofind_keyword || 'live kaaba';
+  toggleAutofindSettingsVisibility();
+
   // Background image
   if (appData.settings.background_image) {
     backgroundImageData = appData.settings.background_image;
@@ -1259,6 +1265,83 @@ function toggleFullscreenQrOnlyVisibility() {
   onlyGroup.style.display = fullscreenEnabled ? 'block' : 'none';
 }
 
+// Auto-Find Live Stream settings visibility toggle
+function toggleAutofindSettingsVisibility() {
+  const enabled = document.getElementById('setting-kabah-video-autofind-enabled').checked;
+  const group = document.getElementById('autofind-settings-group');
+  group.style.display = enabled ? 'block' : 'none';
+  document.getElementById('setting-kabah-video-url').disabled = enabled;
+}
+
+// Test Auto-Find YouTube live stream
+async function testAutoFind() {
+  const btn = document.getElementById('test-autofind-btn');
+  const resultDiv = document.getElementById('autofind-test-result');
+  const originalText = btn.innerHTML;
+
+  const apiKey = document.getElementById('setting-kabah-video-autofind-api-key').value.trim();
+  if (!apiKey) {
+    showToast('Harap masukkan YouTube API Key terlebih dahulu', 'warning');
+    return;
+  }
+
+  // Save settings first so the backend has the latest API key and keyword
+  try {
+    await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        kabah_video_autofind_api_key: apiKey,
+        kabah_video_autofind_keyword: document.getElementById('setting-kabah-video-autofind-keyword').value || 'live kaaba'
+      })
+    });
+  } catch (e) {
+    showToast('Gagal menyimpan pengaturan', 'error');
+    return;
+  }
+
+  btn.innerHTML = '⏳ Mencari...';
+  btn.disabled = true;
+
+  try {
+    await fetch('/api/youtube/find-live/cache-clear', { method: 'POST' });
+    const response = await fetch('/api/youtube/find-live');
+    const data = await response.json();
+
+    if (!response.ok) {
+      resultDiv.style.display = 'none';
+      showToast(data.error || 'Gagal mencari live stream', 'error');
+      return;
+    }
+
+    if (data.found) {
+      document.getElementById('autofind-test-title').textContent = data.title;
+      document.getElementById('autofind-test-channel').textContent = data.channelTitle;
+      document.getElementById('autofind-test-url').textContent = data.url;
+
+      const thumbnail = document.getElementById('autofind-test-thumbnail');
+      if (data.thumbnail) {
+        thumbnail.src = data.thumbnail;
+        thumbnail.style.display = 'block';
+      } else {
+        thumbnail.style.display = 'none';
+      }
+
+      resultDiv.style.display = 'block';
+      showToast(`Ditemukan: ${data.title}`, 'success');
+    } else {
+      resultDiv.style.display = 'none';
+      showToast(data.message || 'Live stream tidak ditemukan', 'warning');
+    }
+  } catch (error) {
+    resultDiv.style.display = 'none';
+    showToast('Gagal menghubungi server. Pastikan server berjalan.', 'error');
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+}
+
 // ==================== SAVE ALL ====================
 document.getElementById('save-all-btn').addEventListener('click', async () => {
   const btn = document.getElementById('save-all-btn');
@@ -1328,6 +1411,10 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       ...(kabahFallbackImageData !== appData.settings.kabah_video_fallback_image ? { kabah_video_fallback_image: kabahFallbackImageData } : {}),
       // Ka'bah fallback timeout
       kabah_video_fallback_timeout: document.getElementById('setting-kabah-video-fallback-timeout').value || '300',
+      // YouTube Auto-Find Live Stream
+      kabah_video_autofind_enabled: document.getElementById('setting-kabah-video-autofind-enabled').checked ? 'true' : 'false',
+      kabah_video_autofind_keyword: document.getElementById('setting-kabah-video-autofind-keyword').value || 'live kaaba',
+      kabah_video_autofind_api_key: document.getElementById('setting-kabah-video-autofind-api-key').value || '',
       // Dark mode settings
       dark_mode_enabled: document.getElementById('setting-dark-mode-enabled').checked ? 'true' : 'false',
       dark_mode_style: document.getElementById('setting-dark-mode-style').value
