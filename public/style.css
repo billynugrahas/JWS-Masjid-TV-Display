@@ -1311,6 +1311,41 @@ body.no-transitions .iqomah-section {
   animation: none;
 }
 
+/* ==================== EVENT COUNTDOWN ==================== */
+.event-countdown {
+  display: none;
+  align-items: center;
+  gap: 0.375rem;
+  padding: clamp(0.3rem, 0.5vh, 0.5rem) clamp(0.75rem, 1.5vw, 1.5rem);
+  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  color: #fff;
+  border-radius: 9999px;
+  font-size: clamp(0.7rem, 1.2vh, 0.9rem);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  justify-self: end;
+  margin-top: 0.25rem;
+}
+.event-countdown.visible {
+  display: flex;
+}
+.event-countdown-icon {
+  font-size: 1em;
+}
+.event-countdown-days {
+  color: #fcd34d;
+  font-weight: 900;
+}
+body.dark-mode .event-countdown {
+  background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+  color: #022c22;
+}
+body.dark-mode .event-countdown-days {
+  color: #022c22;
+}
+
 /* ==================== DARK MODE ==================== */
 
 /* Dark Mode - Soft Style */

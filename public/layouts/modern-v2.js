@@ -595,6 +595,44 @@ var MasjidLayout = {
   body.no-transitions.layout-modern-v2 .mv2-countdown-pill {
     animation: none;
   }
+
+  /* ==================== EVENT COUNTDOWN ==================== */
+  .mv2-event-countdown {
+    display: none;
+    align-items: center;
+    white-space: nowrap;
+    gap: 0.375rem;
+    align-self: flex-end;
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+    margin-right: calc(1rem * var(--padding-scale, 1));
+    padding: calc(0.35rem * var(--padding-scale, 1)) calc(1rem * var(--padding-scale, 1));
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    color: #fff;
+    border-radius: 9999px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 5;
+  }
+  .mv2-event-countdown.visible {
+    display: flex;
+  }
+  .mv2-event-countdown-icon {
+    font-size: 0.875rem;
+  }
+  .mv2-event-countdown-days {
+    color: #fcd34d;
+    font-weight: 900;
+  }
+  body.layout-modern-v2.dark-mode .mv2-event-countdown {
+    background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+    color: #022c22;
+  }
+  body.layout-modern-v2.dark-mode .mv2-event-countdown-days {
+    color: #022c22;
+  }
   /* Marquee tags on dark background */
   body.layout-modern-v2 .mv2-marquee-bar .marquee-tag {
     background: rgba(255, 255, 255, 0.15);
@@ -887,6 +925,13 @@ var MasjidLayout = {
       <div class="live-indicator mv2-live-indicator">\u25CF LIVE</div>
     </div>
   </header>
+
+  <!-- Event Countdown (positioned top-right, below header) -->
+  <div id="event-countdown" class="mv2-event-countdown">
+    <span class="mv2-event-countdown-icon">🌙</span>
+    <span id="event-countdown-name"></span>
+    <span id="event-countdown-days" class="mv2-event-countdown-days"></span>
+  </div>
 
   <!-- ==================== MAIN CONTENT ==================== -->
   <main class="mv2-main">

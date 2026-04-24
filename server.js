@@ -126,7 +126,12 @@ const defaultSettings = {
   // Padding scale for different display resolutions
   padding_scale: '1',
   // Layout theme
-  display_layout: 'default'
+  display_layout: 'default',
+  // Event Countdown settings
+  event_countdown_enabled: 'false',
+  event_countdown_preset: 'custom',
+  event_countdown_custom_name: '',
+  event_countdown_custom_date: ''
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');

@@ -1094,6 +1094,14 @@ function populateSettings() {
   document.getElementById('setting-dark-mode-enabled').checked = appData.settings.dark_mode_enabled === 'true';
   document.getElementById('setting-dark-mode-style').value = appData.settings.dark_mode_style || 'soft';
   toggleDarkModeStyleVisibility();
+
+  // Event Countdown settings
+  document.getElementById('setting-event-countdown-enabled').checked = appData.settings.event_countdown_enabled === 'true';
+  document.getElementById('setting-event-countdown-preset').value = appData.settings.event_countdown_preset || 'custom';
+  document.getElementById('setting-event-countdown-custom-name').value = appData.settings.event_countdown_custom_name || '';
+  document.getElementById('setting-event-countdown-custom-date').value = appData.settings.event_countdown_custom_date || '';
+  onEventCountdownChange();
+  onEventCountdownPresetChange();
 }
 
 // Preview prayer calculation
@@ -1342,6 +1350,90 @@ async function testAutoFind() {
   }
 }
 
+// ==================== EVENT COUNTDOWN HELPERS ====================
+const islamicEventPresets = {
+  idul_fitri:       { name: 'Idul Fitri',       hijriMonth: 10, hijriDay: 1 },
+  idul_adha:        { name: 'Idul Adha',         hijriMonth: 12, hijriDay: 10 },
+  maulid_nabi:      { name: 'Maulid Nabi',       hijriMonth: 3,  hijriDay: 12 },
+  isra_miraj:       { name: "Isra Mi'raj",       hijriMonth: 7,  hijriDay: 27 },
+  nuzulul_quran:    { name: 'Nuzulul Quran',     hijriMonth: 9,  hijriDay: 17 },
+  tahun_baru_islam: { name: 'Tahun Baru Islam',  hijriMonth: 1,  hijriDay: 1 },
+};
+
+function calculateHijriDateApprox(gregorianDate) {
+  const year = gregorianDate.getFullYear();
+  const month = gregorianDate.getMonth() + 1;
+  const day = gregorianDate.getDate();
+  let jd;
+  if (month <= 2) {
+    const y = year - 1; const m = month + 12;
+    jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day - 1524.5;
+  } else {
+    jd = Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day - 1524.5;
+  }
+  const a = Math.floor(year / 100);
+  const b = 2 - a + Math.floor(a / 4);
+  jd = jd + b;
+  const l = Math.floor(jd - 1948439.5) + 10632;
+  const n = Math.floor((l - 1) / 10631);
+  const l2 = l - 10631 * n + 354;
+  const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
+  const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+  const hijriMonth = Math.floor((24 * l3) / 709);
+  const hijriDay = l3 - Math.floor((709 * hijriMonth) / 24);
+  const hijriYear = 30 * n + j - 30;
+  return { year: hijriYear, month: hijriMonth - 1, day: hijriDay };
+}
+
+function findNextGregorianDate(targetHijriMonth, targetHijriDay) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  for (let i = 0; i < 400; i++) {
+    const testDate = new Date(today);
+    testDate.setDate(today.getDate() + i);
+    const hijri = calculateHijriDateApprox(testDate);
+    if (hijri.month === targetHijriMonth - 1 && hijri.day === targetHijriDay) {
+      return testDate;
+    }
+  }
+  return null;
+}
+
+function onEventCountdownChange() {
+  const enabled = document.getElementById('setting-event-countdown-enabled').checked;
+  const group = document.getElementById('event-countdown-settings-group');
+  group.style.display = enabled ? 'block' : 'none';
+}
+
+function onEventCountdownPresetChange() {
+  const preset = document.getElementById('setting-event-countdown-preset').value;
+  const customGroup = document.getElementById('event-countdown-custom-group');
+  const customDateGroup = document.getElementById('event-countdown-custom-date-group');
+  const previewDiv = document.getElementById('event-countdown-preview');
+  const previewText = document.getElementById('event-countdown-preview-text');
+
+  if (preset === 'custom') {
+    customGroup.style.display = 'block';
+    customDateGroup.style.display = 'block';
+    previewDiv.style.display = 'none';
+  } else {
+    customGroup.style.display = 'none';
+    customDateGroup.style.display = 'none';
+
+    const eventInfo = islamicEventPresets[preset];
+    if (eventInfo) {
+      const nextDate = findNextGregorianDate(eventInfo.hijriMonth, eventInfo.hijriDay);
+      if (nextDate) {
+        const daysLeft = Math.ceil((nextDate - new Date(new Date().setHours(0,0,0,0))) / (1000 * 60 * 60 * 24));
+        previewText.textContent = `${eventInfo.name} — ${nextDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} (${daysLeft} hari lagi)`;
+        previewDiv.style.display = 'block';
+      } else {
+        previewDiv.style.display = 'none';
+      }
+    }
+  }
+}
+
 // ==================== SAVE ALL ====================
 document.getElementById('save-all-btn').addEventListener('click', async () => {
   const btn = document.getElementById('save-all-btn');
@@ -1417,7 +1509,12 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       kabah_video_autofind_api_key: document.getElementById('setting-kabah-video-autofind-api-key').value || '',
       // Dark mode settings
       dark_mode_enabled: document.getElementById('setting-dark-mode-enabled').checked ? 'true' : 'false',
-      dark_mode_style: document.getElementById('setting-dark-mode-style').value
+      dark_mode_style: document.getElementById('setting-dark-mode-style').value,
+      // Event Countdown settings
+      event_countdown_enabled: document.getElementById('setting-event-countdown-enabled').checked ? 'true' : 'false',
+      event_countdown_preset: document.getElementById('setting-event-countdown-preset').value,
+      event_countdown_custom_name: document.getElementById('setting-event-countdown-custom-name').value,
+      event_countdown_custom_date: document.getElementById('setting-event-countdown-custom-date').value
     };
 
     if (backgroundImageData !== appData.settings.background_image) {

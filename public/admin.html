@@ -646,6 +646,51 @@
 
           <div class="card">
             <div class="card-header">
+              <h2>Countdown Event Islami</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="setting-event-countdown-enabled" onchange="onEventCountdownChange()">
+                  <span>Tampilkan Countdown Event</span>
+                </label>
+                <small style="color: var(--color-text-muted);">Menampilkan hitungan mundur menuju event Islam di bawah header display (contoh: "Idul Adha -30 hari")</small>
+              </div>
+              <div id="event-countdown-settings-group">
+                <div class="form-group">
+                  <label>Pilih Event</label>
+                  <select id="setting-event-countdown-preset" onchange="onEventCountdownPresetChange()">
+                    <option value="custom">Custom</option>
+                    <option value="idul_fitri">Idul Fitri (1 Syawal)</option>
+                    <option value="idul_adha">Idul Adha (10 Dzulhijjah)</option>
+                    <option value="maulid_nabi">Maulid Nabi (12 Rabiul Awal)</option>
+                    <option value="isra_miraj">Isra Mi'raj (27 Rajab)</option>
+                    <option value="nuzulul_quran">Nuzulul Quran (17 Ramadhan)</option>
+                    <option value="tahun_baru_islam">Tahun Baru Islam (1 Muharram)</option>
+                  </select>
+                  <small style="color: var(--color-text-muted);">Preset otomatis menghitung tanggal berdasarkan kalender Hijriah (perkiraan). Pilih "Custom" untuk menentukan tanggal sendiri.</small>
+                </div>
+                <div class="form-group" id="event-countdown-custom-group" style="display:none;">
+                  <label>Nama Event</label>
+                  <input type="text" id="setting-event-countdown-custom-name" placeholder="Idul Adha">
+                </div>
+                <div class="form-group" id="event-countdown-custom-date-group" style="display:none;">
+                  <label>Tanggal Event (Gregorian)</label>
+                  <input type="date" id="setting-event-countdown-custom-date">
+                  <small style="color: var(--color-text-muted);">Masukkan tanggal Gregorian untuk event</small>
+                </div>
+                <div id="event-countdown-preview" style="display:none; margin-top:0.5rem; padding:0.75rem; background: var(--bg-glass); border-radius: var(--radius-lg);">
+                  <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <span style="font-size:1.25rem;">🌙</span>
+                    <span id="event-countdown-preview-text" style="font-weight:700; font-size:0.9rem;"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
               <h2>Optimasi Performa (Low-RAM)</h2>
             </div>
             <div class="card-body">

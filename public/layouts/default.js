@@ -57,6 +57,13 @@ var MasjidLayout = {
       </div>
     </header>
 
+    <!-- Event Countdown -->
+    <div id="event-countdown" class="event-countdown">
+      <span class="event-countdown-icon">🌙</span>
+      <span id="event-countdown-name"></span>
+      <span id="event-countdown-days" class="event-countdown-days"></span>
+    </div>
+
     <!-- ==================== 3-COLUMN MAIN SECTION ==================== -->
     <section class="main-three-column">
 

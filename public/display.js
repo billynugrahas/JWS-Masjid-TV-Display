@@ -25,6 +25,7 @@
  *   prayer-grid,
  *   info-text, info-source,
  *   marquee,
+ *   event-countdown, event-countdown-name, event-countdown-days,
  *   beep-sound
  *
  * Required CSS classes on elements:
@@ -523,6 +524,9 @@ function updateDisplayElements() {
 
   // Update prayer icons visibility
   updatePrayerIconsVisibility();
+
+  // Update event countdown
+  updateEventCountdown();
 }
 
 // ==================== PRAYER GRID RENDERING ====================
@@ -1330,6 +1334,85 @@ function updatePrayerIconsVisibility() {
   }
 }
 
+// ==================== EVENT COUNTDOWN ====================
+const islamicEventPresets = {
+  idul_fitri:       { name: 'Idul Fitri',       hijriMonth: 10, hijriDay: 1 },
+  idul_adha:        { name: 'Idul Adha',         hijriMonth: 12, hijriDay: 10 },
+  maulid_nabi:      { name: 'Maulid Nabi',       hijriMonth: 3,  hijriDay: 12 },
+  isra_miraj:       { name: "Isra Mi'raj",       hijriMonth: 7,  hijriDay: 27 },
+  nuzulul_quran:    { name: 'Nuzulul Quran',     hijriMonth: 9,  hijriDay: 17 },
+  tahun_baru_islam: { name: 'Tahun Baru Islam',  hijriMonth: 1,  hijriDay: 1 },
+};
+
+function findNextGregorianDateForEvent(targetHijriMonth, targetHijriDay) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  for (let i = 0; i < 400; i++) {
+    const testDate = new Date(today);
+    testDate.setDate(today.getDate() + i);
+    const hijri = calculateHijriDate(testDate);
+    if (hijri.month === targetHijriMonth - 1 && hijri.day === targetHijriDay) {
+      return testDate;
+    }
+  }
+  return null;
+}
+
+function updateEventCountdown() {
+  const el = document.getElementById('event-countdown');
+  const nameEl = document.getElementById('event-countdown-name');
+  const daysEl = document.getElementById('event-countdown-days');
+  if (!el || !nameEl || !daysEl) return;
+
+  if (settings.event_countdown_enabled !== 'true') {
+    el.classList.remove('visible');
+    return;
+  }
+
+  let eventName = '';
+  let targetDate = null;
+  const preset = settings.event_countdown_preset || 'custom';
+
+  if (preset === 'custom') {
+    eventName = settings.event_countdown_custom_name || '';
+    const dateStr = settings.event_countdown_custom_date;
+    if (dateStr) {
+      targetDate = new Date(dateStr + 'T00:00:00');
+    }
+  } else {
+    const eventInfo = islamicEventPresets[preset];
+    if (eventInfo) {
+      eventName = eventInfo.name;
+      targetDate = findNextGregorianDateForEvent(eventInfo.hijriMonth, eventInfo.hijriDay);
+    }
+  }
+
+  if (!targetDate || !eventName) {
+    el.classList.remove('visible');
+    return;
+  }
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const target = new Date(targetDate);
+  target.setHours(0, 0, 0, 0);
+
+  const diffMs = target - now;
+  const daysLeft = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+  if (daysLeft === 0) {
+    nameEl.textContent = eventName;
+    daysEl.textContent = 'Hari Ini!';
+    el.classList.add('visible');
+  } else if (daysLeft > 0) {
+    nameEl.textContent = eventName;
+    daysEl.textContent = `-${daysLeft} hari`;
+    el.classList.add('visible');
+  } else {
+    el.classList.remove('visible');
+  }
+}
+
 // ==================== DARK MODE ====================
 function updateDarkMode() {
   const darkModeEnabled = settings.dark_mode_enabled === 'true';
@@ -1523,15 +1606,30 @@ function monitorIframeLoad(videoContainer, embedUrl) {
 
   let fallbackTriggered = false;
   let monitorInterval = null;
+  let playbackConfirmed = false;
+  let fallbackTimeoutId = null;
+
+  function cancelFallbackTimeout() {
+    if (fallbackTimeoutId) {
+      clearTimeout(fallbackTimeoutId);
+      fallbackTimeoutId = null;
+    }
+  }
+
+  function confirmPlayback() {
+    if (playbackConfirmed) return;
+    playbackConfirmed = true;
+    cancelFallbackTimeout();
+    console.log('YouTube video playback confirmed — fallback timeout cancelled');
+  }
 
   function showFallback() {
     if (fallbackTriggered) return;
     fallbackTriggered = true;
 
-    // Stop monitoring
+    cancelFallbackTimeout();
     if (monitorInterval) clearInterval(monitorInterval);
 
-    // Try auto-find before showing fallback image
     if (settings.kabah_video_autofind_enabled === 'true' && settings.kabah_video_type !== 'offline') {
       autofindAndRetryVideo(videoContainer).then((found) => {
         if (!found && settings.kabah_video_fallback_image) {
@@ -1545,22 +1643,46 @@ function monitorIframeLoad(videoContainer, embedUrl) {
     }
   }
 
-  // Listen for YouTube IFrame API error messages
+  // Listen for YouTube IFrame API messages (errors + playback state)
   function onYouTubeMessage(event) {
     if (fallbackTriggered) return;
-    // YouTube posts messages when player errors occur
     try {
       const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+      if (!data || typeof data !== 'object') return;
+
       // YouTube IFrame API sends error events via postMessage
-      if (data && data.event === 'onError') {
+      if (data.event === 'onError') {
         console.warn('YouTube player error detected via postMessage:', data);
         showFallback();
+        return;
+      }
+
+      // Confirm playback: state 1 = playing, state 3 = buffering (about to play)
+      if (data.event === 'infoDelivery' && data.info && data.info.playerState === 1) {
+        confirmPlayback();
+      }
+
+      // Also handle initial ready + state change from some iframe API implementations
+      if (data.event === 'initialDelivery' && data.info && data.info.playerState === 1) {
+        confirmPlayback();
       }
     } catch (e) {
       // Not a JSON message or not from YouTube — ignore
     }
   }
   window.addEventListener('message', onYouTubeMessage);
+
+  // Listen for iframe load event as a basic playback confirmation
+  iframe.addEventListener('load', () => {
+    // iframe loaded its content — give YouTube player a few seconds to start,
+    // then confirm playback. If an error already occurred, showFallback
+    // would have been called and we skip this.
+    setTimeout(() => {
+      if (!fallbackTriggered && !playbackConfirmed) {
+        confirmPlayback();
+      }
+    }, 15000); // 15 seconds grace period for player to initialize
+  });
 
   // Use YouTube oEmbed API to check if the video actually exists
   const videoId = getYouTubeVideoId(embedUrl);
@@ -1572,10 +1694,13 @@ function monitorIframeLoad(videoContainer, embedUrl) {
           showFallback();
           return;
         }
-        // oEmbed says video exists, but it might be a dead live stream.
+        // oEmbed says video exists — cancel the fallback timeout since
+        // the video is confirmed valid. Periodic monitoring will still
+        // catch it if it goes offline later.
+        confirmPlayback();
+
         // Start periodic monitoring — re-check oEmbed every 2 minutes.
-        // Dead live streams can appear valid on oEmbed for a while but
-        // eventually return errors. We also use the IFrame API error listener.
+        // This catches streams that go offline after initially being valid.
         monitorInterval = setInterval(() => {
           if (fallbackTriggered) {
             clearInterval(monitorInterval);
@@ -1598,21 +1723,23 @@ function monitorIframeLoad(videoContainer, embedUrl) {
         // Give iframe 10s to load, then fallback if it hasn't
         setTimeout(() => {
           const currentIframe = videoContainer.querySelector('iframe');
-          if (currentIframe && settings.kabah_video_fallback_image) {
+          if (currentIframe && settings.kabah_video_fallback_image && !playbackConfirmed) {
             showFallback();
           }
         }, 10000);
       });
   }
 
-  // Ultimate safety net: configurable fallback timeout.
-  // If no error was detected by the methods above within this time,
-  // assume the stream is stuck/unavailable and show the fallback image.
-  // This catches "This live stream recording is not available" and similar
-  // cases where YouTube's player doesn't fire formal error events.
-  const fallbackTimeout = parseInt(settings.kabah_video_fallback_timeout) || 300; // default 5 minutes
-  setTimeout(() => {
+  // Safety net: configurable fallback timeout.
+  // Only triggers if playback was never confirmed (no oEmbed success,
+  // no iframe load, no YouTube player state confirmation).
+  // This catches cases where the iframe silently fails without any
+  // detectable error events.
+  const fallbackTimeout = parseInt(settings.kabah_video_fallback_timeout) || 300;
+  fallbackTimeoutId = setTimeout(() => {
+    fallbackTimeoutId = null;
     if (fallbackTriggered) return;
+    if (playbackConfirmed) return;
     if (settings.kabah_video_fallback_image) {
       console.warn(`YouTube video: no playback confirmed after ${fallbackTimeout}s, showing fallback image`);
       showFallback();
