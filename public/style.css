@@ -1540,7 +1540,8 @@ body.calm-mode {
 body.calm-mode .header,
 body.calm-mode .prayer-section,
 body.calm-mode .info-section,
-body.calm-mode .optional-times-section {
+body.calm-mode .optional-times-section,
+body.calm-mode .event-countdown {
   opacity: 0.2;
   filter: blur(2px);
 }

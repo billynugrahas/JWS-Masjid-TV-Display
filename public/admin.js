@@ -1451,6 +1451,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       mosque_phone: document.getElementById('setting-mosque-phone').value,
       hadith_rotation_interval: document.getElementById('setting-hadith-interval').value,
       prayer_duration: document.getElementById('setting-prayer-duration').value,
+      jumat_prayer_duration: document.getElementById('setting-jumat-prayer-duration').value,
       iqomah_beep_seconds: document.getElementById('setting-iqomah-beep-seconds').value,
       prayer_subtext: document.getElementById('setting-prayer-subtext').value,
       prayer_subtext_2: document.getElementById('setting-prayer-subtext-2').value,

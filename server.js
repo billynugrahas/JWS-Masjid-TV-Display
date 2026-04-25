@@ -84,6 +84,7 @@ const defaultSettings = {
   marquee_speed: 30,
   marquee_gap: 4,
   prayer_duration: 15,
+  jumat_prayer_duration: 45,
   prayer_subtext: 'Luruskan dan Rapatkan Shaf',
   prayer_subtext_2: '',
   imsak_offset: 10,

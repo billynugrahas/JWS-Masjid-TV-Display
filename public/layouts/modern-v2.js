@@ -668,7 +668,8 @@ var MasjidLayout = {
   body.calm-mode.layout-modern-v2 .mv2-sidebar,
   body.calm-mode.layout-modern-v2 .mv2-lower,
   body.calm-mode.layout-modern-v2 .mv2-marquee-bar,
-  body.calm-mode.layout-modern-v2 .mv2-video-bg {
+  body.calm-mode.layout-modern-v2 .mv2-video-bg,
+  body.calm-mode.layout-modern-v2 .mv2-event-countdown {
     filter: blur(10px);
     opacity: 0.3;
     pointer-events: none;

@@ -832,9 +832,6 @@ function checkPrayerState() {
   const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
   const currentSeconds = now.getSeconds();
 
-  // Get prayer duration from settings (default 15 minutes)
-  const prayerDuration = parseInt(settings.prayer_duration) || 15;
-
   let foundState = false;
 
   for (let i = 0; i < prayerTimes.length; i++) {
@@ -843,6 +840,9 @@ function checkPrayerState() {
     const prayerTimeMinutes = hours * 60 + minutes;
     const isFridayDzuhur = isFriday() && prayer.name === 'Dzuhur';
     const effectiveIqomah = isFridayDzuhur ? 0 : prayer.iqomah_duration;
+    const prayerDuration = isFridayDzuhur
+      ? (parseInt(settings.jumat_prayer_duration) || 45)
+      : (parseInt(settings.prayer_duration) || 15);
     const iqomahEndMinutes = prayerTimeMinutes + effectiveIqomah;
     const prayerEndMinutes = iqomahEndMinutes + prayerDuration;
     const displayName = getPrayerDisplayName(prayer);
