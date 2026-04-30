@@ -1049,6 +1049,12 @@ function populateSettings() {
   document.getElementById('setting-disable-transitions').checked = appData.settings.disable_transitions === 'true';
   document.getElementById('setting-disable-marquee').checked = appData.settings.disable_marquee === 'true';
 
+  // Watchdog settings
+  document.getElementById('setting-watchdog-enabled').checked = appData.settings.watchdog_enabled !== 'false'; // Default true
+  document.getElementById('setting-watchdog-fail-threshold').value = appData.settings.watchdog_fail_threshold || '3';
+  document.getElementById('setting-watchdog-max-reloads').value = appData.settings.watchdog_max_reloads || '3';
+  toggleWatchdogSettingsVisibility();
+
   // Ka'bah Video settings
   document.getElementById('setting-kabah-video-enabled').checked = appData.settings.kabah_video_enabled === 'true';
   document.getElementById('kabah-video-type-youtube').checked = appData.settings.kabah_video_type !== 'offline';
@@ -1281,6 +1287,13 @@ function toggleAutofindSettingsVisibility() {
   document.getElementById('setting-kabah-video-url').disabled = enabled;
 }
 
+// Watchdog settings visibility toggle
+function toggleWatchdogSettingsVisibility() {
+  const enabled = document.getElementById('setting-watchdog-enabled').checked;
+  const group = document.getElementById('watchdog-settings-group');
+  group.style.display = enabled ? 'block' : 'none';
+}
+
 // Test Auto-Find YouTube live stream
 async function testAutoFind() {
   const btn = document.getElementById('test-autofind-btn');
@@ -1496,6 +1509,10 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
       // Performance settings (for low-RAM devices)
       disable_transitions: document.getElementById('setting-disable-transitions').checked ? 'true' : 'false',
       disable_marquee: document.getElementById('setting-disable-marquee').checked ? 'true' : 'false',
+      // Watchdog settings
+      watchdog_enabled: document.getElementById('setting-watchdog-enabled').checked ? 'true' : 'false',
+      watchdog_fail_threshold: document.getElementById('setting-watchdog-fail-threshold').value || '3',
+      watchdog_max_reloads: document.getElementById('setting-watchdog-max-reloads').value || '3',
       // Ka'bah video settings
       kabah_video_enabled: document.getElementById('setting-kabah-video-enabled').checked ? 'true' : 'false',
       kabah_video_type: document.querySelector('input[name="kabah-video-type"]:checked').value,

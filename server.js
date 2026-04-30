@@ -132,7 +132,11 @@ const defaultSettings = {
   event_countdown_enabled: 'false',
   event_countdown_preset: 'custom',
   event_countdown_custom_name: '',
-  event_countdown_custom_date: ''
+  event_countdown_custom_date: '',
+  // Watchdog settings (auto-reload on hang)
+  watchdog_enabled: 'true',
+  watchdog_fail_threshold: '3',    // consecutive fetch failures before reload
+  watchdog_max_reloads: '3'        // max reloads per hour
 };
 
 const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');

@@ -67,6 +67,10 @@ let runningTexts = [];
 let announcements = [];
 let donations = [];
 let countdownInterval = null;
+
+// Watchdog state
+let watchdogConsecutiveFails = 0;
+let watchdogReloadTimestamps = [];
 let iqomahInterval = null;
 let hadithInterval = null;
 let donationInterval = null;
@@ -355,11 +359,41 @@ async function fetchData() {
 
     startHadithRotation();
     checkPrayerState();
+
+    // Watchdog: reset fail counter on successful fetch
+    watchdogConsecutiveFails = 0;
   } catch (error) {
     console.error('Error fetching data:', error);
     // Use defaults on error
     hadiths = defaultHadiths;
+
+    // Watchdog: track consecutive failures
+    watchdogConsecutiveFails++;
+    checkWatchdog();
   }
+}
+
+// ==================== WATCHDOG ====================
+function checkWatchdog() {
+  if (settings.watchdog_enabled === 'false') return;
+
+  const threshold = parseInt(settings.watchdog_fail_threshold) || 3;
+  const maxReloads = parseInt(settings.watchdog_max_reloads) || 3;
+
+  if (watchdogConsecutiveFails < threshold) return;
+
+  // Clean up timestamps older than 1 hour
+  const oneHourAgo = Date.now() - 3600000;
+  watchdogReloadTimestamps = watchdogReloadTimestamps.filter(t => t > oneHourAgo);
+
+  if (watchdogReloadTimestamps.length >= maxReloads) {
+    console.warn(`[Watchdog] Max reloads (${maxReloads}/hour) reached. Skipping reload.`);
+    return;
+  }
+
+  console.warn(`[Watchdog] ${watchdogConsecutiveFails} consecutive failures. Reloading page... (${watchdogReloadTimestamps.length + 1}/${maxReloads} this hour)`);
+  watchdogReloadTimestamps.push(Date.now());
+  location.reload();
 }
 
 // ==================== DISPLAY UPDATES ====================
