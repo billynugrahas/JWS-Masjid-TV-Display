@@ -360,6 +360,9 @@ async function fetchData() {
     startHadithRotation();
     checkPrayerState();
 
+    // Always update event countdown (days change at midnight without settings change)
+    updateEventCountdown();
+
     // Watchdog: reset fail counter on successful fetch
     watchdogConsecutiveFails = 0;
   } catch (error) {
