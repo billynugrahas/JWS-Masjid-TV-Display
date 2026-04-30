@@ -598,6 +598,10 @@ app.get('/api/state', (req, res) => {
 });
 
 // ---------- PAGES ----------
+app.get('/', (req, res) => {
+  res.redirect('/admin');
+});
+
 app.get('/display', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'display.html'));
 });

@@ -67,6 +67,8 @@ let runningTexts = [];
 let announcements = [];
 let donations = [];
 let countdownInterval = null;
+let cachedEventDate = null;
+let cachedEventDateDay = null;
 
 // Watchdog state
 let watchdogConsecutiveFails = 0;
@@ -1384,14 +1386,26 @@ const islamicEventPresets = {
 function findNextGregorianDateForEvent(targetHijriMonth, targetHijriDay) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const todayStr = today.toDateString();
+
+  // Return cached result if same day and same target
+  const cacheKey = `${todayStr}-${targetHijriMonth}-${targetHijriDay}`;
+  if (cachedEventDateDay === cacheKey && cachedEventDate) {
+    return cachedEventDate;
+  }
+
   for (let i = 0; i < 400; i++) {
     const testDate = new Date(today);
     testDate.setDate(today.getDate() + i);
     const hijri = calculateHijriDate(testDate);
     if (hijri.month === targetHijriMonth - 1 && hijri.day === targetHijriDay) {
+      cachedEventDate = testDate;
+      cachedEventDateDay = cacheKey;
       return testDate;
     }
   }
+  cachedEventDate = null;
+  cachedEventDateDay = cacheKey;
   return null;
 }
 
