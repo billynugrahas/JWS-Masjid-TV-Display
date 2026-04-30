@@ -137,6 +137,7 @@ async function fetchSettingsOnly() {
   try {
     const response = await fetch('/api/settings');
     const tempSettings = await response.json();
+    settings = tempSettings; // Store early so watchdog has correct values
     return tempSettings.display_layout || 'default';
   } catch (error) {
     console.error('Error fetching settings:', error);
@@ -380,7 +381,7 @@ async function fetchData() {
 
 // ==================== WATCHDOG ====================
 function checkWatchdog() {
-  if (settings.watchdog_enabled === 'false') return;
+  if (!settings.watchdog_enabled || settings.watchdog_enabled === 'false') return;
 
   const threshold = parseInt(settings.watchdog_fail_threshold) || 3;
   const maxReloads = parseInt(settings.watchdog_max_reloads) || 3;
